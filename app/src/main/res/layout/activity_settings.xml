@@ -9,16 +9,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:backgroundTint="@color/white"
         android:orientation="vertical"
         android:padding="2dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:padding="0dp"
-
-            >
+            android:layout_height="48dp">
 
             <Button
                 android:id="@+id/backSettings"
@@ -27,8 +24,8 @@
                 android:backgroundTint="@color/white"
                 app:icon="@drawable/arrow_back"
                 app:iconTint="@color/black"
-
-                />
+                android:paddingLeft="16dp"
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -39,8 +36,7 @@
                 android:text="@string/app_settings"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:textStyle="bold" />
-
+                android:textStyle="bold"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -48,18 +44,18 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/activity_setting_layout_height"
                 android:layout_marginTop="20dp"
                 android:gravity="start"
                 android:orientation="horizontal"
-                android:paddingLeft="16dp">
+                android:paddingLeft="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_vertical"
                     android:text="@string/app_dark_style"
                     android:textColor="@color/black"
                     android:textSize="@dimen/setting_text_size"
@@ -67,9 +63,9 @@
 
                 <Switch
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center" />
-            </LinearLayout>
+            </FrameLayout>
 
 
             <Button
@@ -81,9 +77,11 @@
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="@dimen/setting_text_size"
+                android:padding="@dimen/activity_setting_padding_left"
                 app:icon="@drawable/share"
                 app:iconGravity="end"
-                app:iconTint="@color/grey" />
+                app:iconTint="@color/grey"
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
             <Button
                 android:layout_width="match_parent"
@@ -94,9 +92,11 @@
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="@dimen/setting_text_size"
+                android:padding="@dimen/activity_setting_padding_left"
                 app:icon="@drawable/support"
                 app:iconGravity="end"
-                app:iconTint="@color/grey" />
+                app:iconTint="@color/grey"
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
             <Button
                 android:layout_width="match_parent"
@@ -107,9 +107,11 @@
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="@dimen/setting_text_size"
+                android:padding="@dimen/activity_setting_padding_left"
                 app:icon="@drawable/arrow_forward"
                 app:iconGravity="end"
-                app:iconTint="@color/grey" />
+                app:iconTint="@color/grey"
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
         </LinearLayout>
     </LinearLayout>
