@@ -8,8 +8,6 @@ import android.widget.Button
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
-        supportActionBar?.hide()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
