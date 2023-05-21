@@ -9,104 +9,109 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="@color/white"
+        android:orientation="vertical"
         android:padding="2dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:padding="0dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:padding="0dp"
 
-        >
+            >
 
-        <Button
-            android:id="@+id/backSettings"
-            android:layout_width="48dp"
+            <Button
+                android:id="@+id/backSettings"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/white"
+                app:icon="@drawable/arrow_back"
+                app:iconTint="@color/black"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="left"
+                android:paddingLeft="60dp"
+                android:text="@string/app_settings"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="@color/white"
-            app:iconTint="@color/black"
-            app:icon="@drawable/arrow_back"
+            android:orientation="vertical">
 
-            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/activity_setting_layout_height"
+                android:layout_marginTop="20dp"
+                android:gravity="start"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_centerVertical="true"
-            android:paddingLeft="60dp"
-            android:text="@string/app_settings"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/app_dark_style"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/setting_text_size"
+                    android:textStyle="bold" />
 
-    </RelativeLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-
-        >
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:text="@string/app_dark_style"
-            android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:textSize="@dimen/setting_Text_Size"
-            android:gravity="start"
-            app:iconTint="@color/grey"
-            app:icon="@drawable/track"
-            app:iconGravity="end"
-
-            />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:text="@string/app_share"
-            android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:textSize="@dimen/setting_Text_Size"
-            android:gravity="start"
-            app:iconTint="@color/grey"
-            app:icon="@drawable/share"
-            app:iconGravity="end"
-            />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:text="@string/app_mail_Support"
-            android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:textSize="@dimen/setting_Text_Size"
-            android:gravity="start"
-            app:iconTint="@color/grey"
-            app:icon="@drawable/support"
-            app:iconGravity="end"
-            />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:text="@string/app_arrow_forward"
-            android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:textSize="@dimen/setting_Text_Size"
-            android:gravity="start"
-            app:iconTint="@color/grey"
-            app:icon="@drawable/arrow_forward"
-            app:iconGravity="end"
-            />
+                <Switch
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+            </LinearLayout>
 
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/activity_setting_layout_height"
+                android:backgroundTint="@color/white"
+                android:gravity=""
+                android:text="@string/app_share"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="@dimen/setting_text_size"
+                app:icon="@drawable/share"
+                app:iconGravity="end"
+                app:iconTint="@color/grey" />
 
-    </LinearLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/activity_setting_layout_height"
+                android:backgroundTint="@color/white"
+                android:gravity=""
+                android:text="@string/app_mail_support"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="@dimen/setting_text_size"
+                app:icon="@drawable/support"
+                app:iconGravity="end"
+                app:iconTint="@color/grey" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/activity_setting_layout_height"
+                android:backgroundTint="@color/white"
+                android:gravity=""
+                android:text="@string/user_licence"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="@dimen/setting_text_size"
+                app:icon="@drawable/arrow_forward"
+                app:iconGravity="end"
+                app:iconTint="@color/grey" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

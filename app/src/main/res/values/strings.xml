@@ -5,6 +5,6 @@
     <string name="app_settings">Настройки</string>
     <string name="app_dark_style">Темная тема</string>
     <string name="app_share">Поделиться приложением</string>
-    <string name="app_mail_Support">Написать в поддержку</string>
-    <string name="app_arrow_forward">Пользовательское соглашение</string>
+    <string name="app_mail_support">Написать в поддержку</string>
+    <string name="user_licence">Пользовательское соглашение</string>
 </resources>

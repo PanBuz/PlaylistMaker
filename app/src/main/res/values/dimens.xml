@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="main_Text_Size">20sp</dimen>
-    <dimen name="setting_Text_Size">16sp</dimen>
+    <dimen name="main_text_size">20sp</dimen>
+    <dimen name="setting_text_size">16sp</dimen>
+    <dimen name="activity_main_radius_size">20dp</dimen>
+    <dimen name="activity_setting_layout_height">60dp</dimen>
 </resources>
