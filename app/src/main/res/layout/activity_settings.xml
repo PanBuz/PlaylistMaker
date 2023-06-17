@@ -61,21 +61,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    app:iconTint="@color/blue"
                     />
             </FrameLayout>
 
             <Button
+                android:id="@+id/shareBtm"
                 android:text="@string/app_share"
                 style="@style/SettingBottomStyle"
                 app:icon="@drawable/share" />
 
             <Button
+                android:id="@+id/supportBtm"
                 android:text="@string/app_mail_support"
                 style="@style/SettingBottomStyle"
                 app:icon="@drawable/support" />
 
             <Button
+                android:id="@+id/licenceBtm"
                 android:text="@string/user_licence"
                 style="@style/SettingBottomStyle"
                 app:icon="@drawable/arrow_forward" />
