@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="setting_text_size">16sp</dimen>
+    <dimen name="activity_setting_layout_height">60dp</dimen>
+    <dimen name="activity_setting_padding_left">12dp</dimen>
+</resources>
