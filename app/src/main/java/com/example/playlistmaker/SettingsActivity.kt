@@ -21,10 +21,6 @@ class SettingsActivity : AppCompatActivity() {
         val licenceBottom: Button = findViewById(R.id.licenceBtm)
 
         backButton.setOnClickListener {
-            val mainIntent = Intent(this, MainActivity::class.java)
-            startActivity(mainIntent)
-        }
-        backButton.setOnClickListener {
             finish()
         }
 
@@ -47,16 +43,14 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun shareCourse() {
-        // Создание интента для отправки данных
-        val sendIntent = Intent().apply {
+
+        Intent().apply {
             action = Intent.ACTION_SEND
             val courseUrl = getResources().getString(R.string.course_url_string)
             putExtra(Intent.EXTRA_TEXT, courseUrl)
             type = "text/plain"
+            startActivity(Intent.createChooser(this, "Поделиться приложением"))
         }
-
-        // Запуск стандартного системного sharing-диалога
-        startActivity(Intent.createChooser(sendIntent, "Поделиться приложением"))
     }
 
     private fun sendEmailToSupport() {

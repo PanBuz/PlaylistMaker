@@ -15,8 +15,8 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 
 class SearchActivity : AppCompatActivity() {
-    var inputEditText: String = ""
-    var ValueString: String = ""
+    private var inputEditText: String = ""
+    private var valueString: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -26,10 +26,6 @@ class SearchActivity : AppCompatActivity() {
         val clearButton = findViewById<ImageView>(R.id.clearIcon)
         val backButton = findViewById<Button>(R.id.backButton)
 
-        backButton.setOnClickListener {
-            val mainIntent = Intent(this, MainActivity::class.java)
-            startActivity(mainIntent)
-        }
         backButton.setOnClickListener {
             finish()
         }
@@ -47,7 +43,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                ValueString = s.toString()
+                valueString = s.toString()
                 clearButton.visibility = clearButtonVisibility(s)
             }
 
@@ -58,25 +54,21 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.addTextChangedListener(simpleTextWatcher)
     }
 
-    companion object {
-        const val PRODUCT_AMOUNT = "PRODUCT_AMOUNT"
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        outState.putString(PRODUCT_AMOUNT, ValueString)
+        outState.putString(PRODUCT_AMOUNT, valueString)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         // Вторым параметром мы передаём значение по умолчанию
-        ValueString = savedInstanceState.getString(PRODUCT_AMOUNT, "")
-        inputEditText = ValueString
+        valueString = savedInstanceState.getString(PRODUCT_AMOUNT, "")
+        inputEditText = valueString
 
-        Log.e("PRODUCT_AMOUNT", "ValueString before $ValueString")
-        ValueString = savedInstanceState.getString(PRODUCT_AMOUNT, "")
-        Log.e("PRODUCT_AMOUNT", "ValueString after $ValueString")
+        Log.e("PRODUCT_AMOUNT", "ValueString before $valueString")
+        valueString = savedInstanceState.getString(PRODUCT_AMOUNT, "")
+        Log.e("PRODUCT_AMOUNT", "ValueString after $valueString")
 
     }
 
@@ -87,14 +79,8 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
-
-    /*private fun isPrime(number: Int): Boolean {
-        for (i in 2..number / 2) {
-            if (number % i == 0) {
-                return false
-            }
-        }
-        return true
-    }*/
+    companion object {
+        const val PRODUCT_AMOUNT = "PRODUCT_AMOUNT"
+    }
 
 }
