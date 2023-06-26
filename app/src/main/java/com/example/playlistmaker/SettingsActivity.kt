@@ -47,9 +47,10 @@ class SettingsActivity : AppCompatActivity() {
         Intent().apply {
             action = Intent.ACTION_SEND
             val courseUrl = getResources().getString(R.string.course_url_string)
+            val shareText = getResources().getString(R.string.share_text)
             putExtra(Intent.EXTRA_TEXT, courseUrl)
             type = "text/plain"
-            startActivity(Intent.createChooser(this, "Поделиться приложением"))
+            startActivity(Intent.createChooser(this, shareText))
         }
     }
 
