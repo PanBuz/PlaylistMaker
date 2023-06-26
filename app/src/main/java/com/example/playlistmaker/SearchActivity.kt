@@ -79,6 +79,7 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
+
     companion object {
         const val PRODUCT_AMOUNT = "PRODUCT_AMOUNT"
     }

@@ -13,25 +13,25 @@
         android:layout_height="48dp">
 
         <Button
-            style="@style/SettingBackgroundStyle"
             android:id="@+id/backButton"
+            style="@style/SettingBackgroundStyle"
             android:layout_width="48dp"
             android:layout_height="match_parent"
-            app:icon="@drawable/arrow_back"
-            android:paddingLeft="16dp" />
+            android:paddingLeft="16dp"
+            app:icon="@drawable/arrow_back" />
 
         <TextView
+            style="@style/SettingTextVievStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
+            android:fontFamily="@font/ys_display_medium"
             android:paddingStart="10dp"
             android:text="@string/app_search"
-            style="@style/SettingTextVievStyle"
             android:textAllCaps="false"
+            android:textFontWeight="500"
             android:textSize="22sp"
-            android:textStyle="bold"
-            android:fontFamily="@font/ys_display_medium"
-            android:textFontWeight="500" />
+            android:textStyle="bold" />
     </LinearLayout>
 
     <FrameLayout
@@ -40,29 +40,29 @@
         android:layout_height="wrap_content">
 
 
-    <EditText
-        android:id="@+id/inputEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/app_search"
-        android:padding="10dp"
-        android:maxLength="30"
-        android:maxLines="1"
-        android:inputType="text"
-        style="@style/searchTextStyle"
-        android:paddingLeft="30dp"
-        android:background="@drawable/search_field"
-        android:drawablePadding="12dp"/>
+        <EditText
+            android:id="@+id/inputEditText"
+            style="@style/searchTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_field"
+            android:drawablePadding="12dp"
+            android:hint="@string/app_search"
+            android:inputType="text"
+            android:maxLength="30"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:paddingLeft="30dp" />
 
-    <ImageView
-        android:id="@+id/clearIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|end"
-        android:paddingEnd="10dp"
-        style="@style/searchClearIcon"
-        android:contentDescription="TODO"
-        android:visibility="gone" />
+        <ImageView
+            android:id="@+id/clearIcon"
+            style="@style/searchClearIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:contentDescription="TODO"
+            android:paddingEnd="10dp"
+            android:visibility="gone" />
 
     </FrameLayout>
 

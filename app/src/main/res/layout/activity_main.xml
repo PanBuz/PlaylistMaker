@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/ActivityBackgroundStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/ActivityBackgroundStyle"
     android:orientation="vertical"
     android:padding="20dp">
 
@@ -25,20 +25,20 @@
 
     <Button
         android:id="@+id/searchButton"
-        android:text="@string/app_search"
         style="@style/ActivityBottomTextStyle"
+        android:text="@string/app_search"
         app:icon="@drawable/search" />
 
     <Button
         android:id="@+id/libraryButton"
-        android:text="@string/app_library"
         style="@style/ActivityBottomTextStyle"
+        android:text="@string/app_library"
         app:icon="@drawable/library" />
 
     <Button
         android:id="@+id/settingButton"
-        android:text="@string/app_settings"
         style="@style/ActivityBottomTextStyle"
+        android:text="@string/app_settings"
         app:icon="@drawable/settings" />
 
 </LinearLayout>
