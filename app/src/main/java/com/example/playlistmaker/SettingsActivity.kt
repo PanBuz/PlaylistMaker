@@ -9,8 +9,8 @@ import android.net.Uri
 
 class SettingsActivity : AppCompatActivity() {
 
-    private val courseUrl = "https://yandex.ru/praktikum"
     private val studentEmail = "aleksandor1203@yandex.ru"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -20,10 +20,6 @@ class SettingsActivity : AppCompatActivity() {
         val supportButton = findViewById<Button>(R.id.supportBtm)
         val licenceBottom: Button = findViewById(R.id.licenceBtm)
 
-        backButton.setOnClickListener {
-            val mainIntent = Intent(this, MainActivity::class.java)
-            startActivity(mainIntent)
-        }
         backButton.setOnClickListener {
             finish()
         }
@@ -37,39 +33,40 @@ class SettingsActivity : AppCompatActivity() {
             sendEmailToSupport()
         }
 
-
         licenceBottom.setOnClickListener {
-            val url = "https://praktikum.yandex.ru/oferta/"
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
+            val url_oferta = getResources().getString(R.string.oferta_url_string)
+            intent.data = Uri.parse(url_oferta)
             startActivity(intent)
         }
 
     }
 
     private fun shareCourse() {
-        // Создание интента для отправки данных
-        val sendIntent = Intent().apply {
+
+        Intent().apply {
             action = Intent.ACTION_SEND
+            val courseUrl = getResources().getString(R.string.course_url_string)
+            val shareText = getResources().getString(R.string.share_text)
             putExtra(Intent.EXTRA_TEXT, courseUrl)
             type = "text/plain"
+            startActivity(Intent.createChooser(this, shareText))
         }
-
-        // Запуск стандартного системного sharing-диалога
-        startActivity(Intent.createChooser(sendIntent, "Поделиться приложением"))
     }
 
     private fun sendEmailToSupport() {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, arrayOf(studentEmail))
+            val extraSubjectString = getResources().getString(R.string.course_url_string)
+            val extraTextString = getResources().getString(R.string.course_url_string)
             putExtra(
                 Intent.EXTRA_SUBJECT,
-                "Сообщение разработчикам и разработчицам приложения Playlist Maker"
+                extraSubjectString
             )
             putExtra(
                 Intent.EXTRA_TEXT,
-                "Спасибо разработчикам и разработчицам за крутое приложение!"
+                extraTextString
             )
         }
 
