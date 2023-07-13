@@ -126,48 +126,8 @@ class SearchActivity : AppCompatActivity() {
 
 }
 
-data class Track(
-    val trackName: String, // Название композиции
-    val artistName: String, // Имя исполнителя
-    val trackTime: String, // Продолжительность трека
-    val artworkUrl100: String, // Ссылка на изображение обложки
-)
-
-class TrackAdapter(
-    private val trackData: List<Track>
-) : RecyclerView.Adapter<TrackViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.treck_item, parent, false)
-        return TrackViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(trackData[position])
-    }
-
-    override fun getItemCount(): Int {
-        return trackData.size
-    }
-
-}
-class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val tvTrackName: TextView = itemView.findViewById(R.id.tvTrackName)
-    private val tvArtistName: TextView = itemView.findViewById(R.id.tvArtistName)
-    private val tvTrackTime: TextView = itemView.findViewById(R.id.tvTimeTrack)
-    private val ivTrackImage: ImageView = itemView.findViewById(R.id.ivPlaceHolderImage)
-
-    fun bind(item: Track) {
-        Glide.with(ivTrackImage).load(item.artworkUrl100)
-            .centerInside()
-            .transform(RoundedCorners(4))
-            .placeholder(R.drawable.placeholder)
-            .into(ivTrackImage)
 
 
-        tvTrackName.text = item.trackName
-        tvArtistName.text = item.artistName
-        tvTrackTime.text = item.trackTime
-    }
-}
+
+
 
