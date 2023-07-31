@@ -61,10 +61,17 @@
     <style name="greyAndWhiteText">
         <item name="android:textColor">@color/white</item>
     </style>
+    <style name="blackAndWhiteText">
+        <item name="android:textColor">@color/white</item>
+    </style>
     <style name="iconTintGreyWhite">
     <item name="iconTint">@color/white</item>
     </style>
     <style name="backGroundGreyWhite">
         <item name="android:background">@color/white</item>
+    </style>
+    <style name="bottomBlackAndWhite" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>
