@@ -17,7 +17,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val radiusIconImage = 4
 
-    fun bind(item: Track) {
+    fun bind(item: Track, listener : TrackAdapter.Listener) {
         Glide.with(ivTrackImage).load(item.artworkUrl100)
             .centerInside()
             .error(R.drawable.error_mode)
@@ -29,5 +29,9 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         tvTrackName.text = item.trackName
         tvArtistName.text = item.artistName
         tvTrackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
+
+        itemView.setOnClickListener {
+            listener.onClickRecyclerItemView(item)
+        }
     }
 }
