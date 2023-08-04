@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Window
 import android.widget.Button
 import android.net.Uri
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -17,8 +16,8 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
-        val backButton = findViewById<Button>(R.id.backSettings)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSw)
+        val backSettingsButton = findViewById<Button>(R.id.backSettingsBtm)
         val shareButton = findViewById<Button>(R.id.shareBtm)
         val supportButton = findViewById<Button>(R.id.supportBtm)
         val licenceBottom: Button = findViewById(R.id.licenceBtm)
@@ -35,7 +34,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
 
-        backButton.setOnClickListener {
+        backSettingsButton.setOnClickListener {
             finish()
         }
 

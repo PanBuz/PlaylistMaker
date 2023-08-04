@@ -68,58 +68,6 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         clickedSearchSongs = sharedPrefsUtils.readClickedSearchSongs(CLICKED_SEARCH_TRACK)
 
 
-
-        backButton.setOnClickListener {
-            finish()
-        }
-
-
-        // при нажатии на крестик очистки поля поиска:
-        clearButton.setOnClickListener {
-            inputEditText.setText("")
-            noSongImage.visibility = View.GONE
-            inetProblemImage.visibility = View.GONE
-            searchSongs.clear()
-            recyclerViewSearch.adapter?.notifyDataSetChanged()
-            recyclerViewClicked.adapter?.notifyDataSetChanged()
-        }
-
-
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
-            }
-
-            // если будут изменения текста в поле поиска, то крестик очистки появится, при удалении - станет невидимым
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                valueString = s.toString()
-                clearButton.visibility = clearButtonVisibility(s)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // empty
-            }
-        }
-
-        fun showGroupClickedSong() {
-            if (clickedSearchSongs.size > 0) {
-                groupSearched.visibility =
-                    if (inputEditText.hasFocus() && inputEditText.text.isEmpty()) View.GONE else View.VISIBLE
-                groupClicked.visibility =
-                    if (inputEditText.hasFocus() && inputEditText.text.isEmpty()) View.VISIBLE else View.GONE
-            } else {
-                groupSearched.visibility = View.VISIBLE
-                groupClicked.visibility = View.GONE
-            }
-        }
-
-        inputEditText.addTextChangedListener(simpleTextWatcher)
-
-
-        // при получении фокуса показать историю просмотренных песен
-        inputEditText.setOnFocusChangeListener { view, hasFocus -> showGroupClickedSong() }
-
-
         fun searchTracks() {
             appleApiService.search(inputEditText.text.toString())
                 .enqueue(object : Callback<TracksResponse> {
@@ -178,14 +126,68 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
                 })
         }
 
+        fun showGroupClickedSong() {
+            if (clickedSearchSongs.size > 0) {
+                groupSearched.visibility =
+                    if (inputEditText.hasFocus() && inputEditText.text.isEmpty()) GONE else VISIBLE
+                groupClicked.visibility =
+                    if (inputEditText.hasFocus() && inputEditText.text.isEmpty()) VISIBLE else GONE
+            } else {
+                groupSearched.visibility = VISIBLE
+                groupClicked.visibility = GONE
+            }
+        }
+
+        val simpleTextWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // empty
+            }
+
+            // если будут изменения текста в поле поиска, то крестик очистки появится, при удалении - станет невидимым
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString().trim().isEmpty()) {
+                    clearButton.visibility = GONE
+                } else {
+                    clearButton.visibility = VISIBLE
+                }
+                showGroupClickedSong()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // empty
+            }
+        }
+
+        backButton.setOnClickListener {
+            finish()
+        }
+
+
+        // при нажатии на крестик очистки поля поиска:
+        clearButton.setOnClickListener {
+            inputEditText.setText("")
+            noSongImage.visibility = GONE
+            inetProblemImage.visibility = GONE
+            searchSongs.clear()
+            recyclerViewSearch.adapter?.notifyDataSetChanged()
+            recyclerViewClicked.adapter?.notifyDataSetChanged()
+        }
+
+
+        inputEditText.addTextChangedListener(simpleTextWatcher)
+
+
+
+        // при получении фокуса показать историю просмотренных песен
+        inputEditText.setOnFocusChangeListener { view, hasFocus -> showGroupClickedSong() }
 
         // обработка нажатия на кнопку Done
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // ВЫПОЛНЯЙТЕ ПОИСКОВЫЙ ЗАПРОС ЗДЕСЬ
 
                 searchTracks()
                 true
+                groupSearched.visibility = VISIBLE
             }
             false
         }
@@ -238,9 +240,9 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
-            View.GONE
+            GONE
         } else {
-            View.VISIBLE
+            VISIBLE
         }
     }
 
@@ -257,8 +259,8 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         val sharedPrefsApp = getSharedPreferences(MUSIC_MAKER_PREFERENCES, Application.MODE_PRIVATE)
         val sharedPrefsUtils = SharedPrefsUtils(sharedPrefsApp)
 
-        /*sharedPrefsUtils.writeClickedSearchSongs(CLICKED_SEARCH_TRACK, clickedSearchSongs)
-        val displayIntent = Intent(this, MediaActivity::class.java)
+        sharedPrefsUtils.writeClickedSearchSongs(CLICKED_SEARCH_TRACK, clickedSearchSongs)
+       /* val displayIntent = Intent(this, MediaActivity::class.java)
         displayIntent.putExtra("trackId", clickedTrack.trackId)
         startActivity(displayIntent)*/
     }
