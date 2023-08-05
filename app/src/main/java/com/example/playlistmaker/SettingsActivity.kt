@@ -1,11 +1,12 @@
 package com.example.playlistmaker
 
+import android.app.Application
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Window
 import android.widget.Button
 import android.net.Uri
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -15,12 +16,25 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val backButton = findViewById<Button>(R.id.backSettings)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSw)
+        val backSettingsButton = findViewById<Button>(R.id.backSettingsBtm)
         val shareButton = findViewById<Button>(R.id.shareBtm)
         val supportButton = findViewById<Button>(R.id.supportBtm)
         val licenceBottom: Button = findViewById(R.id.licenceBtm)
 
-        backButton.setOnClickListener {
+        //изменение темы приложения
+        val sharedPrefs = getSharedPreferences(MUSIC_MAKER_PREFERENCES, Application.MODE_PRIVATE)
+
+        themeSwitcher.setChecked (sharedPrefs.getString (DARK_THEME_ENABLED, "false").toBoolean())
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            sharedPrefs.edit()
+                .putString(DARK_THEME_ENABLED, checked.toString())
+                .apply()
+            (applicationContext as App).switchTheme(checked)
+        }
+
+
+        backSettingsButton.setOnClickListener {
             finish()
         }
 
@@ -28,11 +42,11 @@ class SettingsActivity : AppCompatActivity() {
         shareButton.setOnClickListener {
             shareCourse()
         }
-
+        //кнопка поддержки
         supportButton.setOnClickListener {
             sendEmailToSupport()
         }
-
+        //почитать лицензию
         licenceBottom.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             val url_oferta = getResources().getString(R.string.oferta_url_string)
