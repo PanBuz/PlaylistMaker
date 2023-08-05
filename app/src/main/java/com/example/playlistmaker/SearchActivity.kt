@@ -260,9 +260,9 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         val sharedPrefsUtils = SharedPrefsUtils(sharedPrefsApp)
 
         sharedPrefsUtils.writeClickedSearchSongs(CLICKED_SEARCH_TRACK, clickedSearchSongs)
-       /* val displayIntent = Intent(this, MediaActivity::class.java)
+        val displayIntent = Intent(this, MediaActivity::class.java)
         displayIntent.putExtra("trackId", clickedTrack.trackId)
-        startActivity(displayIntent)*/
+        startActivity(displayIntent)
     }
 
     companion object {
