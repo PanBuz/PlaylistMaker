@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         librar.setOnClickListener {
-            val librarIntent = Intent(this, LibraryActivity::class.java)
+            val librarIntent = Intent(this, MediaActivity::class.java)
             startActivity(librarIntent)
         }
 
