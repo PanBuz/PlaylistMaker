@@ -11,6 +11,8 @@ interface AppleApiService {
     fun search(@Query("term", encoded = false) text: String): Call<TracksResponse>
 }
 
+class TracksResponse (val resultCount: Int,
+                      val results:  ArrayList<Track>)
 class ITunesSearch(searchedText: String, val onSearchListener : OnSearchListener)
 {
     private val iTunesBaseUrl = "https://itunes.apple.com"

@@ -5,6 +5,8 @@ import android.app.Application
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -25,6 +27,13 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
     private var inputEditText: String = ""
     private var valueString: String = ""
 
+    companion object {
+        const val PRODUCT_AMOUNT = "PRODUCT_AMOUNT"
+        private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 1500L
+    }
+
+    private val handler = Handler(Looper.getMainLooper()) // для запроса
+
 
     private val searchSongs = mutableListOf<Track>() // песни найденные через iTunesApi
     private var clickedSearchSongs = arrayListOf<Track>() // песни сохраненные по клику
@@ -40,7 +49,6 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
 
         val linearLayout = findViewById<FrameLayout>(R.id.container)
 
-
         val inputEditText = findViewById<EditText>(R.id.inputEditText) //  EditText поиска песен
         val clearButton = findViewById<ImageView>(R.id.clearIcon) // крестик очистки EditText
         val backButton = findViewById<Button>(R.id.backButton) //нажатие на стрелку НАЗАД
@@ -49,8 +57,6 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         val zaglushkaPustoiText = findViewById<TextView>(R.id.zaglushka_pustoi_text)
         val inetProblemImage =
             findViewById<Button>(R.id.zaglushka_inet_button) // ImageView показа отсутствия интернета
-
-        //val trackAdapter = TrackAdapter(searchSongs)
 
         val recyclerViewSearch =
             findViewById<RecyclerView>(R.id.recyclerViewSearch)  // Recycler найденных песен
@@ -62,6 +68,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         val groupClicked =
             findViewById<LinearLayout>(R.id.group_clicked)  // контейнер с сохраненными трэками
         val clearHistory = findViewById<Button>(R.id.clear_history)  // кнопка Очистить историю
+        val progressBar = findViewById<ProgressBar>(R.id.progressBar)  // ПрогрессБар
 
         val sharedPrefsApp = getSharedPreferences(MUSIC_MAKER_PREFERENCES, Application.MODE_PRIVATE)
         val sharedPrefsUtils = SharedPrefsUtils(sharedPrefsApp)
@@ -69,38 +76,62 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
 
 
         fun searchTracks() {
-            appleApiService.search(inputEditText.text.toString())
-                .enqueue(object : Callback<TracksResponse> {
+            if (inputEditText.text.isNotEmpty()) {
+                // Меняем видимость элементов перед выполнением запроса
+                zaglushkaPustoiText.visibility = GONE
+                recyclerViewClicked.visibility = GONE
+                progressBar.visibility = VISIBLE
 
-                    @SuppressLint("ResourceAsColor")
-                    override fun onResponse(
-                        call: Call<TracksResponse>,
-                        response: Response<TracksResponse>
-                    ) {
-                        if (response.code() == 200) {
-                            searchSongs.clear()
-                            recyclerViewSearch.adapter?.notifyDataSetChanged()
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                noSongImage.visibility = GONE
-                                zaglushkaPustoiText.visibility = GONE
-                                inetProblemImage.visibility = GONE
-                                searchSongs.addAll(response.body()?.results!!)
+                appleApiService.search(inputEditText.text.toString())
+                    .enqueue(object : Callback<TracksResponse> {
+
+                        @SuppressLint("ResourceAsColor")
+                        override fun onResponse(
+                            call: Call<TracksResponse>,
+                            response: Response<TracksResponse>
+                        ) {
+                            progressBar.visibility =
+                                View.GONE // Прячем ProgressBar после успешного выполнения запроса
+                            if (response.code() == 200) {
+                                searchSongs.clear()
                                 recyclerViewSearch.adapter?.notifyDataSetChanged()
-                            } else {
-                                runOnUiThread {
-                                    searchSongs.clear()
+                                if (response.body()?.results?.isNotEmpty() == true) {
+                                    noSongImage.visibility = GONE
+                                    zaglushkaPustoiText.visibility = GONE
+                                    inetProblemImage.visibility = GONE
+                                    searchSongs.addAll(response.body()?.results!!)
                                     recyclerViewSearch.adapter?.notifyDataSetChanged()
-                                    zaglushkaPustoiText.setText(R.string.error_not_found)
-                                    noSongImage.setImageResource(R.drawable.empty_mode)
+                                } else {
+                                    runOnUiThread {
+                                        searchSongs.clear()
+                                        recyclerViewSearch.adapter?.notifyDataSetChanged()
+                                        zaglushkaPustoiText.setText(R.string.error_not_found)
+                                        noSongImage.setImageResource(R.drawable.empty_mode)
+                                        noSongImage.visibility = VISIBLE
+                                        zaglushkaPustoiText.visibility = VISIBLE
+                                        inetProblemImage.visibility = GONE
+                                    }
+                                }
+                            } else {
+                                searchSongs.clear()
+                                recyclerViewSearch.adapter?.notifyDataSetChanged()
+                                runOnUiThread {
+                                    zaglushkaPustoiText.setText(R.string.error_not_internet)
+                                    noSongImage.setImageResource(R.drawable.error_mode)
                                     noSongImage.visibility = VISIBLE
                                     zaglushkaPustoiText.visibility = VISIBLE
-                                    inetProblemImage.visibility = GONE
+                                    inetProblemImage.visibility = VISIBLE
                                 }
                             }
-                        } else {
-                            searchSongs.clear()
-                            recyclerViewSearch.adapter?.notifyDataSetChanged()
+                        }
+
+                        @SuppressLint("ResourceAsColor")
+                        override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                            progressBar.visibility =
+                                View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
                             runOnUiThread {
+                                searchSongs.clear()
+                                recyclerViewSearch.adapter?.notifyDataSetChanged()
                                 zaglushkaPustoiText.setText(R.string.error_not_internet)
                                 noSongImage.setImageResource(R.drawable.error_mode)
                                 noSongImage.visibility = VISIBLE
@@ -108,22 +139,16 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
                                 inetProblemImage.visibility = VISIBLE
                             }
                         }
-                    }
 
-                    @SuppressLint("ResourceAsColor")
-                    override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
-                        runOnUiThread {
-                            searchSongs.clear()
-                            recyclerViewSearch.adapter?.notifyDataSetChanged()
-                            zaglushkaPustoiText.setText(R.string.error_not_internet)
-                            noSongImage.setImageResource(R.drawable.error_mode)
-                            noSongImage.visibility = VISIBLE
-                            zaglushkaPustoiText.visibility = VISIBLE
-                            inetProblemImage.visibility = VISIBLE
-                        }
-                    }
+                    })
+            }
+        }
 
-                })
+        // функция для запроса в реальном времени
+        val searchRunnable = Runnable { searchTracks() }
+        fun searchDebounce() {
+            handler.removeCallbacks(searchRunnable)
+            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY_MILLIS)
         }
 
         fun showGroupClickedSong() {
@@ -151,6 +176,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
                     clearButton.visibility = VISIBLE
                 }
                 showGroupClickedSong()
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -177,20 +203,9 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         inputEditText.addTextChangedListener(simpleTextWatcher)
 
 
-
         // при получении фокуса показать историю просмотренных песен
         inputEditText.setOnFocusChangeListener { view, hasFocus -> showGroupClickedSong() }
 
-        // обработка нажатия на кнопку Done
-        inputEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-
-                searchTracks()
-                true
-                groupSearched.visibility = VISIBLE
-            }
-            false
-        }
 
         // обработка нажатия на кнопку Обновить
         inetProblemImage.setOnClickListener {
@@ -260,14 +275,12 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         val sharedPrefsUtils = SharedPrefsUtils(sharedPrefsApp)
 
         sharedPrefsUtils.writeClickedSearchSongs(CLICKED_SEARCH_TRACK, clickedSearchSongs)
+        App.activeTracks.add(0, clickedTrack)
         val displayIntent = Intent(this, MediaActivity::class.java)
         displayIntent.putExtra("trackId", clickedTrack.trackId)
         startActivity(displayIntent)
     }
 
-    companion object {
-        const val PRODUCT_AMOUNT = "PRODUCT_AMOUNT"
-    }
 
 }
 
