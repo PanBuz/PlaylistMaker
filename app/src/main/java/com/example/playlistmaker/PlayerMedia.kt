@@ -9,6 +9,8 @@ import android.widget.ImageView
 
 class PlayerMedia ( var buttonPlay : Button) {
 
+
+
     companion object  {
         val STATE_DEFAULT = 0
         val STATE_PREPARED = 1

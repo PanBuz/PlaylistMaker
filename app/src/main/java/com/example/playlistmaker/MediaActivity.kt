@@ -29,17 +29,17 @@ class MediaActivity : AppCompatActivity() {
         val STATE_PAUSED = 3
     }
 
-    private lateinit var binding: ActivityMediaBinding
+    private var binding: ActivityMediaBinding? = null
     var mediaPlayer = MediaPlayer()
     private var playerState  = STATE_DEFAULT
-    lateinit var  buttonPlay : MaterialButton
+    var  buttonPlay : MaterialButton? = null
     val handler = Handler(Looper.getMainLooper())
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMediaBinding.inflate(layoutInflater)
-        val view = binding.root
+        val view = binding?.root
         setContentView(view)
 
         val sharedPrefsApp = getSharedPreferences(MUSIC_MAKER_PREFERENCES, Application.MODE_PRIVATE)
@@ -48,21 +48,21 @@ class MediaActivity : AppCompatActivity() {
 
 
         // Элементы экрана:
-        val backOffImage = binding.ivBack
-        val cover = binding.ivCover512
-        val title = binding.tvTitle
-        val artist = binding.tvArtist
-        val buttonAdd = binding.ivAdd
-        buttonPlay = binding.btPlay
-        val buttonLike = binding.ivLike
-        val playback = binding.tvPlaybackTime
-        val durationTrack = binding.tvDuration
-        val album = binding.tvAlbum
-        val yearTrack = binding.tvYear
-        val genre = binding.tvGenre
-        val country = binding.tvCountry
+        val backOffImage = binding?.ivBack
+        val cover = binding?.ivCover512
+        val title = binding?.tvTitle
+        val artist = binding?.tvArtist
+        val buttonAdd = binding?.ivAdd
+        buttonPlay = binding?.btPlay
+        val buttonLike = binding?.ivLike
+        val playback = binding?.tvPlaybackTime
+        val durationTrack = binding?.tvDuration
+        val album = binding?.tvAlbum
+        val yearTrack = binding?.tvYear
+        val genre = binding?.tvGenre
+        val country = binding?.tvCountry
 
-        backOffImage.setOnClickListener { finish() }
+        backOffImage?.setOnClickListener { finish() }
 
 
         if (App.activeTracks.size > 0) {
@@ -70,35 +70,35 @@ class MediaActivity : AppCompatActivity() {
 
             val duration = SimpleDateFormat("mm:ss", Locale.getDefault() )
                 .format(playedTrack.trackTimeMillis)
-            title.setText(playedTrack.trackName)
-            artist.setText(playedTrack.artistName)
-            playback.setText("0:00")
-            durationTrack.setText(duration)
-            album.setText(playedTrack.collectionName)
-            yearTrack.setText(playedTrack.releaseDate.substring(0, 4))
-            genre.setText(playedTrack.primaryGenreName)
-            country.setText(playedTrack.country)
+            title?.setText(playedTrack.trackName)
+            artist?.setText(playedTrack.artistName)
+            playback?.setText("0:00")
+            durationTrack?.setText(duration)
+            album?.setText(playedTrack.collectionName)
+            yearTrack?.setText(playedTrack.releaseDate.substring(0, 4))
+            genre?.setText(playedTrack.primaryGenreName)
+            country?.setText(playedTrack.country)
             val coverUrl100 = playedTrack.artworkUrl100
             val coverUrl500 = playedTrack.artworkUrl512
             val radius = resources.getDimensionPixelSize(R.dimen.corner_radius)
-            Glide.with(cover)
+            Glide.with(cover!!)
                 .load(coverUrl500)
                 .transform(RoundedCorners(radius))
                 .placeholder(R.drawable.media_placeholder)
                 .into(cover)
             val trackViewUrl = playedTrack.previewUrl
-            buttonPlay.isEnabled = false
+            buttonPlay?.isEnabled = false
             mediaPlayer.setDataSource(trackViewUrl)
             mediaPlayer.prepareAsync()
             mediaPlayer.setOnPreparedListener {
-                buttonPlay.isEnabled = true
+                buttonPlay?.isEnabled = true
                 playerState = PlayerMedia.STATE_PREPARED
             }
 
             mediaPlayer.setOnCompletionListener {
 
-                if (App.darkTheme) {buttonPlay.setIconResource(R.drawable.button_play_night )}
-                else {buttonPlay.setIconResource(R.drawable.button_play_day )}
+                if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_play_night )}
+                else {buttonPlay?.setIconResource(R.drawable.button_play_day )}
                 playerState = PlayerMedia.STATE_PREPARED
             }
         }
@@ -107,15 +107,15 @@ class MediaActivity : AppCompatActivity() {
 
         fun startPlayer() {
             mediaPlayer.start()
-            if (App.darkTheme) {buttonPlay.setIconResource(R.drawable.button_pause_night )}
-            else {buttonPlay.setIconResource(R.drawable.button_pause_day )}
+            if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_pause_night )}
+            else {buttonPlay?.setIconResource(R.drawable.button_pause_day )}
             playerState = PlayerMedia.STATE_PLAYING
         }
 
         fun pausePlayer() {
             mediaPlayer.pause()
-            if (App.darkTheme) {buttonPlay.setIconResource(R.drawable.button_play_night )}
-            else {buttonPlay.setIconResource(R.drawable.button_play_day )}
+            if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_play_night )}
+            else {buttonPlay?.setIconResource(R.drawable.button_play_day )}
             playerState = PlayerMedia.STATE_PAUSED
         }
 
@@ -139,10 +139,10 @@ class MediaActivity : AppCompatActivity() {
                         override fun run() {
                             val trackPosition = SimpleDateFormat("mm:ss", Locale.getDefault() )
                                 .format(mediaPlayer.currentPosition)
-                            playback.setText(trackPosition)
+                            playback?.setText(trackPosition)
 
                             handler.postDelayed(this,333L)
-                            if (playerState == PlayerMedia.STATE_PREPARED) {playback.setText("00:00")}
+                            if (playerState == PlayerMedia.STATE_PREPARED) {playback?.setText("00:00")}
                         }
                     },   333L
                 )
@@ -150,7 +150,7 @@ class MediaActivity : AppCompatActivity() {
         }
 
 
-        buttonPlay.setOnClickListener {
+        buttonPlay?.setOnClickListener {
             playbackControl()
             if (playerState == PlayerMedia.STATE_PLAYING) {refreshTime()}
         }
@@ -167,8 +167,8 @@ class MediaActivity : AppCompatActivity() {
         super.onPause()
 
         mediaPlayer.pause()
-        if (App.darkTheme) {buttonPlay.setIconResource(R.drawable.button_play_night )}
-        else {buttonPlay.setIconResource(R.drawable.button_play_day )}
+        if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_play_night )}
+        else {buttonPlay?.setIconResource(R.drawable.button_play_day )}
         playerState = PlayerMedia.STATE_PAUSED
     }
 }

@@ -13,10 +13,9 @@ import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.databinding.ActivitySearchBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
     private var inputEditText: String = ""
     private var valueString: String = ""
-
+    private lateinit var binding: ActivitySearchBinding
     companion object {
         const val PRODUCT_AMOUNT = "PRODUCT_AMOUNT"
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 1500L
@@ -45,30 +44,26 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
     val appleApiService = retrofit.create(AppleApiService::class.java)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val linearLayout = findViewById<FrameLayout>(R.id.container)
+        val linearLayout = binding.container // не используется?
 
-        val inputEditText = findViewById<EditText>(R.id.inputEditText) //  EditText поиска песен
-        val clearButton = findViewById<ImageView>(R.id.clearIcon) // крестик очистки EditText
-        val backButton = findViewById<Button>(R.id.backButton) //нажатие на стрелку НАЗАД
+        val etInputSearchText = binding.inputEditText //  EditText поиска песен
+        val btClearButton = binding.clearIcon  // крестик очистки EditText
+        val btBackButton = binding.backButton //нажатие на стрелку НАЗАД
 
-        val noSongImage = findViewById<ImageView>(R.id.zaglushka_pustoi)
-        val zaglushkaPustoiText = findViewById<TextView>(R.id.zaglushka_pustoi_text)
-        val inetProblemImage =
-            findViewById<Button>(R.id.zaglushka_inet_button) // ImageView показа отсутствия интернета
+        val ivNoSongImage = binding.zaglushkaPustoi
+        val tvZaglushkaPustoiText = binding.zaglushkaPustoiText
+        val ivInetProblemImage = binding.zaglushkaInetButton// ImageView показа отсутствия интернета
 
-        val recyclerViewSearch =
-            findViewById<RecyclerView>(R.id.recyclerViewSearch)  // Recycler найденных песен
-        val recyclerViewClicked =
-            findViewById<RecyclerView>(R.id.recyclerViewClicked)   // Recycler сохраненных песен
+        val rvSearch =binding.recyclerViewSearch  // Recycler найденных песен
+        val rvClicked = binding.recyclerViewClicked   // Recycler сохраненных песен
 
-        val groupSearched =
-            findViewById<LinearLayout>(R.id.group_searched)     // контейнер с найденными трэками
-        val groupClicked =
-            findViewById<LinearLayout>(R.id.group_clicked)  // контейнер с сохраненными трэками
-        val clearHistory = findViewById<Button>(R.id.clear_history)  // кнопка Очистить историю
-        val progressBar = findViewById<ProgressBar>(R.id.progressBar)  // ПрогрессБар
+        val llGroupSearched =binding.groupSearched    // контейнер с найденными трэками
+        val llGroupClicked = binding.groupClicked // контейнер с сохраненными трэками
+        val btClearHistory = binding.clearHistory  // кнопка Очистить историю
+        val progressBar = binding.progressBar // ПрогрессБар
 
         val sharedPrefsApp = getSharedPreferences(MUSIC_MAKER_PREFERENCES, Application.MODE_PRIVATE)
         val sharedPrefsUtils = SharedPrefsUtils(sharedPrefsApp)
@@ -76,13 +71,13 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
 
 
         fun searchTracks() {
-            if (inputEditText.text.isNotEmpty()) {
+            if (etInputSearchText.text.isNotEmpty()) {
                 // Меняем видимость элементов перед выполнением запроса
-                zaglushkaPustoiText.visibility = GONE
-                recyclerViewClicked.visibility = GONE
+                tvZaglushkaPustoiText.visibility = GONE
+                rvClicked.visibility = GONE
                 progressBar.visibility = VISIBLE
 
-                appleApiService.search(inputEditText.text.toString())
+                appleApiService.search(etInputSearchText.text.toString())
                     .enqueue(object : Callback<TracksResponse> {
 
                         @SuppressLint("ResourceAsColor")
@@ -91,36 +86,36 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
                             response: Response<TracksResponse>
                         ) {
                             progressBar.visibility =
-                                View.GONE // Прячем ProgressBar после успешного выполнения запроса
+                                GONE // Прячем ProgressBar после успешного выполнения запроса
                             if (response.code() == 200) {
                                 searchSongs.clear()
-                                recyclerViewSearch.adapter?.notifyDataSetChanged()
+                                rvSearch.adapter?.notifyDataSetChanged()
                                 if (response.body()?.results?.isNotEmpty() == true) {
-                                    noSongImage.visibility = GONE
-                                    zaglushkaPustoiText.visibility = GONE
-                                    inetProblemImage.visibility = GONE
+                                    ivNoSongImage.visibility = GONE
+                                    tvZaglushkaPustoiText.visibility = GONE
+                                    ivInetProblemImage.visibility = GONE
                                     searchSongs.addAll(response.body()?.results!!)
-                                    recyclerViewSearch.adapter?.notifyDataSetChanged()
+                                    rvSearch.adapter?.notifyDataSetChanged()
                                 } else {
                                     runOnUiThread {
                                         searchSongs.clear()
-                                        recyclerViewSearch.adapter?.notifyDataSetChanged()
-                                        zaglushkaPustoiText.setText(R.string.error_not_found)
-                                        noSongImage.setImageResource(R.drawable.empty_mode)
-                                        noSongImage.visibility = VISIBLE
-                                        zaglushkaPustoiText.visibility = VISIBLE
-                                        inetProblemImage.visibility = GONE
+                                        rvSearch.adapter?.notifyDataSetChanged()
+                                        tvZaglushkaPustoiText.setText(R.string.error_not_found)
+                                        ivNoSongImage.setImageResource(R.drawable.empty_mode)
+                                        ivNoSongImage.visibility = VISIBLE
+                                        tvZaglushkaPustoiText.visibility = VISIBLE
+                                        ivInetProblemImage.visibility = GONE
                                     }
                                 }
                             } else {
                                 searchSongs.clear()
-                                recyclerViewSearch.adapter?.notifyDataSetChanged()
+                                rvSearch.adapter?.notifyDataSetChanged()
                                 runOnUiThread {
-                                    zaglushkaPustoiText.setText(R.string.error_not_internet)
-                                    noSongImage.setImageResource(R.drawable.error_mode)
-                                    noSongImage.visibility = VISIBLE
-                                    zaglushkaPustoiText.visibility = VISIBLE
-                                    inetProblemImage.visibility = VISIBLE
+                                    tvZaglushkaPustoiText.setText(R.string.error_not_internet)
+                                    ivNoSongImage.setImageResource(R.drawable.error_mode)
+                                    ivNoSongImage.visibility = VISIBLE
+                                    tvZaglushkaPustoiText.visibility = VISIBLE
+                                    ivInetProblemImage.visibility = VISIBLE
                                 }
                             }
                         }
@@ -131,12 +126,12 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
                                 View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
                             runOnUiThread {
                                 searchSongs.clear()
-                                recyclerViewSearch.adapter?.notifyDataSetChanged()
-                                zaglushkaPustoiText.setText(R.string.error_not_internet)
-                                noSongImage.setImageResource(R.drawable.error_mode)
-                                noSongImage.visibility = VISIBLE
-                                zaglushkaPustoiText.visibility = VISIBLE
-                                inetProblemImage.visibility = VISIBLE
+                                rvSearch.adapter?.notifyDataSetChanged()
+                                tvZaglushkaPustoiText.setText(R.string.error_not_internet)
+                                ivNoSongImage.setImageResource(R.drawable.error_mode)
+                                ivNoSongImage.visibility = VISIBLE
+                                tvZaglushkaPustoiText.visibility = VISIBLE
+                                ivInetProblemImage.visibility = VISIBLE
                             }
                         }
 
@@ -147,19 +142,19 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         // функция для запроса в реальном времени
         val searchRunnable = Runnable { searchTracks() }
         fun searchDebounce() {
-            handler.removeCallbacks(searchRunnable)
-            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY_MILLIS)
+            //handler.removeCallbacks(searchRunnable)
+            etInputSearchText.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY_MILLIS)
         }
 
         fun showGroupClickedSong() {
             if (clickedSearchSongs.size > 0) {
-                groupSearched.visibility =
-                    if (inputEditText.hasFocus() && inputEditText.text.isEmpty()) GONE else VISIBLE
-                groupClicked.visibility =
-                    if (inputEditText.hasFocus() && inputEditText.text.isEmpty()) VISIBLE else GONE
+                llGroupSearched.visibility =
+                    if (etInputSearchText.hasFocus() && etInputSearchText.text.isEmpty()) GONE else VISIBLE
+                llGroupClicked.visibility =
+                    if (etInputSearchText.hasFocus() && etInputSearchText.text.isEmpty()) VISIBLE else GONE
             } else {
-                groupSearched.visibility = VISIBLE
-                groupClicked.visibility = GONE
+                llGroupSearched.visibility = VISIBLE
+                llGroupClicked.visibility = GONE
             }
         }
 
@@ -171,12 +166,12 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
             // если будут изменения текста в поле поиска, то крестик очистки появится, при удалении - станет невидимым
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.toString().trim().isEmpty()) {
-                    clearButton.visibility = GONE
+                    btClearButton.visibility = GONE
                 } else {
-                    clearButton.visibility = VISIBLE
+                    btClearButton.visibility = VISIBLE
+                    searchDebounce()
                 }
                 showGroupClickedSong()
-                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -184,53 +179,53 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
             }
         }
 
-        backButton.setOnClickListener {
+        btBackButton.setOnClickListener {
             finish()
         }
 
 
         // при нажатии на крестик очистки поля поиска:
-        clearButton.setOnClickListener {
-            inputEditText.setText("")
-            noSongImage.visibility = GONE
-            inetProblemImage.visibility = GONE
+        btClearButton.setOnClickListener {
+            etInputSearchText.setText("")
+            ivNoSongImage.visibility = GONE
+            ivInetProblemImage.visibility = GONE
             searchSongs.clear()
-            recyclerViewSearch.adapter?.notifyDataSetChanged()
-            recyclerViewClicked.adapter?.notifyDataSetChanged()
+            rvSearch.adapter?.notifyDataSetChanged()
+            rvClicked.adapter?.notifyDataSetChanged()
         }
 
 
-        inputEditText.addTextChangedListener(simpleTextWatcher)
+        etInputSearchText.addTextChangedListener(simpleTextWatcher)
 
 
         // при получении фокуса показать историю просмотренных песен
-        inputEditText.setOnFocusChangeListener { view, hasFocus -> showGroupClickedSong() }
+        etInputSearchText.setOnFocusChangeListener { view, hasFocus -> showGroupClickedSong() }
 
 
         // обработка нажатия на кнопку Обновить
-        inetProblemImage.setOnClickListener {
-            noSongImage.visibility = GONE
-            zaglushkaPustoiText.visibility = GONE
-            inetProblemImage.visibility = GONE
+        ivInetProblemImage.setOnClickListener {
+            ivNoSongImage.visibility = GONE
+            tvZaglushkaPustoiText.visibility = GONE
+            ivInetProblemImage.visibility = GONE
             searchTracks()
         }
 
         // обработка нажатия на кнопку Очистить историю
-        clearHistory.setOnClickListener {
+        btClearHistory.setOnClickListener {
             clickedSearchSongs.clear()
 
             sharedPrefsUtils.writeClickedSearchSongs(CLICKED_SEARCH_TRACK, clickedSearchSongs)
             showGroupClickedSong()
-            recyclerViewClicked.adapter?.notifyDataSetChanged()
+            rvClicked.adapter?.notifyDataSetChanged()
         }
 
 
         /*     Формирование списка найденных песен в recyclerViewSearch                 */
-        recyclerViewSearch.layoutManager = LinearLayoutManager(this)
-        recyclerViewSearch.adapter = TrackAdapter(searchSongs, this)
+        rvSearch.layoutManager = LinearLayoutManager(this)
+        rvSearch.adapter = TrackAdapter(searchSongs, this)
         /*     Формирование списка сохраненных (кликнутых) песен в recyclerViewClicked  */
-        recyclerViewClicked.layoutManager = LinearLayoutManager(this)
-        recyclerViewClicked.adapter = ClickedMusicAdapter(clickedSearchSongs, this)
+        rvClicked.layoutManager = LinearLayoutManager(this)
+        rvClicked.adapter = ClickedMusicAdapter(clickedSearchSongs, this)
 
         // КОНЕЦ  fun onCreate(savedInstanceState: Bundle?)
 

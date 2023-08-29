@@ -6,27 +6,30 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.net.Uri
+import com.example.playlistmaker.databinding.ActivityMainBinding
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
 
     private val studentEmail = "aleksandor1203@yandex.ru"
-
+    private var binding : ActivitySettingsBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
 
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSw)
-        val backSettingsButton = findViewById<Button>(R.id.backSettingsBtm)
-        val shareButton = findViewById<Button>(R.id.shareBtm)
-        val supportButton = findViewById<Button>(R.id.supportBtm)
-        val licenceBottom: Button = findViewById(R.id.licenceBtm)
+        val themeSwitcher = binding?.themeSw
+        val backSettingsButton = binding?.backSettingsBtm
+        val shareButton = binding?.shareBtm
+        val supportButton = binding?.supportBtm
+        val licenceBottom: Button? = binding?.licenceBtm
 
         //изменение темы приложения
         val sharedPrefs = getSharedPreferences(MUSIC_MAKER_PREFERENCES, Application.MODE_PRIVATE)
 
-        themeSwitcher.setChecked (sharedPrefs.getString (DARK_THEME_ENABLED, "false").toBoolean())
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+        themeSwitcher?.setChecked (sharedPrefs.getString (DARK_THEME_ENABLED, "false").toBoolean())
+        themeSwitcher?.setOnCheckedChangeListener { switcher, checked ->
             sharedPrefs.edit()
                 .putString(DARK_THEME_ENABLED, checked.toString())
                 .apply()
@@ -34,20 +37,20 @@ class SettingsActivity : AppCompatActivity() {
         }
 
 
-        backSettingsButton.setOnClickListener {
+        backSettingsButton?.setOnClickListener {
             finish()
         }
 
         // Обработчик нажатия на кнопку "Поделиться приложением"
-        shareButton.setOnClickListener {
+        shareButton?.setOnClickListener {
             shareCourse()
         }
         //кнопка поддержки
-        supportButton.setOnClickListener {
+        supportButton?.setOnClickListener {
             sendEmailToSupport()
         }
         //почитать лицензию
-        licenceBottom.setOnClickListener {
+        licenceBottom?.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             val url_oferta = getResources().getString(R.string.oferta_url_string)
             intent.data = Uri.parse(url_oferta)
