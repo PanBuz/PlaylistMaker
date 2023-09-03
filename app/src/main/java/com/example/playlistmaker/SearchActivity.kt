@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.ActivitySearchBinding
@@ -26,11 +27,14 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
     private var inputEditText: String = ""
     private var valueString: String = ""
     private lateinit var binding: ActivitySearchBinding
+
     companion object {
         const val PRODUCT_AMOUNT = "PRODUCT_AMOUNT"
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 1500L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
-
+    private var lastClickTime = 0L
+    private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper()) // для запроса
 
 
@@ -57,10 +61,10 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         val tvZaglushkaPustoiText = binding.zaglushkaPustoiText
         val ivInetProblemImage = binding.zaglushkaInetButton// ImageView показа отсутствия интернета
 
-        val rvSearch =binding.recyclerViewSearch  // Recycler найденных песен
+        val rvSearch = binding.recyclerViewSearch  // Recycler найденных песен
         val rvClicked = binding.recyclerViewClicked   // Recycler сохраненных песен
 
-        val llGroupSearched =binding.groupSearched    // контейнер с найденными трэками
+        val llGroupSearched = binding.groupSearched    // контейнер с найденными трэками
         val llGroupClicked = binding.groupClicked // контейнер с сохраненными трэками
         val btClearHistory = binding.clearHistory  // кнопка Очистить историю
         val progressBar = binding.progressBar // ПрогрессБар
@@ -141,6 +145,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
 
         // функция для запроса в реальном времени
         val searchRunnable = Runnable { searchTracks() }
+
         fun searchDebounce() {
             //handler.removeCallbacks(searchRunnable)
             etInputSearchText.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY_MILLIS)
@@ -201,6 +206,18 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         // при получении фокуса показать историю просмотренных песен
         etInputSearchText.setOnFocusChangeListener { view, hasFocus -> showGroupClickedSong() }
 
+        // обработка нажатия на кнопку Done
+        etInputSearchText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+                searchTracks()
+                true
+                llGroupSearched.visibility = VISIBLE
+            }
+            false
+        }
+
+
 
         // обработка нажатия на кнопку Обновить
         ivInetProblemImage.setOnClickListener {
@@ -236,16 +253,17 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         super.onSaveInstanceState(outState)
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
         outState.putString(PRODUCT_AMOUNT, inputEditText.text.toString())
+        super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        inputEditText = savedInstanceState.getString(PRODUCT_AMOUNT, "")
+
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
-        Log.e("PRODUCT_AMOUNT", "ValueString before $valueString")
-        valueString = savedInstanceState.getString(PRODUCT_AMOUNT, "")
-        Log.e("PRODUCT_AMOUNT", "ValueString after $valueString")
-        inputEditText.setText(valueString)
+        if (savedInstanceState.containsKey(PRODUCT_AMOUNT)) {
+            val valueString = savedInstanceState.getString(PRODUCT_AMOUNT)
+            inputEditText.setText(valueString)
+        }
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -259,7 +277,19 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
     // нажатие на найденные песни в Recycler через SearchMusicAdapter
     @SuppressLint("SuspiciousIndentation")
     override fun onClickRecyclerItemView(clickedTrack: Track) {
+        val currentTime = System.currentTimeMillis()
+        // Проверяем, прошло ли необходимое время с момента последнего клика
+        if (currentTime - lastClickTime >= CLICK_DEBOUNCE_DELAY) {
+            // Выполняем действия по клику на трек
+            handleTrackClick(clickedTrack)
 
+            // Обновляем время последнего клика
+            lastClickTime = currentTime
+        }
+
+    }
+
+    private fun handleTrackClick(clickedTrack: Track) {
         if (clickedSearchSongs.contains(clickedTrack)) {
             clickedSearchSongs.remove(clickedTrack)
         } else if (clickedSearchSongs.size >= 10) {
