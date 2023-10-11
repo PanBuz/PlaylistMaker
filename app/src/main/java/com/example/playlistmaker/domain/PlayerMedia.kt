@@ -1,10 +1,7 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.domain
 
 import android.media.MediaPlayer
-import android.net.Uri
 import android.widget.Button
-
-import android.widget.ImageView
 
 
 class PlayerMedia ( var buttonPlay : Button) {

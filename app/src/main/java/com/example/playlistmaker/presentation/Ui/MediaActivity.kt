@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.Ui
 
 import android.annotation.SuppressLint
 import android.app.Application
@@ -7,13 +7,14 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.databinding.ActivityMainBinding
+import com.example.playlistmaker.domain.App
+import com.example.playlistmaker.domain.MUSIC_MAKER_PREFERENCES
+import com.example.playlistmaker.domain.PlayerMedia
+import com.example.playlistmaker.R
+import com.example.playlistmaker.data.SharedPrefsUtils
 import com.example.playlistmaker.databinding.ActivityMediaBinding
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
@@ -97,8 +98,8 @@ class MediaActivity : AppCompatActivity() {
 
             mediaPlayer.setOnCompletionListener {
 
-                if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_play_night )}
-                else {buttonPlay?.setIconResource(R.drawable.button_play_day )}
+                if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_play_night)}
+                else {buttonPlay?.setIconResource(R.drawable.button_play_day)}
                 playerState = PlayerMedia.STATE_PREPARED
             }
         }
@@ -107,15 +108,15 @@ class MediaActivity : AppCompatActivity() {
 
         fun startPlayer() {
             mediaPlayer.start()
-            if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_pause_night )}
-            else {buttonPlay?.setIconResource(R.drawable.button_pause_day )}
+            if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_pause_night)}
+            else {buttonPlay?.setIconResource(R.drawable.button_pause_day)}
             playerState = PlayerMedia.STATE_PLAYING
         }
 
         fun pausePlayer() {
             mediaPlayer.pause()
-            if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_play_night )}
-            else {buttonPlay?.setIconResource(R.drawable.button_play_day )}
+            if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_play_night)}
+            else {buttonPlay?.setIconResource(R.drawable.button_play_day)}
             playerState = PlayerMedia.STATE_PAUSED
         }
 
@@ -167,8 +168,8 @@ class MediaActivity : AppCompatActivity() {
         super.onPause()
 
         mediaPlayer.pause()
-        if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_play_night )}
-        else {buttonPlay?.setIconResource(R.drawable.button_play_day )}
+        if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_play_night)}
+        else {buttonPlay?.setIconResource(R.drawable.button_play_day)}
         playerState = PlayerMedia.STATE_PAUSED
     }
 }

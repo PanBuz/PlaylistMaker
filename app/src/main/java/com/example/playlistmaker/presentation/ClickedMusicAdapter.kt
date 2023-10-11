@@ -1,8 +1,10 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.Track
 
 class ClickedMusicAdapter (private val clickedSearchSongs: MutableList<Track>, private val listener : TrackAdapter.Listener) : RecyclerView.Adapter <TrackViewHolder> ()
 {
