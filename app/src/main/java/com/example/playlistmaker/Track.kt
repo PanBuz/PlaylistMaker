@@ -6,9 +6,13 @@ data class Track(
     val artistName: String, // Имя исполнителя
     val trackTimeMillis: Int, // Продолжительность трека
     val artworkUrl100: String, // Ссылка на изображение обложки
-    val trackViewUrl: String,  // Ссылка на трэк в iTunes
+    val previewUrl: String,  // Ссылка на трэк в iTunes
     val collectionName: String,
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String
+
 )
+{
+   val artworkUrl512 get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+}
