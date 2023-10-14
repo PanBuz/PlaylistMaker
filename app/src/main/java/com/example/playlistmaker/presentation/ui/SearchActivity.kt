@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation.Ui
+package com.example.playlistmaker.presentation.ui
 
 import android.annotation.SuppressLint
 import android.app.Application
@@ -15,15 +15,16 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.domain.App
-import com.example.playlistmaker.data.network.AppleApiService
 import com.example.playlistmaker.domain.CLICKED_SEARCH_TRACK
 import com.example.playlistmaker.domain.MUSIC_MAKER_PREFERENCES
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.SharedPrefsUtils
 import com.example.playlistmaker.domain.Track
 import com.example.playlistmaker.presentation.TrackAdapter
-import com.example.playlistmaker.data.dto.TracksResponse
+import com.example.playlistmaker.data.network.ITunesResponse
+import com.example.playlistmaker.data.network.ITunesSearchApi
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.presentation.ClickedMusicAdapter
 import retrofit2.Call
@@ -38,10 +39,11 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
     private lateinit var binding: ActivitySearchBinding
 
     companion object {
-        const val PRODUCT_AMOUNT = "PRODUCT_AMOUNT"
+        const val SEARCH_STRING = "SEARCH_STRING"
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 1500L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+
     private var lastClickTime = 0L
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper()) // для запроса
@@ -54,7 +56,8 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         .baseUrl("https://itunes.apple.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-    val appleApiService = retrofit.create(AppleApiService::class.java)
+    val iTunesService = retrofit.create(ITunesSearchApi::class.java)
+    private val tracksInteractor = Creator.provideTracksInteractor()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
@@ -90,13 +93,13 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
                 rvClicked.visibility = GONE
                 progressBar.visibility = VISIBLE
 
-                appleApiService.search(etInputSearchText.text.toString())
-                    .enqueue(object : Callback<TracksResponse> {
+                iTunesService.searchSongApi(etInputSearchText.text.toString())
+                    .enqueue(object : Callback<ITunesResponse> {
 
                         @SuppressLint("ResourceAsColor")
                         override fun onResponse(
-                            call: Call<TracksResponse>,
-                            response: Response<TracksResponse>
+                            call: Call<ITunesResponse>,
+                            response: Response<ITunesResponse>
                         ) {
                             progressBar.visibility =
                                 GONE // Прячем ProgressBar после успешного выполнения запроса
@@ -134,7 +137,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
                         }
 
                         @SuppressLint("ResourceAsColor")
-                        override fun onFailure(call: Call<TracksResponse>, t: Throwable) {
+                        override fun onFailure(call: Call<ITunesResponse>, t: Throwable) {
                             progressBar.visibility =
                                 View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
                             runOnUiThread {
@@ -227,7 +230,6 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         }
 
 
-
         // обработка нажатия на кнопку Обновить
         ivInetProblemImage.setOnClickListener {
             ivNoSongImage.visibility = GONE
@@ -258,20 +260,21 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
     }
 
 
+    // запоминание текста поисковой строки inputSearchText в переменную
+    @SuppressLint("SuspiciousIndentation")
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        val inputEditText = findViewById<EditText>(R.id.inputEditText)
-        outState.putString(PRODUCT_AMOUNT, inputEditText.text.toString())
+        val inputSearchText = findViewById<EditText>(R.id.inputEditText)
+        outState.putString(SEARCH_STRING, inputSearchText.text.toString())
         super.onSaveInstanceState(outState)
     }
 
+    //заполнение тектового поля из предыдущего запуска Активити
+    @SuppressLint("SuspiciousIndentation")
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-
-        val inputEditText = findViewById<EditText>(R.id.inputEditText)
-        if (savedInstanceState.containsKey(PRODUCT_AMOUNT)) {
-            val valueString = savedInstanceState.getString(PRODUCT_AMOUNT)
-            inputEditText.setText(valueString)
+        val inputSearchText = findViewById<EditText>(R.id.inputEditText)
+        if (savedInstanceState.containsKey(SEARCH_STRING)) {
+            val searchText = savedInstanceState.getString(SEARCH_STRING)
+            inputSearchText.setText(searchText)
         }
     }
 
@@ -286,19 +289,25 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
     // нажатие на найденные песни в Recycler через SearchMusicAdapter
     @SuppressLint("SuspiciousIndentation")
     override fun onClickRecyclerItemView(clickedTrack: Track) {
-        val currentTime = System.currentTimeMillis()
-        // Проверяем, прошло ли необходимое время с момента последнего клика
-        if (currentTime - lastClickTime >= CLICK_DEBOUNCE_DELAY) {
-            // Выполняем действия по клику на трек
-            handleTrackClick(clickedTrack)
 
-            // Обновляем время последнего клика
-            lastClickTime = currentTime
+        if (clickedSearchSongs.contains(clickedTrack)) {
+            clickedSearchSongs.remove(clickedTrack)
+        } else if (clickedSearchSongs.size >= 10) {
+            clickedSearchSongs.removeAt(clickedSearchSongs.size - 1)
         }
+        clickedSearchSongs.add(0, clickedTrack)
+        val sharedPrefsApp = getSharedPreferences(MUSIC_MAKER_PREFERENCES, Application.MODE_PRIVATE)
+        val sharedPrefsUtils = SharedPrefsUtils(sharedPrefsApp)
 
+        sharedPrefsUtils.writeClickedSearchSongs(CLICKED_SEARCH_TRACK, clickedSearchSongs)
+
+        App.activeTracks.add(0, clickedTrack)
+        val displayIntent = Intent(this, MediaActivity::class.java)
+        displayIntent.putExtra("trackId", clickedTrack.trackId)
+        startActivity(displayIntent)
     }
 
-    private fun handleTrackClick(clickedTrack: Track) {
+    /*private fun handleTrackClick(clickedTrack: Track) {
         if (clickedSearchSongs.contains(clickedTrack)) {
             clickedSearchSongs.remove(clickedTrack)
         } else if (clickedSearchSongs.size >= 10) {
@@ -313,7 +322,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         val displayIntent = Intent(this, MediaActivity::class.java)
         displayIntent.putExtra("trackId", clickedTrack.trackId)
         startActivity(displayIntent)
-    }
+    }*/
 
 
 }

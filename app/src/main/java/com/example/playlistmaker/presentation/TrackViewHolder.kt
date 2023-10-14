@@ -24,7 +24,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .centerInside()
             .error(R.drawable.error_mode)
             .transform(RoundedCorners(radiusIconImage))
-            .placeholder(R.drawable.empty_mode)
+            .placeholder(R.drawable.placeholder)
             .into(ivTrackImage)
 
 

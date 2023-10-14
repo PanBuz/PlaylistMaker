@@ -21,4 +21,6 @@ class ClickedMusicAdapter (private val clickedSearchSongs: MutableList<Track>, p
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(clickedSearchSongs[position], listener)
     }
+
+
 }
