@@ -1,9 +1,7 @@
 package com.example.playlistmaker.presentation.ui
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.media.MediaPlayer
-
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,14 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.Creator
-import com.example.playlistmaker.domain.App
-import com.example.playlistmaker.domain.MUSIC_MAKER_PREFERENCES
-import com.example.playlistmaker.domain.PlayerMedia
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.SharedPrefsUtils
 import com.example.playlistmaker.databinding.ActivityMediaBinding
-import com.example.playlistmaker.domain.PlayerMedia.Companion.STATE_DEFAULT
+import com.example.playlistmaker.domain.App
 import com.example.playlistmaker.domain.PlayerState
+import com.example.playlistmaker.domain.models.PlayerState.Companion.STATE_DEFAULT
+import com.example.playlistmaker.domain.models.PlayerState.Companion.STATE_PAUSED
+import com.example.playlistmaker.domain.models.PlayerState.Companion.STATE_PLAYING
+import com.example.playlistmaker.domain.models.PlayerState.Companion.STATE_PREPARED
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -40,9 +38,6 @@ class MediaActivity : AppCompatActivity() {
         binding = ActivityMediaBinding.inflate(layoutInflater)
         val view = binding?.root
         setContentView(view)
-
-        // val sharedPrefsApp = getSharedPreferences(MUSIC_MAKER_PREFERENCES, Application.MODE_PRIVATE)
-        // val sharedPrefsUtils = SharedPrefsUtils(sharedPrefsApp)
 
 
         // Элементы экрана:
@@ -86,20 +81,7 @@ class MediaActivity : AppCompatActivity() {
                 .into(cover)
             val trackViewUrl = playedTrack.previewUrl
             buttonPlay?.isEnabled = false
-            /*
-            mediaPlayer.setDataSource(trackViewUrl)
-            mediaPlayer.prepareAsync()
-            mediaPlayer.setOnPreparedListener {
-                buttonPlay?.isEnabled = true
-                playerState = PlayerMedia.STATE_PREPARED
-            }
-            mediaPlayer.setOnCompletionListener {
 
-                if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_play_night)}
-                else {buttonPlay?.setIconResource(R.drawable.button_play_day)}
-                playerState = PlayerMedia.STATE_PREPARED
-            }
-            */
             mediaPlayerInteractor.preparePlayer(trackViewUrl,
                 { buttonPlay?.isEnabled = true },
                 {
@@ -122,7 +104,7 @@ class MediaActivity : AppCompatActivity() {
             } else {
                 buttonPlay?.setIconResource(R.drawable.button_pause_day)
             }
-            playerState = PlayerMedia.STATE_PLAYING
+            playerState = STATE_PLAYING
         }
 
         fun pausePlayer() {
@@ -132,17 +114,17 @@ class MediaActivity : AppCompatActivity() {
             } else {
                 buttonPlay?.setIconResource(R.drawable.button_play_day)
             }
-            playerState = PlayerMedia.STATE_PAUSED
+            playerState = STATE_PAUSED
         }
 
 
         fun playbackControl() {
             when (playerState) {
-                PlayerMedia.STATE_PLAYING -> {
+                STATE_PLAYING -> {
                     pausePlayer()
                 }
 
-                PlayerMedia.STATE_PREPARED, PlayerMedia.STATE_PAUSED -> {
+                STATE_PREPARED, STATE_PAUSED -> {
                     startPlayer()
                 }
             }
@@ -159,7 +141,7 @@ class MediaActivity : AppCompatActivity() {
                             playback?.setText(trackPosition)
 
                             handler.postDelayed(this, 333L)
-                            if (playerState == PlayerMedia.STATE_PREPARED) {
+                            if (playerState == STATE_PREPARED) {
                                 playback?.setText("00:00")
                             }
                         }
@@ -184,10 +166,7 @@ class MediaActivity : AppCompatActivity() {
             }
         }
 
-        /*buttonPlay?.setOnClickListener {
-            playbackControl()
-            if (playerState == PlayerMedia.STATE_PLAYING) {refreshTime()}
-        }*/
+
         buttonPlay?.setOnClickListener {
             mediaPlayerInteractor.playbackControl({ switchImagesPausePlay() },
                 { switchImagesPausePlay() })
@@ -200,8 +179,7 @@ class MediaActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayerInteractor.pausePlayer({ })
-        /*mediaPlayer.pause()
-        playerState = PlayerMedia.STATE_PAUSED*/
+
     }
 
     override fun onPause() {
@@ -214,10 +192,6 @@ class MediaActivity : AppCompatActivity() {
             buttonPlay?.setIconResource(R.drawable.button_play_day)
         }
 
-        /* mediaPlayer.pause()
-         if (App.darkTheme) {buttonPlay?.setIconResource(R.drawable.button_play_night)}
-         else {buttonPlay?.setIconResource(R.drawable.button_play_day)}
-         playerState = PlayerMedia.STATE_PAUSED*/
     }
 }
 
