@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui
 
 import android.app.Application
 import android.content.Intent
@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.net.Uri
-import com.example.playlistmaker.databinding.ActivityMainBinding
+import com.example.playlistmaker.domain.App
+import com.example.playlistmaker.domain.DARK_THEME_ENABLED
+import com.example.playlistmaker.domain.MUSIC_MAKER_PREFERENCES
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
-import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
 

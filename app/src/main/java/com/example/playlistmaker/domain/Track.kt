@@ -1,10 +1,10 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.domain
 
 data class Track(
     val trackId: Int,
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
-    val trackTimeMillis: Int, // Продолжительность трека
+    val trackTimeMillis: Long, // Продолжительность трека
     val artworkUrl100: String, // Ссылка на изображение обложки
     val previewUrl: String,  // Ссылка на трэк в iTunes
     val collectionName: String,
@@ -13,6 +13,4 @@ data class Track(
     val country: String
 
 )
-{
-   val artworkUrl512 get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
-}
+{ val artworkUrl512 get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg") }

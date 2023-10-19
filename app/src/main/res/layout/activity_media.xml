@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_icon"
-    tools:context=".MediaActivity">
+    tools:context=".presentation.ui.MediaActivity">
 
     <ImageView
         android:id="@+id/iv_back"
@@ -74,7 +74,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/bt_play"
         style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="110dp"
+        android:layout_width="120dp"
         android:layout_height="100dp"
         android:layout_marginTop="@dimen/size_xs"
         app:icon="@drawable/button_play_day"
