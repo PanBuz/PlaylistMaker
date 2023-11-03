@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.Track
 
-class ClickedMusicAdapter (private val clickedSearchSongs: MutableList<Track>, private val listener : TrackAdapter.Listener) : RecyclerView.Adapter <TrackViewHolder> ()
+class ClickedMusicAdapter (
+    private val clickedSearchSongs: MutableList<Track>,
+    private val listener : TrackAdapter.Listener
+    ) : RecyclerView.Adapter <TrackViewHolder> ()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         return TrackViewHolder (LayoutInflater

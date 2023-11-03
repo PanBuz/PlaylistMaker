@@ -2,9 +2,9 @@ package com.example.playlistmaker.domain
 
 data class Track(
     val trackId: Int,
-    val trackName: String, // Название композиции
-    val artistName: String, // Имя исполнителя
-    val trackTimeMillis: Long, // Продолжительность трека
+    val trackName: String,
+    val artistName: String,
+    val trackTimeMillis: Long,
     val artworkUrl100: String, // Ссылка на изображение обложки
     val previewUrl: String,  // Ссылка на трэк в iTunes
     val collectionName: String,

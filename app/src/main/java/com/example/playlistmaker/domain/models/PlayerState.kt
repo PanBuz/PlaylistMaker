@@ -1,5 +1,10 @@
 package com.example.playlistmaker.domain.models
 
+/*enum class PlayerState {
+    DEFAULT, PREPARED, PLAYING, PAUSED;
+
+}*/
+
 class PlayerState {
     companion object  {
         val STATE_DEFAULT = 0

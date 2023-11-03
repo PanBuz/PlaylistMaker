@@ -23,7 +23,7 @@ class RetrofitNetworkClient: NetworkClient {
             val body = resp.body() ?: com.example.playlistmaker.data.dto.Response()
             body.apply { resultCode = resp.code() }
         }) as Response else {
-            com.example.playlistmaker.data.dto.Response().apply { resultCode = HttpURLConnection.HTTP_BAD_REQUEST }
+            Response().apply { resultCode = HttpURLConnection.HTTP_BAD_REQUEST }
         }
     }
 

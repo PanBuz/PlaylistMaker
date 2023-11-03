@@ -9,7 +9,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
@@ -21,9 +20,9 @@ import com.example.playlistmaker.domain.CLICKED_SEARCH_TRACK
 import com.example.playlistmaker.domain.MUSIC_MAKER_PREFERENCES
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.SharedPrefsUtils
+import com.example.playlistmaker.data.dto.ITunesResponse
 import com.example.playlistmaker.domain.Track
 import com.example.playlistmaker.presentation.TrackAdapter
-import com.example.playlistmaker.data.network.ITunesResponse
 import com.example.playlistmaker.data.network.ITunesSearchApi
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.presentation.ClickedMusicAdapter
@@ -34,20 +33,20 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
-    private var inputEditText: String = ""
-    private var valueString: String = ""
+    //private var inputEditText: String = ""
+    //private var valueString: String = ""
     private lateinit var binding: ActivitySearchBinding
 
     companion object {
         const val SEARCH_STRING = "SEARCH_STRING"
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 1500L
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        //private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
-    private var lastClickTime = 0L
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper()) // для запроса
-
+    //private var lastClickTime = 0L
+    //private var isClickAllowed = true
+    //private val handler = Handler(Looper.getMainLooper()) // для запроса
+    private val tracksInteractor = Creator.provideTracksInteractor()
 
     private val searchSongs = mutableListOf<Track>() // песни найденные через iTunesApi
     private var clickedSearchSongs = arrayListOf<Track>() // песни сохраненные по клику
@@ -57,21 +56,19 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     val iTunesService = retrofit.create(ITunesSearchApi::class.java)
-    private val tracksInteractor = Creator.provideTracksInteractor()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val linearLayout = binding.container // не используется?
 
         val etInputSearchText = binding.inputEditText //  EditText поиска песен
         val btClearButton = binding.clearIcon  // крестик очистки EditText
         val btBackButton = binding.backButton //нажатие на стрелку НАЗАД
 
         val ivNoSongImage = binding.zaglushkaPustoi
-        val tvZaglushkaPustoiText = binding.zaglushkaPustoiText
-        val ivInetProblemImage = binding.zaglushkaInetButton// ImageView показа отсутствия интернета
+        val tvNothingWasFound = binding.nothingWasFound
+        val btInetProblemButton = binding.zaglushkaInetButton// ImageView показа отсутствия интернета
 
         val rvSearch = binding.recyclerViewSearch  // Recycler найденных песен
         val rvClicked = binding.recyclerViewClicked   // Recycler сохраненных песен
@@ -83,13 +80,13 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
 
         val sharedPrefsApp = getSharedPreferences(MUSIC_MAKER_PREFERENCES, Application.MODE_PRIVATE)
         val sharedPrefsUtils = SharedPrefsUtils(sharedPrefsApp)
-        clickedSearchSongs = sharedPrefsUtils.readClickedSearchSongs(CLICKED_SEARCH_TRACK)
+        clickedSearchSongs = sharedPrefsUtils.readClickedSearchSongs(CLICKED_SEARCH_TRACK) // выводим на экран все кликнутые ранее треки
 
 
         fun searchTracks() {
             if (etInputSearchText.text.isNotEmpty()) {
                 // Меняем видимость элементов перед выполнением запроса
-                tvZaglushkaPustoiText.visibility = GONE
+                tvNothingWasFound.visibility = GONE
                 rvClicked.visibility = GONE
                 progressBar.visibility = VISIBLE
 
@@ -108,46 +105,45 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
                                 rvSearch.adapter?.notifyDataSetChanged()
                                 if (response.body()?.results?.isNotEmpty() == true) {
                                     ivNoSongImage.visibility = GONE
-                                    tvZaglushkaPustoiText.visibility = GONE
-                                    ivInetProblemImage.visibility = GONE
+                                    tvNothingWasFound.visibility = GONE
+                                    btInetProblemButton.visibility = GONE
                                     searchSongs.addAll(response.body()?.results!!)
                                     rvSearch.adapter?.notifyDataSetChanged()
                                 } else {
                                     runOnUiThread {
                                         searchSongs.clear()
                                         rvSearch.adapter?.notifyDataSetChanged()
-                                        tvZaglushkaPustoiText.setText(R.string.error_not_found)
+                                        tvNothingWasFound.setText(R.string.error_not_found)
                                         ivNoSongImage.setImageResource(R.drawable.empty_mode)
                                         ivNoSongImage.visibility = VISIBLE
-                                        tvZaglushkaPustoiText.visibility = VISIBLE
-                                        ivInetProblemImage.visibility = GONE
+                                        tvNothingWasFound.visibility = VISIBLE
+                                        btInetProblemButton.visibility = GONE
                                     }
                                 }
                             } else {
                                 searchSongs.clear()
                                 rvSearch.adapter?.notifyDataSetChanged()
                                 runOnUiThread {
-                                    tvZaglushkaPustoiText.setText(R.string.error_not_internet)
+                                    tvNothingWasFound.setText(R.string.error_not_internet)
                                     ivNoSongImage.setImageResource(R.drawable.error_mode)
                                     ivNoSongImage.visibility = VISIBLE
-                                    tvZaglushkaPustoiText.visibility = VISIBLE
-                                    ivInetProblemImage.visibility = VISIBLE
+                                    tvNothingWasFound.visibility = VISIBLE
+                                    btInetProblemButton.visibility = VISIBLE
                                 }
                             }
                         }
 
                         @SuppressLint("ResourceAsColor")
                         override fun onFailure(call: Call<ITunesResponse>, t: Throwable) {
-                            progressBar.visibility =
-                                View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
-                            runOnUiThread {
+                            progressBar.visibility = GONE // Прячем ProgressBar после выполнения запроса с ошибкой
+                            runOnUiThread { // выполняем в главном потоке
                                 searchSongs.clear()
                                 rvSearch.adapter?.notifyDataSetChanged()
-                                tvZaglushkaPustoiText.setText(R.string.error_not_internet)
+                                tvNothingWasFound.setText(R.string.error_not_internet)
                                 ivNoSongImage.setImageResource(R.drawable.error_mode)
                                 ivNoSongImage.visibility = VISIBLE
-                                tvZaglushkaPustoiText.visibility = VISIBLE
-                                ivInetProblemImage.visibility = VISIBLE
+                                tvNothingWasFound.visibility = VISIBLE
+                                btInetProblemButton.visibility = VISIBLE
                             }
                         }
 
@@ -205,7 +201,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         btClearButton.setOnClickListener {
             etInputSearchText.setText("")
             ivNoSongImage.visibility = GONE
-            ivInetProblemImage.visibility = GONE
+            btInetProblemButton.visibility = GONE
             searchSongs.clear()
             rvSearch.adapter?.notifyDataSetChanged()
             rvClicked.adapter?.notifyDataSetChanged()
@@ -231,10 +227,10 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
 
 
         // обработка нажатия на кнопку Обновить
-        ivInetProblemImage.setOnClickListener {
+        btInetProblemButton.setOnClickListener {
             ivNoSongImage.visibility = GONE
-            tvZaglushkaPustoiText.visibility = GONE
-            ivInetProblemImage.visibility = GONE
+            tvNothingWasFound.visibility = GONE
+            btInetProblemButton.visibility = GONE
             searchTracks()
         }
 
@@ -278,13 +274,13 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.Listener {
         }
     }
 
-    private fun clearButtonVisibility(s: CharSequence?): Int {
+   /* private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             GONE
         } else {
             VISIBLE
         }
-    }
+    }*/
 
     // нажатие на найденные песни в Recycler через SearchMusicAdapter
     @SuppressLint("SuspiciousIndentation")
