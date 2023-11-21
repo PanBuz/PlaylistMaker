@@ -9,12 +9,12 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.setting.domain.SettingsInteractor
-import com.example.playlistmaker.sharing.domain.App
-import com.example.playlistmaker.sharing.domain.App.Companion.respectMail
-import com.example.playlistmaker.sharing.domain.App.Companion.messageToDevelopers
-import com.example.playlistmaker.sharing.domain.App.Companion.respectText
-import com.example.playlistmaker.sharing.domain.App.Companion.oferUrl
-import com.example.playlistmaker.sharing.domain.App.Companion.shareTitle
+import com.example.playlistmaker.sharing.data.App
+import com.example.playlistmaker.sharing.data.App.Companion.respectMail
+import com.example.playlistmaker.sharing.data.App.Companion.messageToDevelopers
+import com.example.playlistmaker.sharing.data.App.Companion.respectText
+import com.example.playlistmaker.sharing.data.App.Companion.oferUrl
+import com.example.playlistmaker.sharing.data.App.Companion.shareTitle
 import com.example.playlistmaker.sharing.domain.SharingInteractor
 
 class SettingViewModel (private val sharingInteractor: SharingInteractor,

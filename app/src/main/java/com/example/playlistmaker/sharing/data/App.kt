@@ -1,15 +1,17 @@
-package com.example.playlistmaker.sharing.domain
+package com.example.playlistmaker.sharing.data
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.R
+import com.example.playlistmaker.player.data.MediaPlayerRepositoryImpl
+import com.example.playlistmaker.player.domain.MediaPlayerInteractor
+import com.example.playlistmaker.player.domain.MediaPlayerInteractorImpl
 import com.example.playlistmaker.search.domain.TrackSearch
 import com.example.playlistmaker.setting.data.AppPreferences
 import com.example.playlistmaker.setting.data.SettingsInteractorImpl
 import com.example.playlistmaker.setting.data.SettingsRepositoryImpl
 import com.example.playlistmaker.setting.domain.SettingsInteractor
-import com.example.playlistmaker.sharing.data.ExternalNavigatorImpl
-import com.example.playlistmaker.sharing.data.SharingInteractorImpl
+import com.example.playlistmaker.sharing.domain.SharingInteractor
 
 const val MUSIC_MAKER_PREFERENCES = "music_maker_preferences"
 const val DARK_THEME_ENABLED = "DARK_THEME_ENABLED"
@@ -42,6 +44,9 @@ class App : Application() {
     fun getExternalNavigator(): ExternalNavigatorImpl {
         return ExternalNavigatorImpl(this)
     }
+    /*fun getMediaPlayerRepository(): MediaPlayerRepositoryImpl {
+        return MediaPlayerRepositoryImpl()
+    }*/
 
     fun provideSettingsInteractor(): SettingsInteractor {
         return SettingsInteractorImpl(getSettingsRepository())
@@ -50,6 +55,9 @@ class App : Application() {
     fun provideSharingInteractor(): SharingInteractor {
         return SharingInteractorImpl(getExternalNavigator())
     }
+    /*fun provideMediaPlayerInteractor(): MediaPlayerInteractor {
+        return MediaPlayerInteractorImpl(getMediaPlayerRepository())
+    }*/
 
     fun switchTheme(darkThemeEnabled: Boolean) {
         AppCompatDelegate.setDefaultNightMode(
@@ -62,7 +70,6 @@ class App : Application() {
     }
 
     companion object {
-        var requestTracks = arrayListOf<TrackSearch>()
         var historyTracks= arrayListOf<TrackSearch>()
         var darkTheme = false
         var shareText = ""

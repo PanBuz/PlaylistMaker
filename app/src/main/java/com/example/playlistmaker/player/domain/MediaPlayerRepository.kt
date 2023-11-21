@@ -18,5 +18,4 @@ interface MediaPlayerRepository {
 
     fun getTrack() : TrackSearch
 
-    fun isNightTheme() : Boolean
 }

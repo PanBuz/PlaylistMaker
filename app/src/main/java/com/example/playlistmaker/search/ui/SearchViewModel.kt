@@ -14,7 +14,7 @@ import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.search.domain.SearchInteractor
 import com.example.playlistmaker.search.domain.StateSearch
 import com.example.playlistmaker.search.domain.TrackSearch
-import com.example.playlistmaker.sharing.domain.App
+import com.example.playlistmaker.sharing.data.App
 class SearchViewModel (
     private val searchInteractor: SearchInteractor,
     private val app: App
@@ -65,7 +65,6 @@ class SearchViewModel (
 
                     if (searchTracks != null) {
                         tracks.addAll(searchTracks)
-                        App.requestTracks.addAll(searchTracks)
 
                         when {
                             tracks.isEmpty() -> {

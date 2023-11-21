@@ -1,14 +1,14 @@
 package com.example.playlistmaker.search.data
 
 import android.util.Log
-import com.example.playlistmaker.search.data.dto.ResponseStatus
+import com.example.playlistmaker.search.domain.ResponseStatus
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.data.dto.TracksSearchRequest
 import com.example.playlistmaker.search.data.dto.TracksSearchResponse
 import com.example.playlistmaker.search.data.network.NetworkClient
 import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.search.domain.TrackSearch
-import com.example.playlistmaker.sharing.domain.App
+import com.example.playlistmaker.sharing.data.App
 import java.lang.Error
 import javax.net.ssl.HttpsURLConnection
 
@@ -93,4 +93,9 @@ class SearchRepositoryImpl(
     override fun clearHistory() {
         searchDataStorage.clearHistory()
     }
+
+
+
+
+
 }

@@ -3,7 +3,6 @@ package com.example.playlistmaker.player.ui
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -20,7 +19,7 @@ import java.util.Locale
 class MediaActivity : AppCompatActivity() {
 
 
-    lateinit var buttonPlay: MaterialButton
+    private lateinit var buttonPlay: MaterialButton
     private lateinit var binding: ActivityMediaBinding
     private lateinit var viewModel: MediaViewModel
 
@@ -33,72 +32,58 @@ class MediaActivity : AppCompatActivity() {
 
         Log.d("PAN_MediaActivity", "MediaActivity onCreate")
 
-            buttonPlay = binding.btPlay
+        buttonPlay = binding.btPlay
 
-            viewModel = ViewModelProvider(
-                this,
-                MediaViewModel.getViewModelFactory()
-            )[MediaViewModel::class.java]
+        viewModel = ViewModelProvider(
+            this,
+            MediaViewModel.getViewModelFactory()
+        )[MediaViewModel::class.java]
 
-            viewModel.observScreen().observe(this) {
-                refreshScreen(it)
+        viewModel.observScreen().observe(this) { refreshScreen(it) }
+
+        viewModel.observTimer().observe(this) { binding.tvPlaybackTime.text = it }
+
+
+        placeInPlace(viewModel.getTrack())
+
+
+        buttonPlay.setOnClickListener {
+            if (viewModel.isClickAllowed()) {
+                viewModel.playbackControl()
             }
+        }
 
-            viewModel.observTimer().observe(this) {
-                binding.tvPlaybackTime.text = it
-            }
-
-
-            placeInPlace(getTrack())
-
-
-            buttonPlay.setOnClickListener {
-                if (viewModel.isClickAllowed()) {
-                    viewModel.playbackControl()
-                }
-            }
-
-            binding.ivBack.setOnClickListener { finish() }
+        binding.ivBack.setOnClickListener { finish() }
 
     }
 
     //Устанавливаем вьюхи согласно теме
     private fun refreshScreen(state: PlayerState) {
-        if (viewModel.isNightTheme()) {
-            when (state) {
-                is PlayerState.PLAYING -> { buttonPlay.setIconResource(R.drawable.button_pause_night) }
-
-                is PlayerState.PAUSED -> { buttonPlay.setIconResource(R.drawable.button_play_night) }
-
-                is PlayerState.PREPARE -> {
-                    buttonPlay.setIconResource(R.drawable.button_play_night)
-                    buttonPlay.isEnabled = true
-                }
-                else -> {buttonPlay.setIconResource(R.drawable.button_play_night) }
+        when (state) {
+            is PlayerState.PLAYING -> {
+                buttonPlay.setIconResource(R.drawable.button_pause)
             }
-        } else {
-            when (state) {
-                is PlayerState.PLAYING -> { buttonPlay.setIconResource(R.drawable.button_pause_day) }
 
-                is PlayerState.PAUSED -> { buttonPlay.setIconResource(R.drawable.button_play_day) }
+            is PlayerState.PAUSED -> {
+                buttonPlay.setIconResource(R.drawable.button_play)
+            }
 
-                is PlayerState.PREPARE -> {
-                    buttonPlay.setIconResource(R.drawable.button_play_day)
-                    buttonPlay.isEnabled = true
-                }
+            is PlayerState.PREPARE -> {
+                buttonPlay.setIconResource(R.drawable.button_play)
+                buttonPlay.isEnabled = true
+            }
 
-                else -> {buttonPlay.setIconResource(R.drawable.button_play_day) }
+            else -> {
+                buttonPlay.setIconResource(R.drawable.button_play)
             }
         }
-    }
 
-    fun getTrack() : TrackSearch {
-        return viewModel.getTrack()
     }
 
     private fun placeInPlace(playedTrack: TrackSearch) {
 
-        val duration = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playedTrack.trackTimeMillis)
+        val duration =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(playedTrack.trackTimeMillis)
         binding.apply {
             tvTitle.setText(playedTrack.trackName)
             tvArtist.setText(playedTrack.artistName.toString())
@@ -110,11 +95,10 @@ class MediaActivity : AppCompatActivity() {
             tvCountry.setText(playedTrack.country)
         }
 
-        val coverUrl100 = playedTrack.artworkUrl100
-        val coverUrl500 = coverUrl100.replaceAfterLast('/', "512x512bb.jpg")
+        val bigCoverUrl500 = playedTrack.coverUrl500
         val radius = resources.getDimensionPixelSize(R.dimen.corner_radius)
         Glide.with(binding.ivCover512)
-            .load(coverUrl500)
+            .load(bigCoverUrl500)
             .transform(RoundedCorners(radius))
             .placeholder(R.drawable.media_placeholder)
             .into(binding.ivCover512)

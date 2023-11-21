@@ -19,5 +19,5 @@ interface MediaPlayerInteractor {
 
     fun getTrack() : TrackSearch
 
-    fun isNightTheme() : Boolean
+
 }

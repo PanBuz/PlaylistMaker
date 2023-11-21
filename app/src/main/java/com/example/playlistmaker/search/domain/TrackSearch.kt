@@ -11,4 +11,6 @@ data class TrackSearch(
     val primaryGenreName: String,
     val country: String,
     val previewUrl: String
-)
+) {
+    val coverUrl500 get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+}

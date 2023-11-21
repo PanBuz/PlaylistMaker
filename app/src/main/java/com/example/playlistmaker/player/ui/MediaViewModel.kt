@@ -49,9 +49,7 @@ class MediaViewModel   (application: Application): AndroidViewModel(application)
     fun getTrack() : TrackSearch {
         return mediaPlayerInteractor.getTrack()
     }
-    fun isNightTheme() : Boolean {
-        return mediaPlayerInteractor.isNightTheme()
-    }
+
     private fun preparePlayer() {
         mediaPlayerInteractor.preparePlayer(getTrack().previewUrl) {
             updateState(PlayerState.PREPARE)

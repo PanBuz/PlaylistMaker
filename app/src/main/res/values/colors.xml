@@ -28,6 +28,10 @@
     <color name="gray_black">#AEAFB4</color>
     <color name="text_gray">#AEAFB4</color>
     <color name="foregroundTint_gray">#736C6C</color>
+    <color name="track_tint">#AEAFB4</color>
+    <color name="thumb_tint">#E6E8EB</color>
+    <color name="button_play">#1A1B22</color>
+    <color name="button_pause">#1A1B22</color>
 
     <color name="gray_player"> #AEAFB4</color>
 </resources>

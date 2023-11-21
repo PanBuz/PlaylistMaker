@@ -48,8 +48,8 @@
             android:layout_marginHorizontal="12dp"
             android:text="@string/app_dark_style"
             android:textSize="16sp"
-            app:thumbTint="@color/light_gray"
-            app:trackTint="@color/grey" />
+            app:thumbTint="@color/thumb_tint"
+            app:trackTint="@color/track_tint" />
 
         <Button
             android:id="@+id/shareBtm"

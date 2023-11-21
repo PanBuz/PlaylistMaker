@@ -42,14 +42,15 @@ class RetrofitNetworkClient(
                 }
             }
         }
-        catch (error: Error) {
-            throw Exception(error)
-            Log.d ("PAN_Retrofit", "Error ($error)")
+        catch (exception: Exception) {
+            throw exception
+            Log.e ("PAN_Retrofit", "Exception ($exception)")
+
         }
     }
 }
 
-fun isOnline(context: Context): Boolean {
+private fun isOnline(context: Context): Boolean {
     val transportManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     val traficTransport = transportManager.getNetworkCapabilities(transportManager.activeNetwork)
     if (traficTransport != null) {

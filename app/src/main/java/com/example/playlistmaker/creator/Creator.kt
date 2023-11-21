@@ -11,7 +11,7 @@ import com.example.playlistmaker.search.domain.SearchInteractor
 import com.example.playlistmaker.search.data.SearchInteractorImpl
 import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.sharing.data.SharedPrefsUtils
-import com.example.playlistmaker.sharing.domain.App
+import com.example.playlistmaker.sharing.data.App
 
 
 object Creator {
@@ -21,7 +21,10 @@ object Creator {
         this.application = application
     }
     fun provideMediaPlayerInteractor(): MediaPlayerInteractor {
-        return MediaPlayerInteractorImpl(MediaPlayerRepositoryImpl())
+        return MediaPlayerInteractorImpl(getMediaPlayerRepository())
+    }
+    fun getMediaPlayerRepository(): MediaPlayerRepository {
+        return MediaPlayerRepositoryImpl()
     }
     fun provideSearchInteractor(context: Context): SearchInteractor {
         return SearchInteractorImpl(provideSearchRepository(context))
@@ -32,4 +35,5 @@ object Creator {
             SharedPrefsUtils(context),
         )
     }
+
 }

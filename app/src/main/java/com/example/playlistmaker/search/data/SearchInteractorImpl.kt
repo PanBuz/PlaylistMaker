@@ -1,7 +1,7 @@
 package com.example.playlistmaker.search.data
 
 import android.util.Log
-import com.example.playlistmaker.search.data.dto.ResponseStatus
+import com.example.playlistmaker.search.domain.ResponseStatus
 import com.example.playlistmaker.search.domain.SearchInteractor
 import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.search.domain.TrackSearch

@@ -39,7 +39,5 @@ class SettingsActivity() :  AppCompatActivity() {
 
         binding.licenceBtm.setOnClickListener { viewModel.openUserTerms() }  //ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ
     }
-    fun changeTheme (checked : Boolean){ //TODO не используется, можно удалить вроде
-        viewModel.switchTheme(checked)
-    }
+
 }

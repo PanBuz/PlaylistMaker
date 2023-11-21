@@ -4,8 +4,7 @@ import android.media.MediaPlayer
 import android.util.Log
 import com.example.playlistmaker.player.domain.MediaPlayerRepository
 import com.example.playlistmaker.search.domain.TrackSearch
-import com.example.playlistmaker.sharing.domain.App
-import com.example.playlistmaker.sharing.domain.App.Companion.historyTracks
+import com.example.playlistmaker.sharing.data.App.Companion.historyTracks
 
 @Suppress("CAST_NEVER_SUCCEEDS")
 class MediaPlayerRepositoryImpl() : MediaPlayerRepository {
@@ -43,9 +42,6 @@ class MediaPlayerRepositoryImpl() : MediaPlayerRepository {
             historyTracks.add(defaultTracks[0])
         }
         return historyTracks[0]
-    }
-    override fun isNightTheme() : Boolean {
-        return App.darkTheme
     }
 
 }
