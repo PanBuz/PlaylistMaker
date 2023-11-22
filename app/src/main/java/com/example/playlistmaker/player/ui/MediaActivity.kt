@@ -12,8 +12,7 @@ import com.example.playlistmaker.databinding.ActivityMediaBinding
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.TrackSearch
 import com.google.android.material.button.MaterialButton
-import java.text.SimpleDateFormat
-import java.util.Locale
+
 
 
 class MediaActivity : AppCompatActivity() {
@@ -81,24 +80,20 @@ class MediaActivity : AppCompatActivity() {
     }
 
     private fun placeInPlace(playedTrack: TrackSearch) {
-
-        val duration =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(playedTrack.trackTimeMillis)
         binding.apply {
             tvTitle.setText(playedTrack.trackName)
             tvArtist.setText(playedTrack.artistName.toString())
             tvPlaybackTime.setText(R.string.null_time)
-            tvDuration.setText(duration)
+            tvDuration.setText(playedTrack.durationTrack)
             tvAlbum.setText(playedTrack.collectionName)
             tvYear.setText(playedTrack.releaseDate.substring(0, 4))
             tvGenre.setText(playedTrack.primaryGenreName)
             tvCountry.setText(playedTrack.country)
         }
 
-        val bigCoverUrl500 = playedTrack.coverUrl500
         val radius = resources.getDimensionPixelSize(R.dimen.corner_radius)
         Glide.with(binding.ivCover512)
-            .load(bigCoverUrl500)
+            .load(playedTrack.coverUrl500)
             .transform(RoundedCorners(radius))
             .placeholder(R.drawable.media_placeholder)
             .into(binding.ivCover512)

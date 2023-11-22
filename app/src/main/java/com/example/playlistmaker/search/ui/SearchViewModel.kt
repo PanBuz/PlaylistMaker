@@ -17,7 +17,6 @@ import com.example.playlistmaker.search.domain.TrackSearch
 import com.example.playlistmaker.sharing.data.App
 class SearchViewModel (
     private val searchInteractor: SearchInteractor,
-    private val app: App
 ) : ViewModel() {
 
     companion object {
@@ -26,8 +25,7 @@ class SearchViewModel (
             initializer {
                 val app = (this[APPLICATION_KEY] as App)
                 SearchViewModel(
-                    searchInteractor = Creator.provideSearchInteractor(app.applicationContext),
-                    app = app
+                    searchInteractor = Creator.provideSearchInteractor(app.applicationContext)
                 )
             }
         }

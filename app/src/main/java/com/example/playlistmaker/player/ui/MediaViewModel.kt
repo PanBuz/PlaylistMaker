@@ -1,14 +1,12 @@
 package com.example.playlistmaker.player.ui
 
-import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.creator.Creator
@@ -17,13 +15,12 @@ import com.example.playlistmaker.search.domain.TrackSearch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class MediaViewModel   (application: Application): AndroidViewModel(application)
+class MediaViewModel   : ViewModel()
 {
-
     companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                MediaViewModel(this[APPLICATION_KEY] as Application)
+                MediaViewModel()
             }
         }
     }

@@ -3,9 +3,6 @@ package com.example.playlistmaker.sharing.data
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.R
-import com.example.playlistmaker.player.data.MediaPlayerRepositoryImpl
-import com.example.playlistmaker.player.domain.MediaPlayerInteractor
-import com.example.playlistmaker.player.domain.MediaPlayerInteractorImpl
 import com.example.playlistmaker.search.domain.TrackSearch
 import com.example.playlistmaker.setting.data.AppPreferences
 import com.example.playlistmaker.setting.data.SettingsInteractorImpl
@@ -44,9 +41,6 @@ class App : Application() {
     fun getExternalNavigator(): ExternalNavigatorImpl {
         return ExternalNavigatorImpl(this)
     }
-    /*fun getMediaPlayerRepository(): MediaPlayerRepositoryImpl {
-        return MediaPlayerRepositoryImpl()
-    }*/
 
     fun provideSettingsInteractor(): SettingsInteractor {
         return SettingsInteractorImpl(getSettingsRepository())
@@ -55,9 +49,6 @@ class App : Application() {
     fun provideSharingInteractor(): SharingInteractor {
         return SharingInteractorImpl(getExternalNavigator())
     }
-    /*fun provideMediaPlayerInteractor(): MediaPlayerInteractor {
-        return MediaPlayerInteractorImpl(getMediaPlayerRepository())
-    }*/
 
     fun switchTheme(darkThemeEnabled: Boolean) {
         AppCompatDelegate.setDefaultNightMode(

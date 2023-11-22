@@ -1,5 +1,8 @@
 package com.example.playlistmaker.search.domain
 
+import java.text.SimpleDateFormat
+import java.util.Locale
+
 data class TrackSearch(
     val trackId: Int,
     val trackName: String,
@@ -13,4 +16,6 @@ data class TrackSearch(
     val previewUrl: String
 ) {
     val coverUrl500 get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+    val durationTrack =
+        SimpleDateFormat("mm:ss", Locale.getDefault()).format(this.trackTimeMillis)
 }
