@@ -33,9 +33,6 @@ class MediaViewModel   : ViewModel()
     private val RefreshDelayMs = 500L
     private val ClickDelayMs = 100L
 
-    fun observScreen(): LiveData<PlayerState> = stateLiveData
-    fun observTimer(): LiveData<String> = timeLiveData
-
     init {
         Log.d("PAN_MediaViewModel", "VM MediaViewModel onCreate")
         updateState(PlayerState.DEFAULT)
@@ -43,6 +40,10 @@ class MediaViewModel   : ViewModel()
         setOnCompleteListener()
         isClickAllowed()
     }
+
+    fun observScreen(): LiveData<PlayerState> = stateLiveData
+    fun observTimer(): LiveData<String> = timeLiveData
+
     fun getTrack() : TrackSearch {
         return mediaPlayerInteractor.getTrack()
     }

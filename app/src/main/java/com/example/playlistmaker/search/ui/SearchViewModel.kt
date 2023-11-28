@@ -31,15 +31,16 @@ class SearchViewModel (
         }
     }
 
-    private val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper()) // нужен только для дебаусе
     lateinit var searchRunnable: Runnable
     private val stateMutableLiveData = MutableLiveData<StateSearch>()
-    fun stateLiveData(): LiveData<StateSearch> = stateMutableLiveData
-
     private var newSearchText: String? = null
+
     init {
         Log.d("PAN_SearchViewModel", "VM Search onCreate")
     }
+    fun stateLiveData(): LiveData<StateSearch> = stateMutableLiveData
+
     fun searchDebounce(changedText: String, hasError: Boolean) {
         var searchedText = ""
         if (newSearchText == changedText && !hasError) {
