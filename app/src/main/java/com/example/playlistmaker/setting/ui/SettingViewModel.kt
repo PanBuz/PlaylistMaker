@@ -4,17 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.setting.domain.SettingsInteractor
-import com.example.playlistmaker.sharing.data.App
-import com.example.playlistmaker.sharing.data.App.Companion.respectMail
-import com.example.playlistmaker.sharing.data.App.Companion.messageToDevelopers
-import com.example.playlistmaker.sharing.data.App.Companion.respectText
-import com.example.playlistmaker.sharing.data.App.Companion.oferUrl
-import com.example.playlistmaker.sharing.data.App.Companion.shareTitle
+import com.example.playlistmaker.App
+import com.example.playlistmaker.App.Companion.respectMail
+import com.example.playlistmaker.App.Companion.messageToDevelopers
+import com.example.playlistmaker.App.Companion.respectText
+import com.example.playlistmaker.App.Companion.oferUrl
+import com.example.playlistmaker.App.Companion.shareTitle
 import com.example.playlistmaker.sharing.domain.SharingInteractor
 
 class SettingViewModel (private val sharingInteractor: SharingInteractor,
@@ -24,8 +20,8 @@ class SettingViewModel (private val sharingInteractor: SharingInteractor,
     val themeLiveData: LiveData<Boolean> = themeMutableLiveData
 
     init {
-        Log.d("PAN_SettingViewModel", "onCreate")
         themeMutableLiveData.postValue(settingsInteractor.getThemeSettings())
+        Log.d("PAN_SettingViewModel", "onCreate")
     }
     override fun onCleared() {
         Log.d("PAN_SettingViewModel", "onCleared")
@@ -51,19 +47,6 @@ class SettingViewModel (private val sharingInteractor: SharingInteractor,
     fun openUserTerms() {
         Log.d("PAN_SettingViewModel", "openUserTerms")
         sharingInteractor.openTerms(oferUrl)
-    }
-
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val settingsInteractor = (this[APPLICATION_KEY] as App).provideSettingsInteractor()
-                val sharingInteractor = (this[APPLICATION_KEY] as App).provideSharingInteractor()
-                SettingViewModel(
-                    sharingInteractor,
-                    settingsInteractor
-                )
-            }
-        }
     }
 
 }

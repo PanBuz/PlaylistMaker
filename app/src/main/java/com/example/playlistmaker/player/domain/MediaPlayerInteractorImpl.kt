@@ -32,5 +32,8 @@ class MediaPlayerInteractorImpl(val mediaPlayerRepository :MediaPlayerRepository
     override fun getTrack() : TrackSearch {
         return mediaPlayerRepository.getTrack()
     }
+    override fun isNightTheme() : Boolean {
+        return mediaPlayerRepository.isNightTheme()
+    }
 
 }

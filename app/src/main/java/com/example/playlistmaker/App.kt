@@ -1,14 +1,15 @@
-package com.example.playlistmaker.sharing.data
+package com.example.playlistmaker
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.R
+import com.example.playlistmaker.di.dataModule
+import com.example.playlistmaker.di.interactorModule
+import com.example.playlistmaker.di.repositoryModule
+import com.example.playlistmaker.di.viewModelModule
 import com.example.playlistmaker.search.domain.TrackSearch
 import com.example.playlistmaker.setting.data.AppPreferences
-import com.example.playlistmaker.setting.data.SettingsInteractorImpl
-import com.example.playlistmaker.setting.data.SettingsRepositoryImpl
-import com.example.playlistmaker.setting.domain.SettingsInteractor
-import com.example.playlistmaker.sharing.domain.SharingInteractor
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 const val MUSIC_MAKER_PREFERENCES = "music_maker_preferences"
 const val DARK_THEME_ENABLED = "DARK_THEME_ENABLED"
@@ -18,6 +19,11 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        startKoin {
+            androidContext(this@App as Application)
+            modules(dataModule, repositoryModule, interactorModule, viewModelModule)
+        }
 
         shareText =  this.getText(R.string.course_url_string).toString()
         shareTitle =  this.getText(R.string.share_text).toString()
@@ -32,22 +38,6 @@ class App : Application() {
             darkTheme = AppPreferences.darkTheme !!
             switchTheme(darkTheme)
         }
-    }
-
-    fun getSettingsRepository(): SettingsRepositoryImpl {
-        return SettingsRepositoryImpl()
-    }
-
-    fun getExternalNavigator(): ExternalNavigatorImpl {
-        return ExternalNavigatorImpl(this)
-    }
-
-    fun provideSettingsInteractor(): SettingsInteractor {
-        return SettingsInteractorImpl(getSettingsRepository())
-    }
-
-    fun provideSharingInteractor(): SharingInteractor {
-        return SharingInteractorImpl(getExternalNavigator())
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

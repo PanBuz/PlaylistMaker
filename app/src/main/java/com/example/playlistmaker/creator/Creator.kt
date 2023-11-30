@@ -11,9 +11,9 @@ import com.example.playlistmaker.search.domain.SearchInteractor
 import com.example.playlistmaker.search.data.SearchInteractorImpl
 import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.sharing.data.SharedPrefsUtils
-import com.example.playlistmaker.sharing.data.App
+import com.example.playlistmaker.App
 
-
+/*
 object Creator {
     private var application: App? = null
 
@@ -36,4 +36,4 @@ object Creator {
         )
     }
 
-}
+}*/

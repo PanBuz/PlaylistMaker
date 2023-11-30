@@ -9,24 +9,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.TrackSearch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class MediaViewModel   : ViewModel()
+class MediaViewModel  (private val mediaPlayerInteractor: MediaPlayerInteractor): ViewModel()
 {
-    companion object {
+   /* companion object {
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 MediaViewModel()
             }
         }
-    }
+    }*/
 
-    private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
-    private val handler = Handler(Looper.getMainLooper())
+    //private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
+    private val handler = Handler(Looper.getMainLooper()) // нужен ли?
     private val stateLiveData = MutableLiveData<PlayerState>()
     private val timeLiveData = MutableLiveData<String>()
     private var clickAllowed = true

@@ -12,15 +12,15 @@ import com.example.playlistmaker.databinding.ActivityMediaBinding
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.TrackSearch
 import com.google.android.material.button.MaterialButton
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MediaActivity : AppCompatActivity() {
 
-
+    private val viewModel by viewModel<MediaViewModel>()
     private lateinit var buttonPlay: MaterialButton
     private lateinit var binding: ActivityMediaBinding
-    private lateinit var viewModel: MediaViewModel
+
 
 
     @SuppressLint("MissingInflatedId")
@@ -33,10 +33,10 @@ class MediaActivity : AppCompatActivity() {
 
         buttonPlay = binding.btPlay
 
-        viewModel = ViewModelProvider(
+        /*viewModel = ViewModelProvider(
             this,
             MediaViewModel.getViewModelFactory()
-        )[MediaViewModel::class.java]
+        )[MediaViewModel::class.java]*/
 
         viewModel.observScreen().observe(this) { refreshScreen(it) }
 

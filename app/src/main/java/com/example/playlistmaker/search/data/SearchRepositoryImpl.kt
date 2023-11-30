@@ -8,7 +8,7 @@ import com.example.playlistmaker.search.data.dto.TracksSearchResponse
 import com.example.playlistmaker.search.data.network.NetworkClient
 import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.search.domain.TrackSearch
-import com.example.playlistmaker.sharing.data.App
+import com.example.playlistmaker.App
 import java.lang.Error
 import javax.net.ssl.HttpsURLConnection
 
@@ -93,9 +93,6 @@ class SearchRepositoryImpl(
     override fun clearHistory() {
         searchDataStorage.clearHistory()
     }
-
-
-
 
 
 }
