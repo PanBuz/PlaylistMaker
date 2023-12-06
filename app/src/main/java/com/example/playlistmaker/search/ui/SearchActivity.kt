@@ -32,7 +32,6 @@ class SearchActivity : AppCompatActivity() {
     private var searchText = ""
     private var clickAllowed = true
     private lateinit var binding: ActivitySearchBinding
-   // private lateinit var viewModel: SearchViewModel
     private val viewModel by viewModel<SearchViewModel>()
 
     companion object {

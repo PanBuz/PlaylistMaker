@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -32,11 +31,6 @@ class MediaActivity : AppCompatActivity() {
         Log.d("PAN_MediaActivity", "MediaActivity onCreate")
 
         buttonPlay = binding.btPlay
-
-        /*viewModel = ViewModelProvider(
-            this,
-            MediaViewModel.getViewModelFactory()
-        )[MediaViewModel::class.java]*/
 
         viewModel.observScreen().observe(this) { refreshScreen(it) }
 

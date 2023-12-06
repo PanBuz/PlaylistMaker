@@ -6,9 +6,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.TrackSearch
@@ -17,15 +14,7 @@ import java.util.Locale
 
 class MediaViewModel  (private val mediaPlayerInteractor: MediaPlayerInteractor): ViewModel()
 {
-   /* companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                MediaViewModel()
-            }
-        }
-    }*/
 
-    //private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
     private val handler = Handler(Looper.getMainLooper()) // нужен ли?
     private val stateLiveData = MutableLiveData<PlayerState>()
     private val timeLiveData = MutableLiveData<String>()

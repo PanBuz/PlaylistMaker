@@ -15,15 +15,6 @@ class RetrofitNetworkClient(
     private val context: Context
 ) : NetworkClient {
 
-    //private val iTunesBaseUrl = "https://itunes.apple.com/"
-
-    /*private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(iTunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val iTunesService = retrofit.create(ITunesSearchApi::class.java)*/
-
     override fun doRequest(dto: Any): Response {
         try {
             if (!isOnline(context)) {
