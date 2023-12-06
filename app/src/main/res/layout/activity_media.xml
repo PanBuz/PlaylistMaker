@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_icon"
-    tools:context=".presentation.ui.MediaActivity">
+    tools:context=".player.ui.MediaActivity">
 
     <ImageView
         android:id="@+id/iv_back"
@@ -77,7 +77,7 @@
         android:layout_width="120dp"
         android:layout_height="100dp"
         android:layout_marginTop="@dimen/size_xs"
-        app:icon="@drawable/button_play_day"
+        app:icon="@drawable/button_play"
         app:iconSize="95dp"
         app:iconTint="@color/text_color"
         app:layout_constraintBottom_toBottomOf="@+id/iv_add"

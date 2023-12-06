@@ -26,6 +26,10 @@
     <color name="icon_search">#BCBCBC</color>
     <color name="view_background">#1E1E1E</color>
     <color name="gray_black">#1A1B22</color>
+    <color name="track_tint">#6478DF</color>
+    <color name="thumb_tint">#FF4F6FFF</color>
+    <color name="button_play">#ffffff</color>
+    <color name="button_pause">#ffffff</color>
 
     <color name="gray_player"> #AEAFB4</color>
 </resources>

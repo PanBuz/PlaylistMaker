@@ -1,17 +1,11 @@
 <resources>
+
+    <!-- main  -->
     <string name="app_name">Playlist Maker</string>
     <string name="app_search">Поиск</string>
     <string name="app_library">Медиатека</string>
     <string name="app_settings">Настройки</string>
-    <string name="app_dark_style">Темная тема</string>
-    <string name="app_share">Поделиться приложением</string>
-    <string name="app_mail_support">Написать в поддержку</string>
-    <string name="user_licence">Пользовательское соглашение</string>
-    <string name="course_url_string">https://practicum.yandex.ru/android-developer/?from=catalog</string>
-    <string name="extra_subject_string">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
-    <string name="extra_text_string">Спасибо разработчикам и разработчицам за крутое приложение!</string>
-    <string name="oferta_url_string">https://yandex.ru/legal/practicum_offer/</string>
-    <string name="share_text">Поделиться приложением</string>
+    <!-- Search  -->
     <string name="error_not_found">Ничего не нашлось</string>
     <string name="update">Обновить</string>
     <string name="error_not_internet">Проблемы со связью \n\n Загрузка не удалась. Проверьте подключение к интернету</string>
@@ -19,11 +13,24 @@
     <string name="you_searched">Вы искали</string>
     <string name="clear_history">Очистить историю</string>
     <string name="search_go">Поиск</string>
-
+    <!-- Player  -->
     <string name="duration">Длительность</string>
     <string name="album">Альбом</string>
     <string name="year">Год</string>
     <string name="genre">Жанр</string>
     <string name="country">Страна</string>
     <string name="rf">Россия</string>
+    <string name="null_time" translatable="false">0:00</string>
+    <!-- Setting  -->
+    <string name="app_dark_style">Темная тема</string>
+    <string name="share_text">Поделиться приложением</string>
+    <string name="app_share">Поделиться приложением</string>
+    <string name="app_mail_support">Написать в поддержку</string>
+    <string name="user_licence">Пользовательское соглашение</string>
+    <string name="course_url_string">https://practicum.yandex.ru/android-developer/?from=catalog</string>
+    <string name="extra_subject_string">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="extra_text_string">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="oferta_url_string">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="student_email">aleksandor1203@yandex.ru</string>
+
 </resources>
