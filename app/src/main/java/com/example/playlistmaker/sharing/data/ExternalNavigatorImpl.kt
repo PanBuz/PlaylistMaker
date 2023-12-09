@@ -4,11 +4,19 @@ import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import com.example.playlistmaker.R
 import com.example.playlistmaker.sharing.domain.ExternalNavigator
 
 
 class ExternalNavigatorImpl(private val application: Application) : ExternalNavigator {
-    override fun sendShare(shareText:String, shareTitle: String)  {
+
+    val shareText =  application.getText(R.string.course_url_string).toString()
+    val shareTitle =  application.getText(R.string.share_text).toString()
+    val respectText = application.getText(R.string.extra_text_string).toString()
+    val respectMail = application.getText(R.string.student_email).toString()
+    val messageToDevelopers = application.getText(R.string.extra_subject_string).toString()
+    val oferUrl = application.getText(R.string.oferta_url_string).toString()
+    override fun sendShare()  {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, shareText)
@@ -16,7 +24,7 @@ class ExternalNavigatorImpl(private val application: Application) : ExternalNavi
         }
         executeIntent(Intent.createChooser(sendIntent, shareTitle))
     }
-    override fun sendMail(respectText: String, respectMail: String, messageToDevelopers: String)  {
+    override fun sendMail()  {
         val mailIntent = Intent(Intent.ACTION_SENDTO)
         mailIntent.data = Uri.parse("mailto:")
         mailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(respectMail))
@@ -24,7 +32,7 @@ class ExternalNavigatorImpl(private val application: Application) : ExternalNavi
         mailIntent.putExtra(Intent.EXTRA_SUBJECT,messageToDevelopers)
         executeIntent(mailIntent)
     }
-    override fun sendOfer(oferUrl:String) {
+    override fun sendOfer() {
         val oferIntent = Intent(Intent.ACTION_VIEW, Uri.parse(oferUrl as String?))
         executeIntent(oferIntent)
     }

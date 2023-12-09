@@ -17,6 +17,5 @@ interface MediaPlayerRepository {
     fun destroyPlayer()
 
     fun getTrack() : TrackSearch
-    fun isNightTheme() : Boolean
 
 }

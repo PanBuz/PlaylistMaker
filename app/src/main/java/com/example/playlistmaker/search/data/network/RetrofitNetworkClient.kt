@@ -6,8 +6,6 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import com.example.playlistmaker.search.data.dto.Response
 import com.example.playlistmaker.search.data.dto.TracksSearchRequest
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 class RetrofitNetworkClient(

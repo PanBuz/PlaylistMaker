@@ -7,11 +7,11 @@ import com.example.playlistmaker.databinding.ActivityMainBinding
 import com.example.playlistmaker.player.ui.MediaActivity
 import com.example.playlistmaker.search.ui.SearchActivity
 import com.example.playlistmaker.setting.ui.SettingsActivity
-import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel by viewModel<MainViewModel>()
+
     private var binding: ActivityMainBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

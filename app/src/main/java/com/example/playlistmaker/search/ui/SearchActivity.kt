@@ -47,10 +47,6 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /*viewModel = ViewModelProvider(
-            this, SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]*/
-
         viewModel.stateLiveData().observe(this) {
             updateScreen(it)
             Log.d("PAN_SearchActivity", "Изменения статуса во ViewModel ${this.toString()}")

@@ -1,6 +1,5 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.main.MainViewModel
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.ui.MediaViewModel
 import com.example.playlistmaker.search.ui.SearchViewModel
@@ -10,9 +9,6 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel {
-        MainViewModel ()
-    }
 
     viewModel {
         SearchViewModel(
