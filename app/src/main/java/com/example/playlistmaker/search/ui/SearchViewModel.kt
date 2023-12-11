@@ -6,40 +6,28 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.search.domain.SearchInteractor
 import com.example.playlistmaker.search.domain.StateSearch
 import com.example.playlistmaker.search.domain.TrackSearch
-import com.example.playlistmaker.sharing.data.App
 class SearchViewModel (
-    private val searchInteractor: SearchInteractor,
+    private val searchInteractor: SearchInteractor
 ) : ViewModel() {
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 1500L
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = (this[APPLICATION_KEY] as App)
-                SearchViewModel(
-                    searchInteractor = Creator.provideSearchInteractor(app.applicationContext)
-                )
-            }
-        }
+
     }
 
-    private val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper()) // нужен только для дебаусе
     lateinit var searchRunnable: Runnable
     private val stateMutableLiveData = MutableLiveData<StateSearch>()
-    fun stateLiveData(): LiveData<StateSearch> = stateMutableLiveData
-
     private var newSearchText: String? = null
+
     init {
         Log.d("PAN_SearchViewModel", "VM Search onCreate")
     }
+    fun stateLiveData(): LiveData<StateSearch> = stateMutableLiveData
+
     fun searchDebounce(changedText: String, hasError: Boolean) {
         var searchedText = ""
         if (newSearchText == changedText && !hasError) {

@@ -6,35 +6,21 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.player.domain.MediaPlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.TrackSearch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class MediaViewModel   : ViewModel()
+class MediaViewModel  (private val mediaPlayerInteractor: MediaPlayerInteractor): ViewModel()
 {
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                MediaViewModel()
-            }
-        }
-    }
 
-    private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor()
-    private val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper()) // нужен ли?
     private val stateLiveData = MutableLiveData<PlayerState>()
     private val timeLiveData = MutableLiveData<String>()
     private var clickAllowed = true
     private val RefreshDelayMs = 500L
     private val ClickDelayMs = 100L
-
-    fun observScreen(): LiveData<PlayerState> = stateLiveData
-    fun observTimer(): LiveData<String> = timeLiveData
 
     init {
         Log.d("PAN_MediaViewModel", "VM MediaViewModel onCreate")
@@ -43,6 +29,10 @@ class MediaViewModel   : ViewModel()
         setOnCompleteListener()
         isClickAllowed()
     }
+
+    fun observScreen(): LiveData<PlayerState> = stateLiveData
+    fun observTimer(): LiveData<String> = timeLiveData
+
     fun getTrack() : TrackSearch {
         return mediaPlayerInteractor.getTrack()
     }

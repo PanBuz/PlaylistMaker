@@ -8,7 +8,6 @@ import com.example.playlistmaker.search.data.dto.TracksSearchResponse
 import com.example.playlistmaker.search.data.network.NetworkClient
 import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.search.domain.TrackSearch
-import com.example.playlistmaker.sharing.data.App
 import java.lang.Error
 import javax.net.ssl.HttpsURLConnection
 
@@ -70,11 +69,11 @@ class SearchRepositoryImpl(
                 it.previewUrl
             )
         }
-        App.historyTracks = historyTracks as ArrayList<TrackSearch>
+        clickedHistoryTracks = historyTracks as ArrayList<TrackSearch>
         return historyTracks
     }
     override fun addTrackInHistory(track: TrackSearch) {
-        App.historyTracks.add(0,track)
+        clickedHistoryTracks.add(0,track)
         searchDataStorage.addTrackToHistory(
             TrackDto(
                 track.trackId,
@@ -94,8 +93,10 @@ class SearchRepositoryImpl(
         searchDataStorage.clearHistory()
     }
 
+    companion object {
 
+        var clickedHistoryTracks= arrayListOf<TrackSearch>()
 
-
+    }
 
 }

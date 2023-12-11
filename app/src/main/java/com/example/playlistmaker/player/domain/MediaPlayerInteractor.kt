@@ -19,5 +19,4 @@ interface MediaPlayerInteractor {
 
     fun getTrack() : TrackSearch
 
-
 }
