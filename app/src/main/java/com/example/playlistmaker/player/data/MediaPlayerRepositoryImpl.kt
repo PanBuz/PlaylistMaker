@@ -34,12 +34,6 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer : MediaPlayer) : MediaPl
         mediaPlayer.release()
     }
     override fun getTrack() : TrackSearch {
-
-        /*if (clickedHistoryTracks.isNullOrEmpty()) {
-            val defaultTracks =  arrayListOf<TrackSearch>((TrackSearch(1,"Сначала нужно выбрать песню", "Александр Панкратов",100,  "", "", "2023", "", "RU", "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/76/8b/a5/768ba505-7774-9094-f3b7-8f55479df229/mzaf_5299098203351413278.plus.aac.p.m4a")))
-            clickedHistoryTracks.add(defaultTracks[0])
-        }*/ // на экране медиатеки почему - то запускается экран плейера, должен быть пустой экран. (не совсем понял, что подразумевается под пустым экраном?, сделал эту логику чтобы приложение не вылетало при первой попытке открыть медиатеку)
-
         return clickedHistoryTracks[0]
     }
 
