@@ -146,5 +146,8 @@
         <item name="android:textColor">@color/white</item>
         <item name="cornerRadius">54dp</item>
     </style>
+    <style name="MediatekaBackgroundStyle">
+        <item name="android:background">@color/mediateka_background_color</item>
+    </style>
 
 </resources>

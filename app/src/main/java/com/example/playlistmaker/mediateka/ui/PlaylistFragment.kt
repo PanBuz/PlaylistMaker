@@ -11,13 +11,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistFragment : Fragment() {
 
-    private lateinit var binding: FragmentPlaylistBinding
+    private var _binding: FragmentPlaylistBinding? = null
+    private val binding get() = _binding!!
     private val viewModel by viewModel<PlaylistViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentPlaylistBinding.inflate(inflater, container, false)
+        _binding = FragmentPlaylistBinding.inflate(inflater, container, false)
         binding.ivEmptyPlaylist.setImageResource(R.drawable.empty_mode)
         binding.tvEmptyPlaylist.text = getString(R.string.you_are_not_create)
         return binding.root
@@ -29,6 +30,10 @@ class PlaylistFragment : Fragment() {
         viewModel.playlistLiveData.observe(viewLifecycleOwner) {
 
         }
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
