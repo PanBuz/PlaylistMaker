@@ -19,8 +19,8 @@ class PlaylistFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPlaylistBinding.inflate(inflater, container, false)
-        binding.ivEmptyPlaylist.setImageResource(R.drawable.empty_mode)
-        binding.tvEmptyPlaylist.text = getString(R.string.you_are_not_create)
+        //binding.ivEmptyPlaylist.setImageResource(R.drawable.empty_mode)
+        //binding.tvEmptyPlaylist.text = getString(R.string.you_are_not_create)
         return binding.root
     }
 

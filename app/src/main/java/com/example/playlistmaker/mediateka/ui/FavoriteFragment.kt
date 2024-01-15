@@ -20,8 +20,8 @@ class FavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
-        binding.ivEmptyFavorite.setImageResource(R.drawable.empty_mode)
-        binding.tvEmptyFavorite.text = getString(R.string.empty_library)
+       // binding.ivEmptyFavorite.setImageResource(R.drawable.empty_mode)
+       // binding.tvEmptyFavorite.text = getString(R.string.empty_library)
         return binding.root
     }
 
