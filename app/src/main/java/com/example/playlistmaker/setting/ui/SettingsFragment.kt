@@ -1,46 +1,57 @@
 package com.example.playlistmaker.setting.ui
 
-import android.annotation.SuppressLint
+
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class SettingsActivity :  AppCompatActivity() {
+class SettingsFragment :  Fragment() {
 
+
+    private var _binding: FragmentSettingsBinding? = null
+    private val binding get() = _binding!!
     private val viewModel by viewModel<SettingViewModel>()
-    private lateinit var binding: ActivitySettingsBinding
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
 
-    @SuppressLint("MissingInflatedId")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         Log.d("PAN_SettingsActivity", "SettingsActivity onCreate")
 
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        viewModel.themeLiveData.observe(this) {
+        viewModel.themeLiveData.observe(viewLifecycleOwner) {
                // checked -> binding.themeSw.isChecked = checked
             Log.d("PAN_SettingsActivity", "SettingsActivity onCreate3")
             } // Подписка на изменение данных themeLiveData
 
         binding.themeSw.isChecked = viewModel.getThemeState() // изменяем тему приложения
 
-
         binding.themeSw.setOnCheckedChangeListener { _, checked ->
             viewModel.switchTheme(checked) }                      // Слушатель переключения темы
 
-        binding.backSettingsBtm.setOnClickListener { finish() } // НАЗАД
-
         binding.shareBtm.setOnClickListener { viewModel.shareApp() } // ПОДЕЛИТЬСЯ
-
 
         binding.supportBtm.setOnClickListener { viewModel.writeInSupport() } //НАПИСАТЬ в ПОДДЕРЖКУ
 
         binding.licenceBtm.setOnClickListener { viewModel.openUserTerms() }  //ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
