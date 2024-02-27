@@ -1,40 +1,30 @@
 package com.example.playlistmaker.main
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMainBinding
-import com.example.playlistmaker.mediateka.ui.MediatekaActivity
-import com.example.playlistmaker.player.ui.MediaActivity
-import com.example.playlistmaker.search.ui.SearchActivity
-import com.example.playlistmaker.setting.ui.SettingsActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 
 class MainActivity : AppCompatActivity() {
 
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
 
-    private var binding: ActivityMainBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding?.root
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
         setContentView(view)
 
-
-        binding?.settingButton?.setOnClickListener {
-            val settingsIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(settingsIntent)
-        }
-
-        binding?.searchButton?.setOnClickListener {
-            val searchIntent = Intent(this, SearchActivity::class.java)
-            startActivity(searchIntent)
-        }
-
-        binding?.libraryButton?.setOnClickListener {
-            val librarIntent = Intent(this, MediatekaActivity::class.java)
-            startActivity(librarIntent)
-        }
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_main) as NavHostFragment
+        val navController = navHostFragment.navController
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_main)
+        bottomNavigationView.setupWithNavController(navController)
 
     }
 }

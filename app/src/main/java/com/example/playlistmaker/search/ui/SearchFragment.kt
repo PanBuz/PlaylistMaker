@@ -1,6 +1,5 @@
 package com.example.playlistmaker.search.ui
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -9,20 +8,21 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.player.ui.MediaActivity
+import com.example.playlistmaker.databinding.FragmentSearchBinding
+import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.search.domain.StateSearch
 import com.example.playlistmaker.search.domain.TrackSearch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
     private val searchedSong = ArrayList<TrackSearch>()
     private val clickedSong = ArrayList<TrackSearch>()
@@ -31,30 +31,26 @@ class SearchActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper()) // его  от сюда убрать?
     private var searchText = ""
     private var clickAllowed = true
-    private lateinit var binding: ActivitySearchBinding
+    private lateinit var binding: FragmentSearchBinding
     private val viewModel by viewModel<SearchViewModel>()
 
-    companion object {
-        private const val SEARCH_STRING = "SEARCH_STRING"
-        private const val SEARCH_DEBOUNCE_DELAY = 500L
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        binding = FragmentSearchBinding.inflate(layoutInflater)
+        return binding.root
     }
 
-    @SuppressLint("MissingInflatedId")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         Log.d("PAN_SearchActivity", "SearchActivity onCreate")
 
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        viewModel.stateLiveData().observe(this) {
+        viewModel.stateLiveData().observe(viewLifecycleOwner) {
             updateScreen(it)
             Log.d("PAN_SearchActivity", "Изменения статуса во ViewModel ${this.toString()}")
-        }
-
-        //Слушатель НАЗАД
-        binding.backButton.setOnClickListener {
-            finish()
         }
 
         // Слушатель Done
@@ -79,7 +75,6 @@ class SearchActivity : AppCompatActivity() {
             binding.recyclerViewClicked.adapter?.notifyDataSetChanged()
         }
 
-
         // Слушатель крестик очистки поля поиска:
         binding.apply {
             clearIcon.setOnClickListener {
@@ -99,11 +94,11 @@ class SearchActivity : AppCompatActivity() {
 
 
         // Формирование списка найденных песен в recyclerViewSearch
-        binding.recyclerViewSearch.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewSearch.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewSearch.adapter = searchMusicAdapter
 
         // Формирование списка сохраненных (кликнутых) песен в recyclerViewClicked
-        binding.recyclerViewClicked.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewClicked.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewClicked.adapter = clickedMusicAdapter
 
 
@@ -133,6 +128,7 @@ class SearchActivity : AppCompatActivity() {
 
         provideTextWatcher(textWatcher())
 
+
     } // The END  fun onCreate
 
     fun provideTextWatcher(textWatcher: TextWatcher) {
@@ -148,7 +144,10 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    //TODO теперь не ныжно?
+
     // запоминание текста поисковой строки inputSearchText в переменную
+    /*
     @SuppressLint("SuspiciousIndentation")
     override fun onSaveInstanceState(outState: Bundle) {
         val inputSearchText = findViewById<EditText>(R.id.inputEditText)
@@ -163,7 +162,7 @@ class SearchActivity : AppCompatActivity() {
             val searchText = savedInstanceState.getString(SEARCH_STRING)
             binding.inputEditText.setText(searchText)
         }
-    }
+    }*/
 
     private fun trackClickListener(track: TrackSearch) {
         if (isClickAllowed()) {
@@ -172,7 +171,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
     fun goToPlayer(trackId: String) {
-        val playerIntent = Intent(this, MediaActivity::class.java)
+        val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
         playerIntent.putExtra(MediaStore.Audio.AudioColumns.TRACK, trackId)
         startActivity(playerIntent)
     }
@@ -258,6 +257,10 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+    companion object {
+       // private const val SEARCH_STRING = "SEARCH_STRING"
+        private const val SEARCH_DEBOUNCE_DELAY = 500L
     }
 }
 

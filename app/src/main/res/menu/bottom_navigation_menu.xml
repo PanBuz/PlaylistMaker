@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/searchFragment"
+        android:actionLayout="@layout/fragment_search"
+        android:icon="@drawable/search"
+        android:title="@string/app_search" />
+
+    <item
+        android:id="@+id/mediaFragment"
+        android:actionLayout="@layout/fragment_mediateka"
+        android:icon="@drawable/library"
+        android:title="@string/app_library" />
+
+    <item
+        android:id="@+id/settingsFragment"
+        android:actionLayout="@layout/fragment_settings"
+        android:icon="@drawable/settings"
+        android:title="@string/app_settings" />
+
+</menu>

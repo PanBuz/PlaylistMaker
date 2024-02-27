@@ -1,44 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/ActivityBackgroundStyle"
+    android:id="@+id/main_screen"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:layout_height="match_parent">
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_main"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/main_navigation_graph"></androidx.fragment.app.FragmentContainerView>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:paddingBottom="24dp"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gray_player"
+        app:layout_constraintBottom_toTopOf="@id/bottom_main"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    </FrameLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_main"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:addStatesFromChildren="true"
+        style="@style/AllBackgroundStyle"
+        android:foregroundTint="@color/background"
+        android:outlineAmbientShadowColor="@color/blue"
+        app:itemRippleColor="@color/blue"
+        app:itemTextAppearanceActive="@style/Theme.PlaylistMaker"
+        android:theme="@style/Theme.PlaylistMaker"
+        app:itemTextColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_menu"
+        app:navGraph="@navigation/main_navigation_graph" />
 
-    <Button
-        android:id="@+id/searchButton"
-        style="@style/ActivityBottomTextStyle"
-        android:text="@string/app_search"
-        app:icon="@drawable/search" />
-
-    <Button
-        android:id="@+id/libraryButton"
-        style="@style/ActivityBottomTextStyle"
-        android:text="@string/app_library"
-        app:icon="@drawable/library" />
-
-    <Button
-        android:id="@+id/settingButton"
-        style="@style/ActivityBottomTextStyle"
-        android:text="@string/app_settings"
-        app:icon="@drawable/settings" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
