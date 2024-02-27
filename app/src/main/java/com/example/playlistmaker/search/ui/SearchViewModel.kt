@@ -1,73 +1,79 @@
 package com.example.playlistmaker.search.ui
 
-import android.os.Handler
-import android.os.Looper
+
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.SearchInteractor
 import com.example.playlistmaker.search.domain.StateSearch
 import com.example.playlistmaker.search.domain.TrackSearch
+import com.example.playlistmaker.utils.debounce
+import kotlinx.coroutines.launch
+
 class SearchViewModel (
     private val searchInteractor: SearchInteractor
 ) : ViewModel() {
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 1500L
+        var playedTracks = arrayListOf<TrackSearch>()
 
     }
 
-    private val handler = Handler(Looper.getMainLooper()) // нужен только для дебаусе
-    lateinit var searchRunnable: Runnable
     private val stateMutableLiveData = MutableLiveData<StateSearch>()
+    fun stateLiveData(): LiveData<StateSearch> = stateMutableLiveData
     private var newSearchText: String? = null
 
-    init {
-        Log.d("PAN_SearchViewModel", "VM Search onCreate")
+    private val trackSearchDebounce = debounce<String>(
+        SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
+        searchSong(changedText)
     }
-    fun stateLiveData(): LiveData<StateSearch> = stateMutableLiveData
 
-    fun searchDebounce(changedText: String, hasError: Boolean) {
-        var searchedText = ""
-        if (newSearchText == changedText && !hasError) {
-            return
+    fun searchDebounce(changedText: String) {
+        if (newSearchText != changedText) {
+            newSearchText = changedText
+            trackSearchDebounce(changedText)
         }
-        searchedText = changedText
-        this.newSearchText = changedText
-        handler.removeCallbacksAndMessages("PANBUZ")
-        searchRunnable = Runnable { searchSong(searchedText) }
-        handler.postDelayed(searchRunnable, "PANBUZ", SEARCH_DEBOUNCE_DELAY)
-    }
-    private fun searchSong(expression: String) {
-        Log.d("PAN_SearchViewModel", "Пришло на оправку searchSong ($expression)")
 
-        if (expression.isNotEmpty()) {
+    }
+    private fun searchSong(searchQuery: String) {
+        Log.d("PAN_SearchViewModel", "Пришло на оправку searchSong ($searchQuery)")
+
+        if (searchQuery.isNotEmpty()) {
             updateState(StateSearch.Loading)
 
-            searchInteractor.searchTracks(expression, object : SearchInteractor.SearchConsumer {
-                override fun consume(searchTracks: List<TrackSearch>?, hasError: Boolean?) {
-                    val tracks = arrayListOf<TrackSearch>()
-
-                    if (searchTracks != null) {
-                        tracks.addAll(searchTracks)
-
-                        when {
-                            tracks.isEmpty() -> {
-                                updateState(StateSearch.Empty())
-                            }
-
-                            tracks.isNotEmpty() -> {
-                                updateState(StateSearch.Content(tracks))
-                            }
-                        }
-                    } else {
-                        updateState(StateSearch.Error())
+            viewModelScope.launch {
+                searchInteractor.searchTracks(searchQuery)
+                    .collect { pair ->
+                        processResult(pair.first, pair.second)
                     }
-                }
-            })
+            }
         }
     }
+
+    private fun processResult(searchTracks: List<TrackSearch>?, errorMessage: Boolean?) {
+        val tracks = arrayListOf<TrackSearch>()
+        if (searchTracks != null) {
+            playedTracks.addAll(searchTracks)
+            tracks.addAll(searchTracks)
+        }
+
+        when {
+            errorMessage != null -> {
+                updateState(StateSearch.Empty())
+            }
+            tracks.isEmpty() -> {
+                updateState(StateSearch.Content(tracks))
+            }
+            else -> {
+                updateState(StateSearch.Content(tracks))
+            }
+        }
+    }
+
+
 
     fun getTracksHistory() {
         searchInteractor.getTracksHistory(object : SearchInteractor.HistoryConsumer {
@@ -81,7 +87,7 @@ class SearchViewModel (
         })
     }
 
-    fun addTrackToHistory(track: TrackSearch) {
+    fun addTrackToHistory(track: TrackSearch, activity: SearchFragment) {
         searchInteractor.addTrackToHistory(track)
     }
 
@@ -93,9 +99,6 @@ class SearchViewModel (
         stateMutableLiveData.postValue(state)
     }
 
-    override fun onCleared() {
-        Log.d("PAN_SearchViewModel", "VM Search onCleared")
-        handler.removeCallbacks(searchRunnable)
-    }
-
 }
+
+

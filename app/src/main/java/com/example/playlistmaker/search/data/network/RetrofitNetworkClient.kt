@@ -6,6 +6,8 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import com.example.playlistmaker.search.data.dto.Response
 import com.example.playlistmaker.search.data.dto.TracksSearchRequest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class RetrofitNetworkClient(
@@ -13,30 +15,25 @@ class RetrofitNetworkClient(
     private val context: Context
 ) : NetworkClient {
 
-    override fun doRequest(dto: Any): Response {
-        try {
+    override suspend fun doRequest(dto: Any): Response {
+
             if (!isOnline(context)) {
                 return Response().apply { resultCode = -1 }
             }
             Log.d ("PAN_Retrofit", "dto (${dto.toString()})")
             if (dto is TracksSearchRequest) {
-                val response = iTunesService.search(dto.expression).execute()
-                Log.d ("PAN_Retrofit", "response (${response.toString()})")
-                val body = response.body() ?: Response()
-                Log.d ("PAN_Retrofit", "body (${body.toString()})")
-                return body.apply { resultCode = response.code()
-                    Log.d ("PAN_Retrofit", "resultCode (${resultCode.toString()})")
+                return withContext(Dispatchers.IO) {
+                    try {
+                        val response = iTunesService.search(dto.expression)
+                        response.apply { resultCode = 200 }
+                    } catch (e: Throwable) {
+                        Response().apply { resultCode = 500 }
+                    }
                 }
             } else {
-                return Response().apply { resultCode = 400
-                }
+                return Response().apply { resultCode = 400 }
             }
-        }
-        catch (exception: Exception) {
-            throw exception
-            Log.e ("PAN_Retrofit", "Exception ($exception)")
 
-        }
     }
 }
 

@@ -8,8 +8,8 @@ import com.example.playlistmaker.search.data.dto.TracksSearchResponse
 import com.example.playlistmaker.search.data.network.NetworkClient
 import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.search.domain.TrackSearch
-import java.lang.Error
-import javax.net.ssl.HttpsURLConnection
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -17,41 +17,39 @@ class SearchRepositoryImpl(
 ) : SearchRepository {
 
 
-    override fun searchTrack(expression: String): ResponseStatus<List<TrackSearch>> {
-        val response = networkClient.doRequest(TracksSearchRequest(expression))
-        Log.d ("PAN_SearchRepositoryImpl", "Пришло в searchTrack_SearchRepository (${expression})")
-        try {
-            return when (response.resultCode) {
+    override suspend fun searchTrack(searchQuery: String): Flow<ResponseStatus<List<TrackSearch>>> = flow {
+        val response = networkClient.doRequest(TracksSearchRequest(searchQuery))
+        Log.d ("PAN_SearchRepositoryImpl", "Пришло в searchTrack_SearchRepository (${searchQuery})")
+
+             when (response.resultCode) {
                 -1 -> {
-                    ResponseStatus.Error()
+                    emit (ResponseStatus.Error())
                 }
 
-                HttpsURLConnection.HTTP_OK -> {
-                    Log.d ("PAN_SearchRepositoryImpl", "resultCode in searchTrack_SearchRepository (${response.resultCode})")
-                    ResponseStatus.Success((response as TracksSearchResponse).results.map {
+                 200 -> { with(response as TracksSearchResponse) {
+                     val data = results.map {
                         TrackSearch(
-                            it.trackId,
-                            it.trackName,
-                            it.artistName,
-                            it.trackTimeMillis,
-                            it.artworkUrl100,
-                            it.collectionName,
-                            it.releaseDate,
-                            it.primaryGenreName,
-                            it.country,
-                            it.previewUrl
+                            trackId = it.trackId,
+                            trackName = it.trackName,
+                            artistName=it.artistName,
+                            trackTimeMillis=it.trackTimeMillis,
+                            artworkUrl100=it.artworkUrl100,
+                            collectionName=it.collectionName,
+                            releaseDate=it.releaseDate,
+                            primaryGenreName=it.primaryGenreName,
+                            country=it.country,
+                            previewUrl=it.previewUrl
                         )
-                    })
+                    }
+                     emit(ResponseStatus.Success(data))
                 }
+                 }
 
                 else -> {
-                    ResponseStatus.Error()
+                    emit (ResponseStatus.Error())
                 }
             }
-        } catch (error : Error) {
-            Log.d ("PAN_SearchRepositoryImpl", "Ошибка в searchTrack_SearchRepository (${error})")
-            return ResponseStatus.Error()
-        }
+
 
     }
     override fun getTrackHistoryList(): List<TrackSearch> {
