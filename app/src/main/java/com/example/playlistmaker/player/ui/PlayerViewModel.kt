@@ -18,6 +18,7 @@ class PlayerViewModel  (private val mediaPlayerInteractor: MediaPlayerInteractor
 {
 
     private var timerJob: Job? = null
+    private var favoriteJob: Job? = null
     private val RefreshDelayMs = 300L
     private val stateLiveData = MutableLiveData<PlayerState>(PlayerState.DEFAULT())
     fun observePlayerState(): LiveData<PlayerState> = stateLiveData
@@ -91,6 +92,28 @@ class PlayerViewModel  (private val mediaPlayerInteractor: MediaPlayerInteractor
             }
             else -> {}
         }
+    }
+
+
+    fun likeOrDislike() {
+        val playedTrack = getTrack()
+        favoriteJob = viewModelScope.launch {
+            if (playedTrack.isFavorite) {
+                playedTrack.isFavorite = false
+                deleteTrackFromFavorite(playedTrack.trackId)
+            } else {
+                playedTrack.isFavorite = true
+                insertTrackToFavorite(playedTrack)
+            }
+        }
+    }
+
+    suspend fun insertTrackToFavorite(track: TrackSearch) {
+        mediaPlayerInteractor.insertTrackToFavorite(track)
+    }
+
+    suspend fun deleteTrackFromFavorite(trackId: String) {
+        mediaPlayerInteractor.deleteTrackFromFavorite(trackId)
     }
 
     override fun onCleared() {

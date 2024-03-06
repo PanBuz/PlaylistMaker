@@ -3,7 +3,7 @@ package com.example.playlistmaker.search.data.dto
 import java.io.Serializable
 
 data class TrackDto(
-    val trackId: Int,
+    val trackId: String,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Long,
@@ -12,7 +12,8 @@ data class TrackDto(
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-    val previewUrl: String
+    val previewUrl: String,
+    val isFavorite: Boolean = false
 ) : Serializable
 
 

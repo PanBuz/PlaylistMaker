@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 data class TrackSearch(
-    val trackId: Int,
+    val trackId: String,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Long,
@@ -13,7 +13,8 @@ data class TrackSearch(
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-    val previewUrl: String
+    val previewUrl: String,
+    var isFavorite: Boolean = false
 ) {
     val coverUrl500 get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
     val durationTrack =

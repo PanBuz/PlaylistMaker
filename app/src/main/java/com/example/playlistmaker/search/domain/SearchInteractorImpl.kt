@@ -1,24 +1,21 @@
-package com.example.playlistmaker.search.data
+package com.example.playlistmaker.search.domain
 
-import com.example.playlistmaker.search.domain.ResponseStatus
-import com.example.playlistmaker.search.domain.SearchInteractor
-import com.example.playlistmaker.search.domain.SearchRepository
-import com.example.playlistmaker.search.domain.TrackSearch
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 
 class SearchInteractorImpl(private val repository: SearchRepository) : SearchInteractor {
 
-    override fun getTracksHistory(consumer: SearchInteractor.HistoryConsumer) {
+    override suspend fun getTracksHistory(consumer: SearchInteractor.HistoryConsumer) {
         consumer.consume(repository.getTrackHistoryList())
     }
 
-    override fun addTrackToHistory(track: TrackSearch) {
-        repository.addTrackInHistory(track)
+    override suspend fun addTrackToHistory(track: TrackSearch) {
+        repository.addTrackToHistory(track)
     }
 
-    override fun clearHistory() {
+    override suspend fun clearHistory() {
         repository.clearHistory()
     }
 

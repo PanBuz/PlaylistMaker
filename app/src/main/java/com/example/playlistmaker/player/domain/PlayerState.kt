@@ -1,6 +1,10 @@
 package com.example.playlistmaker.player.domain
 
-sealed class PlayerState(val isPlayButtonEnabled: Boolean, val buttonText: String, val progress: String) {
+sealed class PlayerState(
+    val isPlayButtonEnabled: Boolean,
+    val buttonText: String,
+    val progress: String
+) {
 
     class DEFAULT : PlayerState(false, "PLAY", "00:00")
 
@@ -9,5 +13,6 @@ sealed class PlayerState(val isPlayButtonEnabled: Boolean, val buttonText: Strin
     class PLAYING(progress: String) : PlayerState(true, "PAUSE", progress)
 
     class PAUSED(progress: String) : PlayerState(true, "PLAY", progress)
+
 
 }

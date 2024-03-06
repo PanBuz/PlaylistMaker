@@ -26,8 +26,8 @@ class SearchFragment : Fragment() {
 
     private val searchedSong = ArrayList<TrackSearch>()
     private val clickedSong = ArrayList<TrackSearch>()
-    private val searchMusicAdapter = TrackAdapter(searchedSong) {trackClickListener(it)}
-    private val clickedMusicAdapter = TrackAdapter(clickedSong) {trackClickListener(it)}
+    private val searchMusicAdapter = TrackAdapter(searchedSong) { trackClickListener(it) }
+    private val clickedMusicAdapter = TrackAdapter(clickedSong) { trackClickListener(it) }
     private var searchText = ""
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -110,7 +110,9 @@ class SearchFragment : Fragment() {
                 start: Int,
                 count: Int,
                 after: Int
-            ) { }
+            ) {
+            }
+
             // изменения текста в поле поиска в реальном времени
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.clearIcon.isVisible = false
@@ -129,15 +131,15 @@ class SearchFragment : Fragment() {
 
         provideTextWatcher(textWatcher())
 
-        trackClickListener = debounce (CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
-            viewModel.addTrackToHistory(track, this)
-            goToPlayer(track.trackId.toString())
-        }
+        trackClickListener =
+            debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+                viewModel.addTrackToHistory(track)
+                goToPlayer(track.trackId.toString())
+            }
 
         binding.inputEditText.requestFocus()
 
-
-    } // The END  fun onCreate
+    }
 
     fun provideTextWatcher(textWatcher: TextWatcher) {
         binding.inputEditText.apply {
@@ -153,7 +155,6 @@ class SearchFragment : Fragment() {
     }
 
 
-
     fun goToPlayer(trackId: String) {
         val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
         playerIntent.putExtra(MediaStore.Audio.AudioColumns.TRACK, trackId)
@@ -161,14 +162,13 @@ class SearchFragment : Fragment() {
     }
 
 
-
     private fun updateScreen(state: StateSearch) {
         binding.apply {
 
-            Log.d ("PAN_SearchActivity", state.toString())
+            Log.d("PAN_SearchActivity", state.toString())
             when (state) {
                 is StateSearch.Content -> {
-                    Log.d ("PAN_SearchActivity", "Выполняем Content")
+                    Log.d("PAN_SearchActivity", "Выполняем Content")
                     searchedSong.clear()
                     searchedSong.addAll(state.tracks as ArrayList<TrackSearch>)
                     groupClicked.isVisible = false
@@ -183,7 +183,7 @@ class SearchFragment : Fragment() {
                 }
 
                 is StateSearch.Error -> {
-                    Log.d ("PAN_SearchActivity", "Выполняем Error")
+                    Log.d("PAN_SearchActivity", "Выполняем Error")
                     progressBar.isVisible = false
                     groupSearched.isVisible = true
                     recyclerViewSearch.isVisible = false
@@ -195,7 +195,7 @@ class SearchFragment : Fragment() {
                 }
 
                 is StateSearch.Empty -> {
-                    Log.d ("PAN_SearchActivity", "Выполняем Empty")
+                    Log.d("PAN_SearchActivity", "Выполняем Empty")
                     progressBar.isVisible = false
                     groupSearched.isVisible = true
                     recyclerViewSearch.isVisible = false
@@ -207,7 +207,7 @@ class SearchFragment : Fragment() {
                 }
 
                 is StateSearch.Loading -> {
-                    Log.d ("PAN_SearchActivity", "Выполняем Loading")
+                    Log.d("PAN_SearchActivity", "Выполняем Loading")
                     groupClicked.isVisible = false
                     groupSearched.isVisible = false
                     progressBar.isVisible = true
@@ -216,7 +216,7 @@ class SearchFragment : Fragment() {
                 }
 
                 is StateSearch.ContentHistoryList -> {
-                    Log.d ("PAN_SearchActivity", "Выполняем ContentHistoryList")
+                    Log.d("PAN_SearchActivity", "Выполняем ContentHistoryList")
                     groupClicked.isVisible = true
                     progressBar.isVisible = false
                     groupSearched.isVisible = false
@@ -229,18 +229,20 @@ class SearchFragment : Fragment() {
                 }
 
                 is StateSearch.EmptyHistoryList -> {
-                    Log.d ("PAN_SearchActivity", "Выполняем EmptyHistoryList")
+                    Log.d("PAN_SearchActivity", "Выполняем EmptyHistoryList")
                     groupClicked.isVisible = false
                 }
             }
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 300L
+        const val CLICK_DEBOUNCE_DELAY = 300L
     }
 }
 

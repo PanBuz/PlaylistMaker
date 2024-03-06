@@ -1,8 +1,14 @@
 package com.example.playlistmaker.player.domain
 
+import com.example.playlistmaker.mediateka.domain.FavoriteRepository
+import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.search.domain.TrackSearch
 
-class MediaPlayerInteractorImpl(val mediaPlayerRepository :MediaPlayerRepository) :
+class MediaPlayerInteractorImpl(
+    val mediaPlayerRepository :MediaPlayerRepository,
+    val searchRepository: SearchRepository,
+    val favoriteRepository: FavoriteRepository
+) :
     MediaPlayerInteractor {
 
     override val isPlaying  = mediaPlayerRepository.isPlaying
@@ -37,6 +43,22 @@ class MediaPlayerInteractorImpl(val mediaPlayerRepository :MediaPlayerRepository
 
     override fun getTrack() : TrackSearch {
         return mediaPlayerRepository.getTrack()
+    }
+
+    override suspend fun saveTrack(track: TrackSearch) {
+        searchRepository.addTrackToHistory(track)
+    }
+
+    override fun isNightTheme(): Boolean {
+        return mediaPlayerRepository.isNightTheme()
+    }
+
+    override suspend fun insertTrackToFavorite(track: TrackSearch) {
+        favoriteRepository.insertDbTrackToFavorite(track)
+    }
+
+    override suspend fun deleteTrackFromFavorite(trackId: String) {
+        favoriteRepository.deleteDbTrackFromFavorite(trackId)
     }
 
 }

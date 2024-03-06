@@ -2,7 +2,9 @@ package com.example.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
+import androidx.room.Room
 import com.example.playlistmaker.MUSIC_MAKER_PREFERENCES
+import com.example.playlistmaker.mediateka.data.db.AppDatabase
 import com.example.playlistmaker.search.data.SharedPreferencesSearchHistoryStorage
 import com.example.playlistmaker.search.data.network.ITunesSearchApi
 import com.example.playlistmaker.search.data.network.NetworkClient
@@ -44,6 +46,11 @@ val dataModule = module {
 
     single<SearchHistoryStorage> {
         SharedPreferencesSearchHistoryStorage(get(), get())
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .build()
     }
 
 }
