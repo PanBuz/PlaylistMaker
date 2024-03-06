@@ -9,6 +9,8 @@ import com.example.playlistmaker.search.data.SearchRepositoryImpl.Companion.clic
 @Suppress("CAST_NEVER_SUCCEEDS")
 class MediaPlayerRepositoryImpl(private val mediaPlayer : MediaPlayer) : MediaPlayerRepository {
 
+    override val isPlaying = mediaPlayer.isPlaying
+
     override fun preparePlayer(url: String, preparedListener: () -> Unit) {
         val sourse = clickedHistoryTracks[0].previewUrl
         Log.d("PAN_MediaPlayerRepositoryImpl_preparePlayer", sourse)
@@ -29,6 +31,10 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer : MediaPlayer) : MediaPl
     }
     override fun pausePlayer() {
         mediaPlayer.pause()
+    }
+
+    override fun stopPlayer() {
+        mediaPlayer.reset()
     }
     override fun destroyPlayer() {
         mediaPlayer.release()

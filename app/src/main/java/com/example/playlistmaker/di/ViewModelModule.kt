@@ -1,7 +1,7 @@
 package com.example.playlistmaker.di
 
 import com.example.playlistmaker.player.domain.MediaPlayerInteractor
-import com.example.playlistmaker.player.ui.MediaViewModel
+import com.example.playlistmaker.player.ui.PlayerViewModel
 import com.example.playlistmaker.search.ui.SearchViewModel
 import com.example.playlistmaker.setting.ui.SettingViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -19,7 +19,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        MediaViewModel(
+        PlayerViewModel(
             get<MediaPlayerInteractor>()
         )
     }

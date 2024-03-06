@@ -16,7 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity() {
 
-    private val viewModel by viewModel<MediaViewModel>()
+    private val viewModel by viewModel<PlayerViewModel>()
     private lateinit var buttonPlay: MaterialButton
     private var _binding: ActivityPlayerBinding? = null
     private val binding get() = _binding!!
@@ -31,20 +31,20 @@ class PlayerActivity : AppCompatActivity() {
 
         buttonPlay = binding.btPlay
 
-        viewModel.observScreen().observe(this) { refreshScreen(it) }
-
-        viewModel.observTimer().observe(this) { binding.tvPlaybackTime.text = it }
+        viewModel.observePlayerState().observe(this) {
+            refreshTime(it.progress)
+            refreshScreen(it)
+        }
 
         placeInPlace(viewModel.getTrack())
 
         buttonPlay.setOnClickListener {
-            if (viewModel.isClickAllowed()) {
-                viewModel.playbackControl()
-            }
+            viewModel.playbackControl()
         }
 
         binding.ivBack.setOnClickListener { finish() }
 
+        placeInPlace(getTrack())
     }
 
     //Устанавливаем вьюхи согласно теме
@@ -58,9 +58,10 @@ class PlayerActivity : AppCompatActivity() {
                 buttonPlay.setIconResource(R.drawable.button_play)
             }
 
-            is PlayerState.PREPARE -> {
+            is PlayerState.PREPARED -> {
                 buttonPlay.setIconResource(R.drawable.button_play)
                 buttonPlay.isEnabled = true
+                binding.tvPlaybackTime.setText(R.string.null_time)
             }
 
             else -> {
@@ -68,6 +69,16 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    fun refreshTime(time: String) {
+        if (viewModel.observePlayerState().value != PlayerState.PREPARED()) {
+            binding.tvPlaybackTime.text = time
+        }
+    }
+
+    fun getTrack(): TrackSearch {
+        return viewModel.getTrack()
     }
 
     private fun placeInPlace(playedTrack: TrackSearch) {

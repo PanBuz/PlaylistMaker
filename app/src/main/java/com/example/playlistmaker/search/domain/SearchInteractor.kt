@@ -1,7 +1,9 @@
 package com.example.playlistmaker.search.domain
 
+import kotlinx.coroutines.flow.Flow
+
 interface SearchInteractor {
-    fun searchTracks(expression: String, consumer: SearchConsumer)
+    suspend fun searchTracks(searchQuery: String) : Flow<Pair<List<TrackSearch>?, Boolean?>>
     fun getTracksHistory(consumer: HistoryConsumer)
     fun addTrackToHistory(track: TrackSearch)
     fun clearHistory()

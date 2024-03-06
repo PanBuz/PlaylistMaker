@@ -1,10 +1,13 @@
 package com.example.playlistmaker.player.domain
 
+sealed class PlayerState(val isPlayButtonEnabled: Boolean, val buttonText: String, val progress: String) {
 
-sealed interface PlayerState {
-    object DEFAULT : PlayerState
-    object PREPARE : PlayerState
-    object PAUSED : PlayerState
-    data class PLAYING(val time: Int) : PlayerState
+    class DEFAULT : PlayerState(false, "PLAY", "00:00")
+
+    class PREPARED : PlayerState(true, "PLAY", "00:00")
+
+    class PLAYING(progress: String) : PlayerState(true, "PAUSE", progress)
+
+    class PAUSED(progress: String) : PlayerState(true, "PLAY", progress)
 
 }

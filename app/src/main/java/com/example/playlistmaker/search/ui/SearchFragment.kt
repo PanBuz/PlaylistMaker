@@ -2,8 +2,6 @@ package com.example.playlistmaker.search.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,11 +12,13 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.search.domain.StateSearch
 import com.example.playlistmaker.search.domain.TrackSearch
+import com.example.playlistmaker.utils.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -28,18 +28,18 @@ class SearchFragment : Fragment() {
     private val clickedSong = ArrayList<TrackSearch>()
     private val searchMusicAdapter = TrackAdapter(searchedSong) {trackClickListener(it)}
     private val clickedMusicAdapter = TrackAdapter(clickedSong) {trackClickListener(it)}
-    private val handler = Handler(Looper.getMainLooper()) // его  от сюда убрать?
     private var searchText = ""
-    private var clickAllowed = true
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
     private val viewModel by viewModel<SearchViewModel>()
+    private lateinit var trackClickListener: (TrackSearch) -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentSearchBinding.inflate(layoutInflater)
+        _binding = FragmentSearchBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -53,10 +53,11 @@ class SearchFragment : Fragment() {
             Log.d("PAN_SearchActivity", "Изменения статуса во ViewModel ${this.toString()}")
         }
 
+
         // Слушатель Done
         binding.inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.searchDebounce(searchText, true)
+                viewModel.searchDebounce(searchText)
                 binding.groupSearched.isVisible = true
             }
             false
@@ -64,7 +65,7 @@ class SearchFragment : Fragment() {
 
         // Слушатель Обновить
         binding.zaglushkaInetButton.setOnClickListener {
-            viewModel.searchDebounce(searchText, true)
+            viewModel.searchDebounce(searchText)
         }
 
         // Слушатель Очистить историю
@@ -120,13 +121,20 @@ class SearchFragment : Fragment() {
                 }
                 binding.groupClicked.isVisible = false
                 searchText = s.toString()
-                viewModel.searchDebounce(searchText, false)
+                viewModel.searchDebounce(searchText)
             }
 
             override fun afterTextChanged(s: Editable?) {}
         }
 
         provideTextWatcher(textWatcher())
+
+        trackClickListener = debounce (CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+            viewModel.addTrackToHistory(track, this)
+            goToPlayer(track.trackId.toString())
+        }
+
+        binding.inputEditText.requestFocus()
 
 
     } // The END  fun onCreate
@@ -144,46 +152,15 @@ class SearchFragment : Fragment() {
         }
     }
 
-    //TODO теперь не ныжно?
 
-    // запоминание текста поисковой строки inputSearchText в переменную
-    /*
-    @SuppressLint("SuspiciousIndentation")
-    override fun onSaveInstanceState(outState: Bundle) {
-        val inputSearchText = findViewById<EditText>(R.id.inputEditText)
-        outState.putString(SEARCH_STRING, inputSearchText.text.toString())
-        super.onSaveInstanceState(outState)
-    }
 
-    //заполнение тектового поля из предыдущего запуска Активити
-    @SuppressLint("SuspiciousIndentation")
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        if (savedInstanceState.containsKey(SEARCH_STRING)) {
-            val searchText = savedInstanceState.getString(SEARCH_STRING)
-            binding.inputEditText.setText(searchText)
-        }
-    }*/
-
-    private fun trackClickListener(track: TrackSearch) {
-        if (isClickAllowed()) {
-            viewModel.addTrackToHistory(track)
-            goToPlayer(track.trackId.toString())
-        }
-    }
     fun goToPlayer(trackId: String) {
         val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
         playerIntent.putExtra(MediaStore.Audio.AudioColumns.TRACK, trackId)
         startActivity(playerIntent)
     }
 
-    private fun isClickAllowed(): Boolean {
-        val current = clickAllowed
-        if (clickAllowed) {
-            clickAllowed = false
-            handler.postDelayed({ clickAllowed = true }, SEARCH_DEBOUNCE_DELAY)
-        }
-        return current
-    }
+
 
     private fun updateScreen(state: StateSearch) {
         binding.apply {
@@ -258,9 +235,12 @@ class SearchFragment : Fragment() {
             }
         }
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     companion object {
-       // private const val SEARCH_STRING = "SEARCH_STRING"
-        private const val SEARCH_DEBOUNCE_DELAY = 500L
+        private const val CLICK_DEBOUNCE_DELAY = 300L
     }
 }
 
