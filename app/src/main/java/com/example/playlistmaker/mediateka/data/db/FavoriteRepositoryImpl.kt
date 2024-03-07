@@ -13,16 +13,16 @@ class FavoriteRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val trackDbConvertor: TracksDbConvertor,
 ) : FavoriteRepository {
-    override fun favoriteTracks(): Flow<ArrayList<TrackSearch>> = flow {
+    override fun favoriteTracks(): Flow<List<TrackSearch>> = flow {
         val tracks = appDatabase.likeDao().getTracksByTime()
-        emit(convertFromTrackEntity(tracks as ArrayList<FavoriteTraksEntity>))
+        emit(convertFromTrackEntity(tracks as List<FavoriteTraksEntity>))
     }
     override suspend fun deleteDbTrack(trackId: String) {
         appDatabase.likeDao().deleteTrack(trackId)
     }
 
-    private fun convertFromTrackEntity(tracks: ArrayList<FavoriteTraksEntity>): ArrayList<TrackSearch> {
-        return tracks.map { track -> trackDbConvertor.map(track) } as ArrayList<TrackSearch>
+    private fun convertFromTrackEntity(tracks: List<FavoriteTraksEntity>): List<TrackSearch> {
+        return tracks.map { track -> trackDbConvertor.map(track) } as List<TrackSearch>
     }
 
     override fun setClickedTrack(track: TrackSearch) {
@@ -34,8 +34,8 @@ class FavoriteRepositoryImpl(
         appDatabase.likeDao().insertTraks(trackEntities)
     }
 
-    private fun convertToTrackEntity(listTracks: ArrayList<TrackSearch>): ArrayList<FavoriteTraksEntity> {
-        return listTracks.map { track -> trackDbConvertor.map(track) } as ArrayList<FavoriteTraksEntity>
+    private fun convertToTrackEntity(listTracks: List<TrackSearch>): List<FavoriteTraksEntity> {
+        return listTracks.map { track -> trackDbConvertor.map(track) } as List<FavoriteTraksEntity>
     }
 
     override suspend fun insertDbTrackToFavorite(track: TrackSearch) {

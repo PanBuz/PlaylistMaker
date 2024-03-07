@@ -34,7 +34,7 @@ class FavoriteViewModel(
         }
     }
 
-    private fun processResult(tracks: ArrayList<TrackSearch>) {
+    private fun processResult(tracks: List<TrackSearch>) {
         if (tracks.isEmpty()) {
             renderState(FavoriteState.Empty(context.getString(R.string.empty_library)))
         } else {

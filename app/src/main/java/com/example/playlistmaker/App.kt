@@ -2,13 +2,10 @@ package com.example.playlistmaker
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.room.Room
 import com.example.playlistmaker.di.dataModule
 import com.example.playlistmaker.di.interactorModule
 import com.example.playlistmaker.di.repositoryModule
 import com.example.playlistmaker.di.viewModelModule
-import com.example.playlistmaker.mediateka.data.db.AppDatabase
-import com.example.playlistmaker.search.domain.TrackSearch
 import com.example.playlistmaker.setting.data.AppPreferences
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -29,13 +26,14 @@ class App   : Application() {
 
         AppPreferences.setup(applicationContext)
 
-        if (AppPreferences.darkTheme !=null) {
+       /* if (AppPreferences.darkTheme !=null) {
             darkTheme = AppPreferences.darkTheme !!
             switchTheme(darkTheme)
-        }
+        }*/
 
-        //val database = Room.databaseBuilder(this, AppDatabase::class.java, "database.db").build()
-        //TODO нужно ли это здесь?
+        //AppPreferences.darkTheme?.let::(switchTheme)
+
+        AppPreferences.darkTheme?.let { darkTheme = it; switchTheme(darkTheme)}
 
     }
 
