@@ -11,10 +11,11 @@
     <color name="light_gray">#E6E8EB</color>
     <color name="yp_black">#1A1B22</color>
     <color name="blue">#3772E7</color>
+    <color name="YP_blue">#3772E7</color>
     <color name="prime_neutral">#FFFFFFFF</color>
     <color name="prime_positive">#228B22</color>
     <color name="prime_negative">#FF0000</color>
-
+    <color name="purple_550">#6200EE</color>
     <color name="background">#FF4F6FFF</color>
     <color name="background_icon">#FFFFFF</color>
     <color name="text_black">#FF000000</color>

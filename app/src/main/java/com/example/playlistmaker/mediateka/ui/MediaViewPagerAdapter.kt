@@ -4,6 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.playlistmaker.mediateka.ui.favorite.FavoriteFragment
+import com.example.playlistmaker.mediateka.ui.playlist.PlaylistFragment
 
 private const val MEDIA_SCREEN_TABS_COUNT : Int = 2
 class MediaViewPagerAdapter (fragmentManager: FragmentManager, lifecycle: Lifecycle) :

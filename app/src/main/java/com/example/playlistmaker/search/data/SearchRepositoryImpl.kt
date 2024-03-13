@@ -2,7 +2,7 @@ package com.example.playlistmaker.search.data
 
 import android.util.Log
 import com.example.playlistmaker.mediateka.data.db.AppDatabase
-import com.example.playlistmaker.mediateka.data.db.convertor.TracksDbConvertor
+import com.example.playlistmaker.mediateka.data.convertor.TracksDbConvertor
 import com.example.playlistmaker.search.domain.ResponseStatus
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.search.data.dto.TracksSearchRequest
