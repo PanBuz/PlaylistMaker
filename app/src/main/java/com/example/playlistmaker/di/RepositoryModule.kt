@@ -1,5 +1,8 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.mediateka.data.db.FavoriteRepositoryImpl
+import com.example.playlistmaker.mediateka.data.db.convertor.TracksDbConvertor
+import com.example.playlistmaker.mediateka.domain.FavoriteRepository
 import com.example.playlistmaker.player.data.MediaPlayerRepositoryImpl
 import com.example.playlistmaker.player.domain.MediaPlayerRepository
 import com.example.playlistmaker.search.data.SearchDataStorage
@@ -25,7 +28,7 @@ val repositoryModule = module {
     }
 
     single<SearchRepository> {
-        SearchRepositoryImpl(get(), get())
+        SearchRepositoryImpl(get(), get(), get(), get())
     }
 
     single<SearchHistoryStorage> {
@@ -38,5 +41,10 @@ val repositoryModule = module {
 
     single<SettingsRepository> {
         SettingsRepositoryImpl(get())
+    }
+    factory { TracksDbConvertor() }
+
+    single<FavoriteRepository> {
+        FavoriteRepositoryImpl(get(), get())
     }
 }

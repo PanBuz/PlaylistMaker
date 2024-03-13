@@ -2,6 +2,9 @@ package com.example.playlistmaker.player.data
 
 import android.media.MediaPlayer
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.playlistmaker.App
 import com.example.playlistmaker.player.domain.MediaPlayerRepository
 import com.example.playlistmaker.search.domain.TrackSearch
 import com.example.playlistmaker.search.data.SearchRepositoryImpl.Companion.clickedHistoryTracks
@@ -42,5 +45,10 @@ class MediaPlayerRepositoryImpl(private val mediaPlayer : MediaPlayer) : MediaPl
     override fun getTrack() : TrackSearch {
         return clickedHistoryTracks[0]
     }
+
+    override fun isNightTheme(): Boolean {
+        return App.darkTheme
+    }
+
 
 }

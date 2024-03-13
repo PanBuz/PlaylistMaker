@@ -29,14 +29,12 @@ class PlayerActivity : AppCompatActivity() {
 
         Log.d("PAN_MediaActivity", "MediaActivity onCreate")
 
-        buttonPlay = binding.btPlay
-
         viewModel.observePlayerState().observe(this) {
             refreshTime(it.progress)
             refreshScreen(it)
         }
 
-        placeInPlace(viewModel.getTrack())
+        buttonPlay = binding.btPlay
 
         buttonPlay.setOnClickListener {
             viewModel.playbackControl()
@@ -44,10 +42,21 @@ class PlayerActivity : AppCompatActivity() {
 
         binding.ivBack.setOnClickListener { finish() }
 
+        binding.ivLike.setOnClickListener {
+            viewModel.likeOrDislike()
+            var isfavor: Boolean = getTrack().isFavorite
+            Log.d("PAN_likeOrDislike", "Значение равно $isfavor")
+
+            if (getTrack().isFavorite) {
+                binding.ivLike.setImageResource(R.drawable.buttonlike)
+            } else {
+                binding.ivLike.setImageResource(R.drawable.buttondislike)
+            }
+        }
+
         placeInPlace(getTrack())
     }
 
-    //Устанавливаем вьюхи согласно теме
     private fun refreshScreen(state: PlayerState) {
         when (state) {
             is PlayerState.PLAYING -> {
@@ -66,6 +75,7 @@ class PlayerActivity : AppCompatActivity() {
 
             else -> {
                 buttonPlay.setIconResource(R.drawable.button_play)
+                binding.tvPlaybackTime.setText(R.string.null_time)
             }
         }
 
@@ -91,6 +101,8 @@ class PlayerActivity : AppCompatActivity() {
             tvYear.setText(playedTrack.releaseDate.substring(0, 4))
             tvGenre.setText(playedTrack.primaryGenreName)
             tvCountry.setText(playedTrack.country)
+            if (playedTrack.isFavorite) {ivLike.setImageResource(R.drawable.buttonlike)}
+            else {ivLike.setImageResource(R.drawable.buttondislike)}
         }
 
         val radius = resources.getDimensionPixelSize(R.dimen.corner_radius)

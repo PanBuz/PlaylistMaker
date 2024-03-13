@@ -12,7 +12,7 @@ import com.example.playlistmaker.search.domain.TrackSearch
 import com.example.playlistmaker.utils.debounce
 import kotlinx.coroutines.launch
 
-class SearchViewModel (
+class SearchViewModel(
     private val searchInteractor: SearchInteractor
 ) : ViewModel() {
 
@@ -27,7 +27,8 @@ class SearchViewModel (
     private var newSearchText: String? = null
 
     private val trackSearchDebounce = debounce<String>(
-        SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
+        SEARCH_DEBOUNCE_DELAY, viewModelScope, true
+    ) { changedText ->
         searchSong(changedText)
     }
 
@@ -38,6 +39,7 @@ class SearchViewModel (
         }
 
     }
+
     private fun searchSong(searchQuery: String) {
         Log.d("PAN_SearchViewModel", "Пришло на оправку searchSong ($searchQuery)")
 
@@ -64,9 +66,11 @@ class SearchViewModel (
             errorMessage != null -> {
                 updateState(StateSearch.Empty())
             }
+
             tracks.isEmpty() -> {
                 updateState(StateSearch.Content(tracks))
             }
+
             else -> {
                 updateState(StateSearch.Content(tracks))
             }
@@ -74,25 +78,27 @@ class SearchViewModel (
     }
 
 
-
     fun getTracksHistory() {
-        searchInteractor.getTracksHistory(object : SearchInteractor.HistoryConsumer {
-            override fun consume(tracks: List<TrackSearch>?) {
-                if (tracks.isNullOrEmpty()) {
-                    updateState(StateSearch.EmptyHistoryList())
-                } else {
-                    updateState(StateSearch.ContentHistoryList(tracks))
+        viewModelScope.launch {
+            searchInteractor.getTracksHistory(object : SearchInteractor.HistoryConsumer {
+                override fun consume(tracks: List<TrackSearch>?) {
+                    if (tracks.isNullOrEmpty()) {
+                        updateState(StateSearch.EmptyHistoryList())
+                    } else {
+                        updateState(StateSearch.ContentHistoryList(tracks))
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 
-    fun addTrackToHistory(track: TrackSearch, activity: SearchFragment) {
-        searchInteractor.addTrackToHistory(track)
+    fun addTrackToHistory(track: TrackSearch) {
+        viewModelScope.launch { searchInteractor.addTrackToHistory(track) }
     }
 
     fun clearHistory() {
-        searchInteractor.clearHistory()
+        viewModelScope.launch { searchInteractor.clearHistory() }
+        updateState(StateSearch.EmptyHistoryList())
     }
 
     private fun updateState(state: StateSearch) {

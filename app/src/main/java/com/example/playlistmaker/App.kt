@@ -6,7 +6,6 @@ import com.example.playlistmaker.di.dataModule
 import com.example.playlistmaker.di.interactorModule
 import com.example.playlistmaker.di.repositoryModule
 import com.example.playlistmaker.di.viewModelModule
-import com.example.playlistmaker.search.domain.TrackSearch
 import com.example.playlistmaker.setting.data.AppPreferences
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -27,10 +26,15 @@ class App   : Application() {
 
         AppPreferences.setup(applicationContext)
 
-        if (AppPreferences.darkTheme !=null) {
+       /* if (AppPreferences.darkTheme !=null) {
             darkTheme = AppPreferences.darkTheme !!
             switchTheme(darkTheme)
-        }
+        }*/
+
+        //AppPreferences.darkTheme?.let::(switchTheme)
+
+        AppPreferences.darkTheme?.let { darkTheme = it; switchTheme(darkTheme)}
+
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

@@ -8,8 +8,10 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import com.example.playlistmaker.mediateka.ui.FavoriteViewModel
 import com.example.playlistmaker.mediateka.ui.PlaylistViewModel
+import org.koin.android.ext.koin.androidContext
 
 val viewModelModule = module {
+
 
 
     viewModel {
@@ -32,7 +34,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        FavoriteViewModel()
+        FavoriteViewModel(androidContext(), get())
     }
 
     viewModel {

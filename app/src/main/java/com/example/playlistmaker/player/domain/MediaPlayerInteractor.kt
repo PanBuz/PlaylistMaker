@@ -22,4 +22,12 @@ interface MediaPlayerInteractor {
 
     fun getTrack() : TrackSearch
 
+    suspend fun saveTrack(track: TrackSearch)
+
+    fun isNightTheme(): Boolean
+
+    suspend fun insertTrackToFavorite(track: TrackSearch)
+
+    suspend fun deleteTrackFromFavorite(trackId: String)
+
 }

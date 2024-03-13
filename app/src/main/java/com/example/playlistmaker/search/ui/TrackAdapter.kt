@@ -7,7 +7,7 @@ import com.example.playlistmaker.search.domain.TrackSearch
 import com.example.playlistmaker.databinding.TreckItemBinding
 
 class TrackAdapter(
-    private val trackData: ArrayList<TrackSearch>,
+    val trackData: ArrayList<TrackSearch>,
     private val clickListener: TrackClickListener
 ) : RecyclerView.Adapter<TrackViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
