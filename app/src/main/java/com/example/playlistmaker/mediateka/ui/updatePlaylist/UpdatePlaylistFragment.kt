@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -116,9 +115,4 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
         return false
     }
 
-    companion object {
-        // Первый вариант передачи данных плэйлиста из DisplayPlaylistFragment
-        fun passArgs(idPl: Int, imagePl: String, namePl: String, descriptPl: String): Bundle =
-            bundleOf("idPl" to idPl, "imagePl" to imagePl, "namePl" to namePl, "descriptPl" to descriptPl)
-    }
 }
