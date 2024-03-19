@@ -13,9 +13,11 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.player.ui.PlayerActivity
+
 import com.example.playlistmaker.search.domain.StateSearch
 import com.example.playlistmaker.search.domain.TrackSearch
 import com.example.playlistmaker.utils.debounce
@@ -156,9 +158,10 @@ class SearchFragment : Fragment() {
 
 
     fun goToPlayer(trackId: String) {
-        val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
-        playerIntent.putExtra(MediaStore.Audio.AudioColumns.TRACK, trackId)
-        startActivity(playerIntent)
+       // val playerIntent = Intent(requireContext(), PlayerActivity::class.java)
+       // playerIntent.putExtra(MediaStore.Audio.AudioColumns.TRACK, trackId)
+       // startActivity(playerIntent)
+        findNavController().navigate(R.id.action_searchFragment_to_playerFragment)
     }
 
 

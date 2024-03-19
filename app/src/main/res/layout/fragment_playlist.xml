@@ -1,46 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/Theme.PlaylistMaker"
-    tools:context=".mediateka.ui.PlaylistFragment">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/empty_playlist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="@dimen/size_xl">
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/Theme.PlaylistMaker"
+        tools:context=".mediateka.ui.playlist.PlaylistFragment">
 
-        <Button
-            android:id="@+id/bt_new_playlist"
-            style="@style/MediaButtonStyle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/empty_playlist"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/frame_layout_height"
-            android:text="@string/new_playlist" />
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/size_xl">
 
-        <ImageView
-            android:id="@+id/iv_empty_playlist"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:foreground="@drawable/empty_mode"/>
+            <Button
+                android:id="@+id/bt_new_playlist"
+                style="@style/MediaButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/new_playlist" />
 
-        <TextView
-            android:id="@+id/tv_empty_playlist"
-            style="@style/TextMediaStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_sl"
-            android:fontFamily="@font/ys_display_medium"
-            android:textAlignment="center"
-            android:textColor="@color/text_color"
-            android:text="@string/you_are_not_create"
-            android:textSize="19sp" />
+            <ImageView
+                android:id="@+id/iv_empty_playlist"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="48dp"
+                android:foreground="@drawable/empty_mode" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_empty_playlist"
+                style="@style/TextMediaStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/size_sl"
+                android:fontFamily="@font/ys_display_medium"
+                android:text="@string/you_are_not_create"
+                android:textAlignment="center"
+                android:textColor="@color/text_color"
+                android:textSize="19sp" />
 
-</FrameLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="48dp"
+                tools:listitem="@layout/layout_playlist" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

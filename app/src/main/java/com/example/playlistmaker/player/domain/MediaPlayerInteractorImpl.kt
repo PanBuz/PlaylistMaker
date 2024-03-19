@@ -1,6 +1,6 @@
 package com.example.playlistmaker.player.domain
 
-import com.example.playlistmaker.mediateka.domain.FavoriteRepository
+import com.example.playlistmaker.mediateka.domain.favorite.FavoriteRepository
 import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.search.domain.TrackSearch
 

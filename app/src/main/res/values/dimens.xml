@@ -27,5 +27,8 @@
     <dimen name="size_xxl">32dp</dimen>
     <dimen name="size_xxxl">48dp</dimen>
     <dimen name="corner_radius">8dp</dimen>
+    <dimen name="text_22sp">22sp</dimen>
+    <dimen name="text_19sp">19sp</dimen>
+    <dimen name="text_14sp">14sp</dimen>
 
 </resources>
