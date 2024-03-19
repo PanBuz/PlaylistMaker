@@ -12,6 +12,7 @@ import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.search.domain.TrackSearch
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlin.coroutines.coroutineContext
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -37,6 +38,15 @@ class SearchRepositoryImpl(
                 200 -> {
                     with(response as TracksSearchResponse) {
                         val data = results.map {
+                            Log.d ("PAN_SearchRepositoryImpl","it.trackTimeMillis1 = ${it.toString()}")
+                            if (it.trackTimeMillis !is Long) it.trackTimeMillis = 0L
+                            if (it.releaseDate == null ) it.releaseDate = "2001.01.01"
+                            if (it.previewUrl ==null ) it.previewUrl = ""
+                            if (it.primaryGenreName==null) it.primaryGenreName = ""
+                            if (it.collectionName ==null ) it.collectionName = ""
+                            if (it.artistName ==null ) it.artistName = ""
+                            if (it.country ==null ) it.country = ""
+                            if (it.artworkUrl100 ==null ) it.artworkUrl100 = ""
                             TrackSearch(
                                 trackId = it.trackId,
                                 trackName = it.trackName,
@@ -60,11 +70,9 @@ class SearchRepositoryImpl(
                 }
             }
 
-
         }
-
     suspend fun checkIsFavorite(trackId: String): Boolean {
-        return (appDatabase.likeDao().getFavoriteTrack(trackId).size > 0)
+        return (appDatabase.favoriteDao().getFavoriteTrack(trackId).size > 0)
     }
 
     override suspend fun getTrackHistoryList(): List<TrackSearch> {
@@ -93,7 +101,7 @@ class SearchRepositoryImpl(
         for (clickedTrack in clickedHistoryTracks) {
             if (clickedTrack.trackId == track.trackId) {
                 clickedHistoryTracks.remove(clickedTrack)
-                Log.d("Pan_search_repository", "4. Удалил запись с trackId= ${track.trackId} ")  //1
+                Log.d("PAN_search_repository", "4. Удалил запись с trackId= ${track.trackId} ")  //1
                 break
             }
         }

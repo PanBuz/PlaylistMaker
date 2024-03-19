@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
+import com.example.playlistmaker.mediateka.ui.newPlaylist.NewPlaylistViewModel
 import com.example.playlistmaker.mediateka.ui.playlist.PlaylistState
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.TrackSearch
@@ -21,6 +22,7 @@ import java.util.Locale
 class PlayerFragment : Fragment() {
 
     private val viewModel by viewModel<PlayerViewModel>()
+    private val newViewModel by viewModel<NewPlaylistViewModel>()
     private  var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
     private val adapter = PlayerAdapter()
@@ -67,6 +69,7 @@ class PlayerFragment : Fragment() {
             if (reply is ReplyOnAddTrack.Added) bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
+
         binding.btPlay.setOnClickListener { viewModel.playbackControl() }
 
         binding.ivBack.setOnClickListener { findNavController().navigateUp() }
@@ -100,6 +103,7 @@ class PlayerFragment : Fragment() {
         when (playlistState) {
             PlaylistState.Empty -> {}
             is PlaylistState.Playlists -> {
+               // adapter.imagePath = newViewModel.imagePath()
                 adapter.playlists.clear()
                 adapter.playlists.addAll(playlistState.playlists)
                 adapter.notifyDataSetChanged()

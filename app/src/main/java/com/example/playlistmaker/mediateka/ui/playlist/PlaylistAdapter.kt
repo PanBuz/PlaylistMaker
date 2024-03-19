@@ -8,6 +8,8 @@ import com.example.playlistmaker.mediateka.domain.Playlist
 
 class PlaylistAdapter : RecyclerView.Adapter<PlaylistViewHolder>() {
     var playlists = arrayListOf<Playlist>()
+    var playlistClickListener: ((Playlist) -> Unit)? = null
+    var imagePath = ""
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return PlaylistViewHolder(LayoutPlaylistBinding.inflate(layoutInflater, parent, false))
@@ -16,6 +18,7 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistViewHolder>() {
         return playlists.size
     }
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
-        holder.bind(playlists[position])
+        holder.bind(playlists[position], imagePath)
+        holder.itemView.setOnClickListener { playlistClickListener?.invoke(playlists[position]) }
     }
 }

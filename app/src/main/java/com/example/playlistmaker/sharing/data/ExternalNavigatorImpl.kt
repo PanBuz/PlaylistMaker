@@ -45,4 +45,13 @@ class ExternalNavigatorImpl(private val application: Application) : ExternalNavi
             Log.e ("PAN_executeIntent_exception", exception.toString())
         }
     }
+    override fun shareText(sharedText : String, sharedTitle : String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, sharedText)
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, sharedTitle)
+        executeIntent(shareIntent)
+    }
 }

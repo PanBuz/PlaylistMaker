@@ -6,28 +6,20 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.LayoutPlayerPlaylistBinding
 import com.example.playlistmaker.mediateka.domain.Playlist
+import com.example.playlistmaker.utils.Converters
 
 class PlayerViewHolder(private val binding: LayoutPlayerPlaylistBinding) : RecyclerView.ViewHolder(binding.root)
 {
-    fun bind(playlist: Playlist) {
+    fun bind(playlist: Playlist, imagePath: String) {
         binding.namePl.text = playlist.name
-        binding.tvCountTracks.text = choiceOfWord(playlist.countTracks)
+        binding.tvCountTracks.text = Converters(itemView.context).convertCountToTextTracks(playlist.countTracks)
+        val imagePl = imagePath + "/" + playlist.name + ".jpg"
         Glide.with(itemView)
-            .load(playlist.image)
+            .load(imagePl)
             .placeholder(R.drawable.media_placeholder)
             .centerCrop()
-            .transform(RoundedCorners(3))
+            .transform(RoundedCorners(8))
             .into(binding.imagePlaylist)
 
-    }
-
-    private fun choiceOfWord(countTracks: Int): String {
-
-        val s = when (countTracks % 10) {
-            1 -> "$countTracks трек"
-            2, 3, 4 -> "$countTracks трека"
-            else -> "$countTracks треков"
-        }
-        return s
     }
 }

@@ -15,16 +15,25 @@ interface FavoriteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTraks(traks: List<FavoriteTraksEntity>)
 
-    @Query("SELECT * FROM favoritetraks_table")
-    suspend fun getTraks(): List<FavoriteTraksEntity>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTrack(track: FavoriteTraksEntity)
 
-    @Query("SELECT * FROM favoritetraks_table ORDER BY inDbTime DESC")
-    suspend fun getTracksByTime(): List<FavoriteTraksEntity>
+    //@Query("SELECT * FROM favoritetraks_table")
+    //suspend fun getTraks(): List<FavoriteTraksEntity>
 
-    @Query("SELECT * FROM favoritetraks_table WHERE trackId = :trackId")
-    suspend fun getFavoriteTrack(trackId: String): List<FavoriteTraksEntity>
+    @Query("SELECT * FROM favoritetraks_table  WHERE isFavorite=1 ORDER BY inDbTime DESC")
+    suspend fun getFavoriteTracksByTime(): List<FavoriteTraksEntity>
 
-    @Query("DELETE FROM favoritetraks_table WHERE trackId = :trackId")
+    @Query("SELECT * FROM favoritetraks_table WHERE isFavorite=1 AND trackId = :trackId")
+    suspend fun getFavoriteTrack (trackId : String) : List<FavoriteTraksEntity>
+
+    @Query("UPDATE favoritetraks_table SET isFavorite=0 WHERE trackId = :trackId")
+    suspend fun deleteTrackFromFavorite (trackId: String)
+
+    @Query("DELETE FROM favoritetraks_table WHERE isFavorite=0 AND trackId = :trackId")
     suspend fun deleteTrack(trackId: String)
+
+    @Query("DELETE FROM favoritetraks_table WHERE isFavorite=1 AND trackId = :trackId"  )
+    suspend fun deleteFavoriteTrack(trackId: String)
 
 }

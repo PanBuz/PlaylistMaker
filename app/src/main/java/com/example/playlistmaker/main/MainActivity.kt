@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -29,7 +28,8 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener {_, nd, _ ->
             bottomNavigationView.isVisible =
-                ! (nd.id == R.id.newPlaylistFragment || nd.id == R.id.playerFragment)
+                ! (nd.id == R.id.newPlaylistFragment || nd.id == R.id.playerFragment ||
+                        nd.id==R.id.displayPlaylist || nd.id==R.id.updatePlaylistFragment)
         }
 
     }
