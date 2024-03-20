@@ -26,10 +26,10 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_main)
         bottomNavigationView.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener {_, nd, _ ->
+        navController.addOnDestinationChangedListener {_, destination, _ ->
             bottomNavigationView.isVisible =
-                ! (nd.id == R.id.newPlaylistFragment || nd.id == R.id.playerFragment ||
-                        nd.id==R.id.displayPlaylist || nd.id==R.id.updatePlaylistFragment)
+                ! (destination.id == R.id.newPlaylistFragment || destination.id == R.id.playerFragment ||
+                        destination.id==R.id.displayPlaylist || destination.id==R.id.updatePlaylistFragment)
         }
 
     }
