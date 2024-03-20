@@ -11,7 +11,7 @@ import com.example.playlistmaker.mediateka.data.entity.FavoriteTraksEntity
 import com.example.playlistmaker.mediateka.data.entity.LinkTrackPlEntity
 import com.example.playlistmaker.mediateka.data.entity.PlaylistEntity
 
-@Database(version = 3, entities = [FavoriteTraksEntity::class, PlaylistEntity::class, LinkTrackPlEntity::class])
+@Database(version = 4, entities = [FavoriteTraksEntity::class, PlaylistEntity::class, LinkTrackPlEntity::class])
 abstract class AppDatabase : RoomDatabase(){
     abstract fun favoriteDao(): FavoriteDao
     abstract fun playlistDao() : PlaylistDao
