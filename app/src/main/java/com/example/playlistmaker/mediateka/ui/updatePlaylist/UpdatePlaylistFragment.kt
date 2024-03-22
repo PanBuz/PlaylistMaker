@@ -107,8 +107,8 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
         binding.tvButtonNew.text = getString(R.string.save)
         binding.tvNewPlaylist.text = getString(R.string.edit)
         binding.ietNamePl.setText(playlist.name)
-        binding.etNamePl.hint = playlist.name
-        binding.etDescriptPl.hint = playlist.descript
+        binding.etNamePl.hint = getString(R.string.name_playlist)
+        binding.etDescriptPl.hint = getString(R.string.descript_playlist)
         binding.ietDescriptPl.setText(playlist.descript)
         binding.ivPicturePlus.isVisible = false
         val radius = resources.getDimensionPixelSize(R.dimen.corner_radius)
