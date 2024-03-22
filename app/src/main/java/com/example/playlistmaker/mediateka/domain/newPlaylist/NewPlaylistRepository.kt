@@ -8,4 +8,6 @@ interface NewPlaylistRepository {
     suspend fun loadPicture(fileName: String): Uri?
     fun imagePath () : String
     suspend fun deletePicture(oldNamePl: String)
+    suspend fun renameFile(oldName: String, newName: String):Boolean
+
 }

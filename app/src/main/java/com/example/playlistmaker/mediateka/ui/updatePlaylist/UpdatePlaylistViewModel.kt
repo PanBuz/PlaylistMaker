@@ -47,6 +47,12 @@ class UpdatePlaylistViewModel(
         }
     }
 
+     fun renameCover (oldName: String, newName: String) {
+        viewModelScope.launch {
+            newPlaylistInteractor.renameFile(oldName,newName)
+        }
+    }
+
     fun initialization() {
         // Второй вариант передачи данных плэйлиста из DisplayPlaylistFragment
         val actualPlaylist = DisplayPlaylistFragment.actualPlaylist

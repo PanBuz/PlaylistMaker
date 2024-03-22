@@ -31,6 +31,7 @@ open class NewPlaylistFragment : Fragment() {
     private lateinit var completeDialog: MaterialAlertDialogBuilder
     var selectedUri: Uri? = null
 
+
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) {
@@ -54,6 +55,8 @@ open class NewPlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        var selectedUri = viewModel.selectedUri
 
         viewModel.pictureLiveData.observe(viewLifecycleOwner) { uri ->
             if (uri==null) {

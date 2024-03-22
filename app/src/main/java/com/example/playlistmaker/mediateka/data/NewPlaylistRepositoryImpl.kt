@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Environment
 import android.util.Log
 import androidx.core.net.toUri
 import com.example.playlistmaker.R
@@ -33,7 +34,7 @@ class NewPlaylistRepositoryImpl  (val context: Context) : NewPlaylistRepository 
             FileOutputStream(file)
         }
         // записываем картинку с помощью BitmapFactory
-        Log.d ("PAN_savePicture", "uri= $uri, fileName=$fileName ")
+        Log.d ("PAN_savePicture", "Сохраняем в битмап uri= $uri, fileName=$fileName ")
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
@@ -53,12 +54,18 @@ class NewPlaylistRepositoryImpl  (val context: Context) : NewPlaylistRepository 
     }
     override suspend fun loadPicture(imageFileName: String): Uri? {
         val file = File(filePath, "$imageFileName.jpg")
-        Log.d ("PAN_loadPicture", "load... uri= ${file.toUri()}, fileName=$imageFileName ")
+        Log.d ("PAN_loadPicture", "читаем элемент... uri= ${file.toUri()}, fileName=$imageFileName ")
         return if (file.exists()) {
             file.toUri()
 
         } else {
             null
         }
+    }
+
+    override suspend fun renameFile(oldName: String, newName: String):Boolean {
+        val oldCover = File(filePath, "$oldName.jpg")
+        val newCover = File(filePath, "$newName.jpg")
+        return oldCover.renameTo(newCover)
     }
 }

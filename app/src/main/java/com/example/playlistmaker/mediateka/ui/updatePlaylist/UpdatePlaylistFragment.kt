@@ -14,20 +14,21 @@ import com.example.playlistmaker.mediateka.domain.Playlist
 import com.example.playlistmaker.mediateka.ui.newPlaylist.NewPlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+
 class UpdatePlaylistFragment : NewPlaylistFragment() {
 
     override val viewModel by viewModel<UpdatePlaylistViewModel>()
     var updatePlaylist : Playlist = Playlist(0, "", "", "", arrayListOf(),0,0)
-
+    //var selectedUri = viewModel.selectedUri
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         // Третий вариант передачи данных плэйлиста из DisplayPlaylistFragment
         val idPl = arguments?.getInt("idPl")
         var imagePl = arguments?.getString("imagePl")
         var namePl = arguments?.getString("namePl")
         var descriptPl = arguments?.getString("descriptPl")
-        //var selectedUri = arguments?.getString("selectedUri")
         Log.d("PAN_UpdatePlaylistF", "Получено из bundle: idPl = $idPl \n namePl = ${namePl.toString()}  \n " +
                 "imagePl = $imagePl \n descriptPl = ${descriptPl} selectedUri = ${selectedUri.toString()} ")
 
@@ -76,7 +77,16 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
                 viewModel.savePicture(selectedUri, namePl !!)
                 // новый путь к файлу
                 imagePl = viewModel.imagePath() + "/" + namePl + ".jpg"
-            }     // если не выбрана новая обложка, то остается старый файл со старым названием
+            } else {
+                if (oldNamePl != namePl) {
+                    if (oldNamePl != null) {
+                        namePl?.let { it1 -> viewModel.renameCover(oldName = oldNamePl, newName = it1) }
+                    }
+                }
+            }
+
+
+            // если не выбрана новая обложка, то остается старый файл со старым названием
 
             Log.d("PAN_UpdatePlaylistF", "СОХРАНИТЬ: idPl = $idPl \n namePl = $namePl  \n " +
                     "imagePl = $imagePl \n descriptPl = ${descriptPl} \n selectedUri = ${selectedUri.toString()}")
