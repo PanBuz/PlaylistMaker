@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -143,7 +144,10 @@ class DisplayPlaylistFragment : Fragment() {
     private fun displayPlaylist(playlist:Playlist) {
         binding.apply {
             tvNamePl.text = playlist.name
-            tvDesciptPl.text = playlist.descript
+            if (playlist.descript.isNullOrEmpty()) {
+                tvDesciptPl.visibility = View.GONE
+            } else {tvDesciptPl.text = playlist.descript
+            }
             tvPlaylistCount.text = Converters(requireContext()).convertCountToTextTracks (playlist.tracks.size)
             tvPlaylistTime.text = (playlistTime (playlist))
         }

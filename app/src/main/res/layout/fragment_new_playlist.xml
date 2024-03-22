@@ -84,6 +84,7 @@
             android:id="@+id/iet_namePl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
             android:textCursorDrawable="@drawable/cursor_drawable"
             android:textColor="@color/text_color"
             android:inputType="textPersonName"
