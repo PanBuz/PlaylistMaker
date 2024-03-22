@@ -67,6 +67,7 @@ open class NewPlaylistFragment : Fragment() {
 
         viewModel.loadPickMedia(this)
 
+
         checkPermission()
 
         //1. Нажатие на область выбора обложки
@@ -81,12 +82,14 @@ open class NewPlaylistFragment : Fragment() {
 
         // 3. Нажатие на кнопку Создать
         binding.tvButtonNew.setOnClickListener {
+
             val imageFileNamePl = viewModel.imagePath() + "/" +
                     binding.etNamePl.editText!!.text.toString() + ".jpg"
 
             Log.d ("PAN_NewPlaylistF", "imageFileNamePl = ${imageFileNamePl} imagePath = ${viewModel.imagePath()}")
             Log.d ("PAN_NewPlaylistF", "ietNamePl = ${binding.ietNamePl.text} etNamePl=  ${binding.etNamePl.editText !!.text.toString()}" )
             Log.d ("PAN_NewPlaylistF", "ietDescriptPl = ${binding.ietDescriptPl.text} etDescriptPl=  ${binding.etDescriptPl.editText !!.text.toString()}" )
+            Log.d("PAN_NewPlaylistF", "СОХРАНИТЬ:  \n selectedUri = ${selectedUri.toString()}")
             viewModel.insertPlaylist(
                 Playlist(
                     id = 0,

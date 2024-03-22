@@ -153,8 +153,8 @@ class DisplayPlaylistFragment : Fragment() {
             .load(coverPlaylist)
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
-            .placeholder(R.drawable.media_placeholder)
-            .transform(RoundedCorners(radius))
+            .placeholder(R.drawable.album)
+            //.transform(RoundedCorners(radius))
             .into(binding.ivCoverPlaylist)
     }
 

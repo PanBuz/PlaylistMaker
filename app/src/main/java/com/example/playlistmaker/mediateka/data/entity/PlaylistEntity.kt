@@ -12,6 +12,7 @@ data class PlaylistEntity(
     val namePl: String,
     val descriptPl: String,
     val tracksPl: String,
+    //val imagePatch: String,
     val countTracksPl: Int,
     val timePl : Long,
     val inPlTime : Long = Calendar.getInstance().time.time

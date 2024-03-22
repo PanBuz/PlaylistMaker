@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -26,8 +27,9 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
         var imagePl = arguments?.getString("imagePl")
         var namePl = arguments?.getString("namePl")
         var descriptPl = arguments?.getString("descriptPl")
+        //var selectedUri = arguments?.getString("selectedUri")
         Log.d("PAN_UpdatePlaylistF", "Получено из bundle: idPl = $idPl \n namePl = ${namePl.toString()}  \n " +
-                "imagePl = $imagePl \n descriptPl = ${descriptPl} ")
+                "imagePl = $imagePl \n descriptPl = ${descriptPl} selectedUri = ${selectedUri.toString()} ")
 
         viewModel.initialization() // Второй вариант передачи данных плэйлиста из DisplayPlaylistFragment
         viewModel.update.observe(viewLifecycleOwner) { isUpdate ->
@@ -62,6 +64,7 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
         binding.tvButtonNew.setOnClickListener {
             // запомнить старое название
             val oldNamePl = namePl
+
             //получить новое имя файла если есть изменения
             if (binding.etNamePl.editText!!.text.toString().isNotEmpty()) namePl = binding.etNamePl.editText!!.text.toString()
             if (selectedUri != null) {
@@ -113,6 +116,12 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
         if  (!binding.ietDescriptPl.text !!.equals(updatePlaylist.descript))   { return true }
         if  (selectedUri != null) { return true }
         return false
+    }
+
+    companion object {
+        // Первый вариант передачи данных плэйлиста из DisplayPlaylistFragment
+        fun passArgs(idPl: Int, imagePl: String, namePl: String, descriptPl: String): Bundle =
+            bundleOf("idPl" to idPl, "imagePl" to imagePl, "namePl" to namePl, "descriptPl" to descriptPl)
     }
 
 }

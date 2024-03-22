@@ -42,7 +42,7 @@ open class NewPlaylistViewModel(
         viewModelScope.launch {
             if (uri != null) {
                 newPlaylistInteractor.savePicture(uri, namePl)
-                Log.d("PAN_NewPlaylistVM", "Отправляем на сохранение = ${uri.encodedPath}")
+                Log.d("PAN_NewPlaylistVM", "Отправляем на сохранение новый uri = ${uri.encodedPath}")
             }
         }
     }

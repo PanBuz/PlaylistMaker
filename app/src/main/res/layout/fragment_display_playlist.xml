@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/size_xl"
-            android:src="@drawable/media_placeholder"
+            android:src="@drawable/album"
             app:layout_constraintDimensionRatio="h,1:0.85"
             app:layout_constraintBottom_toTopOf="@id/tv_name_pl"
             app:layout_constraintEnd_toEndOf="parent"

@@ -13,6 +13,7 @@ import com.example.playlistmaker.utils.Converters
 class PlaylistViewHolder (private val binding: LayoutPlaylistBinding) : RecyclerView.ViewHolder(binding.root)
 {
     fun bind(playlist: Playlist, imagePath: String) {
+        binding.tvTitle .text = playlist.name
         binding.tvCount.text = Converters(itemView.context).convertCountToTextTracks (playlist.countTracks)
         val coverPl = imagePath + "/" + playlist.name + ".jpg"
         Log.d ("PAN_PlaylistViewHolder", "imagePl = ${ coverPl}")
@@ -20,9 +21,9 @@ class PlaylistViewHolder (private val binding: LayoutPlaylistBinding) : Recycler
             .load(coverPl )
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
-            .placeholder(R.drawable.media_placeholder)
+            .placeholder(R.drawable.album)
             .centerCrop()
-            .transform(RoundedCorners(8))
+            .transform(RoundedCorners(30))
             .into(binding.ivCover)
     }
 }
