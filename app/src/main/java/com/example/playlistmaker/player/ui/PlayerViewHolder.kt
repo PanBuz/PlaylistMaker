@@ -15,7 +15,7 @@ class PlayerViewHolder(private val binding: LayoutPlayerPlaylistBinding) : Recyc
     fun bind(playlist: Playlist, imagePath: String) {
         binding.namePl.text = playlist.name
         binding.tvCountTracks.text = Converters(itemView.context).convertCountToTextTracks(playlist.countTracks)
-        val imagePl = imagePath + "/" + DisplayPlaylistFragment.actualPlaylist!!.name + ".jpg"
+        val imagePl = imagePath + "/" + playlist.name + ".jpg"
         Glide.with(itemView)
             .load(imagePl)
             .placeholder(R.drawable.media_placeholder)

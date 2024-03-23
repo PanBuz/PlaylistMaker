@@ -29,7 +29,6 @@ class PlayerFragment : Fragment() {
     private val binding get() = _binding!!
     private val adapter = PlayerAdapter()
 
-    //var imPatch = viewModelDisp.imagePath()
 
 
     override fun onCreateView(
