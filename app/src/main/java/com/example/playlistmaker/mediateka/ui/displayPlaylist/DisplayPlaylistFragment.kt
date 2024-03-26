@@ -124,14 +124,14 @@ class DisplayPlaylistFragment : Fragment() {
         binding.updatePlBottomSheet.setOnClickListener {
             bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_HIDDEN
             // новый путь к файлу
-            val imagePl = viewModel.imagePath() + "/" + actualPlaylist!!.name + ".jpg"
+           // val imagePl = viewModel.imagePath() + "/" + actualPlaylist!!.name + ".jpg"
             val bundle : Bundle = bundleOf()
-            bundle.putInt("idPl", idPl)
+           /* bundle.putInt("idPl", idPl)
             bundle.putString("namePl",actualPlaylist!!.name )
             bundle.putString("imagePl", imagePl )
             bundle.putString("descriptPl",actualPlaylist!!.descript )
             Log.d("PAN_UpdatePlaylistF", "Получено из bundle дисплей: idPl = $idPl \n namePl = ${actualPlaylist!!.name.toString()}  \n " +
-                    "imagePl = $imagePl \n descriptPl = ${actualPlaylist!!.descript.toString()} ")
+                    "imagePl = $imagePl \n descriptPl = ${actualPlaylist!!.descript.toString()} ")*/
             findNavController().navigate(R.id.updatePlaylistFragment, bundle)
         }
 

@@ -16,7 +16,7 @@ class PlayerAdapter(): RecyclerView.Adapter<PlayerViewHolder>(){
 
     var playlists = arrayListOf<Playlist>()
     var clickListener: ((Playlist) -> Unit)? = null
-    lateinit var imagePath : String
+    var imagePath : String? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder {
         val layoutInspector = LayoutInflater.from(parent.context)
 
@@ -30,7 +30,7 @@ class PlayerAdapter(): RecyclerView.Adapter<PlayerViewHolder>(){
     }
     override fun getItemCount() = playlists.size
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {
-        holder.bind(playlists[position], imagePath)
+        holder.bind(playlists[position], imagePath.toString())
         holder.itemView.setOnClickListener { clickListener?.invoke(playlists[position]) }
     }
 }

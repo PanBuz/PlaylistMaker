@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mediateka.domain.Playlist
+import com.example.playlistmaker.mediateka.ui.displayPlaylist.DisplayPlaylistFragment.Companion.actualPlaylist
 import com.example.playlistmaker.mediateka.ui.newPlaylist.NewPlaylistFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,17 +26,22 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        // Третий вариант передачи данных плэйлиста из DisplayPlaylistFragment
+        /*// Третий вариант передачи данных плэйлиста из DisplayPlaylistFragment
         val idPl = arguments?.getInt("idPl")
         var imagePl = arguments?.getString("imagePl")
         var namePl = arguments?.getString("namePl")
         var descriptPl = arguments?.getString("descriptPl")
-
         Log.d("PAN_UpdatePlaylistF", "Получено из bundle: idPl = $idPl \n namePl = ${namePl.toString()}  \n " +
-                "imagePl = $imagePl \n descriptPl = ${descriptPl} selectedUri = ${selectedUri.toString()} ")
+                "imagePl = $imagePl \n descriptPl = ${descriptPl} selectedUri = ${selectedUri.toString()} ")*/
 
         viewModel.initialization() // Второй вариант передачи данных плэйлиста из DisplayPlaylistFragment
 
+        updatePlaylist = actualPlaylist!!.copy()
+
+        val idPl = updatePlaylist?.id
+        var imagePl = updatePlaylist?.image
+        var namePl = updatePlaylist?.name
+        var descriptPl = updatePlaylist?.descript
 
         viewModel.update.observe(viewLifecycleOwner) { isUpdate ->
             if (isUpdate) findNavController().navigateUp()
@@ -43,8 +49,10 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
 
         viewModel.updateLiveData.observe(viewLifecycleOwner) { playlist ->
             if (playlist.name.isEmpty()) findNavController().navigateUp()
-            updatePlaylist = playlist
-            fillFields (playlist)
+           // updatePlaylist = playlist
+            //fillFields (playlist)
+            //updatePlaylist = actualPlaylist!!.copy()
+            fillFields (updatePlaylist)
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
@@ -123,6 +131,7 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
             .transform(RoundedCorners(radius))
             .placeholder(R.drawable.media_placeholder)
             .into(binding.ivCoverPlImage)
+        Log.d("PAN_fillFields", "CoverPL = $coverPl")
     }
 
     private fun checkChanges() : Boolean {

@@ -56,6 +56,6 @@ class UpdatePlaylistViewModel(interactor: PlaylistInteractor,
     fun initialization() {
         // Второй вариант передачи данных плэйлиста из DisplayPlaylistFragment
         val actualPlaylist = DisplayPlaylistFragment.actualPlaylist
-        _updateLiveData.postValue(actualPlaylist !!)
+        _updateLiveData.postValue(actualPlaylist!!)
     }
 }
