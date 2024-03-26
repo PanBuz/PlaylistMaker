@@ -129,9 +129,9 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
     }
 
     private fun checkChanges() : Boolean {
-        if  (binding.ietNamePl.text!!.isEmpty())   { return false }
-        if  (!binding.ietNamePl.text !!.equals(updatePlaylist.name))   { return true }
-        if  (!binding.ietDescriptPl.text !!.equals(updatePlaylist.descript))   { return true }
+        if  (binding.ietNamePl.text?.isEmpty() == true)   { return false }
+        if  (binding.ietNamePl.text?.equals(updatePlaylist.name) == true)   { return true }
+        if  (binding.ietDescriptPl.text?.equals(updatePlaylist.descript) == true)   { return true }
         if  (selectedUri != null) { return true }
         return false
     }

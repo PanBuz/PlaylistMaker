@@ -109,7 +109,6 @@ class PlayerFragment : Fragment() {
         when (playlistState) {
             PlaylistState.Empty -> {}
             is PlaylistState.Playlists -> {
-               // adapter.imagePath = newViewModel.imagePath()
                 adapter.playlists.clear()
                 adapter.playlists.addAll(playlistState.playlists)
                 adapter.notifyDataSetChanged()
