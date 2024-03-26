@@ -15,12 +15,12 @@ import com.example.playlistmaker.mediateka.domain.playlist.PlaylistInteractor
 import kotlinx.coroutines.launch
 
 open class NewPlaylistViewModel(
-    val interactor: PlaylistInteractor,
-    val newPlaylistInteractor: NewPlaylistInteractor
+    internal val interactor: PlaylistInteractor,
+    internal val newPlaylistInteractor: NewPlaylistInteractor
 ) : ViewModel() {
 
     private var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>? = null
-    open var selectedUri: Uri? = null
+    private var selectedUri: Uri? = null
     private var _playlistLiveData = MutableLiveData<List<Playlist>>()
     val playlistLiveData: LiveData<List<Playlist>> = _playlistLiveData
     private var _pictureLiveData = MutableLiveData<Uri?>()
