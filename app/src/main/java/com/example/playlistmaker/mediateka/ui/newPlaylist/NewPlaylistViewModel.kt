@@ -16,10 +16,10 @@ import kotlinx.coroutines.launch
 
 open class NewPlaylistViewModel(
     val interactor: PlaylistInteractor,
-    val newPlaylistInteractor: NewPlaylistInteractor,
+    val newPlaylistInteractor: NewPlaylistInteractor
 ) : ViewModel() {
 
-    private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    private var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>? = null
     open var selectedUri: Uri? = null
     private var _playlistLiveData = MutableLiveData<List<Playlist>>()
     val playlistLiveData: LiveData<List<Playlist>> = _playlistLiveData
@@ -63,7 +63,7 @@ open class NewPlaylistViewModel(
 
     fun loadCover() {
         viewModelScope.launch {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            pickMedia?.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
     }
 }

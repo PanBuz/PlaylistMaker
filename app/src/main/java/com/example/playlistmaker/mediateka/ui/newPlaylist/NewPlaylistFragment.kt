@@ -27,10 +27,10 @@ open class NewPlaylistFragment : Fragment() {
 
     open val viewModel by viewModel<NewPlaylistViewModel>()
     private val playlistViewModel by viewModel<PlaylistViewModel>()
-    private var _binding: FragmentNewPlaylistBinding? = null
-    val binding get() = _binding !!
-    private lateinit var completeDialog: MaterialAlertDialogBuilder
-    open var selectedUri = viewModel.selectedUri
+    var _binding: FragmentNewPlaylistBinding? = null
+    val binding get() = _binding!!
+    private var completeDialog: MaterialAlertDialogBuilder? = null
+    open var selectedUri: Uri? = null
 
 
     private val requestPermissionLauncher =
@@ -50,14 +50,12 @@ open class NewPlaylistFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentNewPlaylistBinding.inflate(inflater, container, true)
+        _binding = FragmentNewPlaylistBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //open var selectedUri = viewModel.selectedUri
 
         viewModel.pictureLiveData.observe(viewLifecycleOwner) { uri ->
             if (uri==null) {
@@ -153,7 +151,7 @@ open class NewPlaylistFragment : Fragment() {
             || binding.etNamePl.editText!!.text!!.isNotEmpty()
             || binding.etDescriptPl.editText!!.text!!.isNotEmpty()
         ) {
-            completeDialog.show()
+            completeDialog?.show()
         } else {
             findNavController().navigateUp()
         }

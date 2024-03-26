@@ -16,12 +16,11 @@ import kotlinx.coroutines.launch
 class UpdatePlaylistViewModel(interactor: PlaylistInteractor,
                               newPlaylistInteractor: NewPlaylistInteractor
 ) : NewPlaylistViewModel(interactor, newPlaylistInteractor) {
+
     private var _updateLiveData = MutableLiveData<Playlist>()
     val updateLiveData: LiveData<Playlist> = _updateLiveData
     private val _update = MutableLiveData<Boolean>()
     val update: LiveData<Boolean> = _update
-
-
 
     fun updatePl(idPl: Int?, namePl: String?, descriptPl: String?) {
         viewModelScope.launch {

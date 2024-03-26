@@ -1,5 +1,6 @@
 package com.example.playlistmaker.mediateka.ui.displayPlaylist
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -38,6 +39,7 @@ class DisplayPlaylistFragment : Fragment() {
     private lateinit var trackClickListener: (TrackSearch) -> Unit
     private val adapter = TrackAdapter(arrayListOf<TrackSearch>(), {trackClickListener(it)})
     private lateinit var bottomSheetBehaviorMenu : BottomSheetBehavior <LinearLayout>
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -128,7 +130,8 @@ class DisplayPlaylistFragment : Fragment() {
             bundle.putString("namePl",actualPlaylist!!.name )
             bundle.putString("imagePl", imagePl )
             bundle.putString("descriptPl",actualPlaylist!!.descript )
-            Log.d("PAN_ButtonApdate", "Нажали на редактирование")
+            Log.d("PAN_UpdatePlaylistF", "Получено из bundle дисплей: idPl = $idPl \n namePl = ${actualPlaylist!!.name.toString()}  \n " +
+                    "imagePl = $imagePl \n descriptPl = ${actualPlaylist!!.descript.toString()} ")
             findNavController().navigate(R.id.updatePlaylistFragment, bundle)
         }
 

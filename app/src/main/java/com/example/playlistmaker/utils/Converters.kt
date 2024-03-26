@@ -5,7 +5,7 @@ import com.example.playlistmaker.R
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class Converters (private val context:Context){
+class Converters (val context:Context){
 
 
     fun convertCountToTextTracks(countTracks: Int): String {

@@ -1,11 +1,8 @@
 package com.example.playlistmaker.mediateka.ui.updatePlaylist
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -13,10 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.example.playlistmaker.mediateka.domain.Playlist
 import com.example.playlistmaker.mediateka.ui.newPlaylist.NewPlaylistFragment
-import com.example.playlistmaker.mediateka.ui.newPlaylist.NewPlaylistViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -25,8 +20,6 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
     override val viewModel by viewModel<UpdatePlaylistViewModel>()
 
     var updatePlaylist : Playlist = Playlist(0, "", "", "", arrayListOf(),0,0)
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,7 +34,7 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
         Log.d("PAN_UpdatePlaylistF", "Получено из bundle: idPl = $idPl \n namePl = ${namePl.toString()}  \n " +
                 "imagePl = $imagePl \n descriptPl = ${descriptPl} selectedUri = ${selectedUri.toString()} ")
 
-        //viewModel.initialization() // Второй вариант передачи данных плэйлиста из DisplayPlaylistFragment
+        viewModel.initialization() // Второй вариант передачи данных плэйлиста из DisplayPlaylistFragment
 
 
         viewModel.update.observe(viewLifecycleOwner) { isUpdate ->
