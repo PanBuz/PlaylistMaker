@@ -27,9 +27,10 @@ open class NewPlaylistFragment : Fragment() {
 
     open val viewModel by viewModel<NewPlaylistViewModel>()
     private val playlistViewModel by viewModel<PlaylistViewModel>()
-    lateinit var binding: FragmentNewPlaylistBinding
+    private var _binding: FragmentNewPlaylistBinding? = null
+    val binding get() = _binding !!
     private lateinit var completeDialog: MaterialAlertDialogBuilder
-    var selectedUri: Uri? = null
+    open var selectedUri = viewModel.selectedUri
 
 
     private val requestPermissionLauncher =
@@ -49,14 +50,14 @@ open class NewPlaylistFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentNewPlaylistBinding.inflate(layoutInflater)
+        _binding = FragmentNewPlaylistBinding.inflate(inflater, container, true)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var selectedUri = viewModel.selectedUri
+        //open var selectedUri = viewModel.selectedUri
 
         viewModel.pictureLiveData.observe(viewLifecycleOwner) { uri ->
             if (uri==null) {

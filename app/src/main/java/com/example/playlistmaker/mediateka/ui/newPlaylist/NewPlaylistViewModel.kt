@@ -20,7 +20,7 @@ open class NewPlaylistViewModel(
 ) : ViewModel() {
 
     private lateinit var pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
-    var selectedUri: Uri? = null
+    open var selectedUri: Uri? = null
     private var _playlistLiveData = MutableLiveData<List<Playlist>>()
     val playlistLiveData: LiveData<List<Playlist>> = _playlistLiveData
     private var _pictureLiveData = MutableLiveData<Uri?>()

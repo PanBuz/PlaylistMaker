@@ -128,6 +128,7 @@ class DisplayPlaylistFragment : Fragment() {
             bundle.putString("namePl",actualPlaylist!!.name )
             bundle.putString("imagePl", imagePl )
             bundle.putString("descriptPl",actualPlaylist!!.descript )
+            Log.d("PAN_ButtonApdate", "Нажали на редактирование")
             findNavController().navigate(R.id.updatePlaylistFragment, bundle)
         }
 

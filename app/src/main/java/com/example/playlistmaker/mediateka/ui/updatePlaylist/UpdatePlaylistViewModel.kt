@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.playlistmaker.mediateka.domain.Playlist
 import com.example.playlistmaker.mediateka.domain.newPlaylist.NewPlaylistInteractor
 import com.example.playlistmaker.mediateka.domain.playlist.PlaylistInteractor
@@ -12,14 +13,14 @@ import com.example.playlistmaker.mediateka.ui.displayPlaylist.DisplayPlaylistFra
 import com.example.playlistmaker.mediateka.ui.newPlaylist.NewPlaylistViewModel
 import kotlinx.coroutines.launch
 
-class UpdatePlaylistViewModel(
-    interactor: PlaylistInteractor,
-    newPlaylistInteractor: NewPlaylistInteractor
+class UpdatePlaylistViewModel(interactor: PlaylistInteractor,
+                              newPlaylistInteractor: NewPlaylistInteractor
 ) : NewPlaylistViewModel(interactor, newPlaylistInteractor) {
     private var _updateLiveData = MutableLiveData<Playlist>()
     val updateLiveData: LiveData<Playlist> = _updateLiveData
     private val _update = MutableLiveData<Boolean>()
     val update: LiveData<Boolean> = _update
+
 
 
     fun updatePl(idPl: Int?, namePl: String?, descriptPl: String?) {
@@ -47,7 +48,7 @@ class UpdatePlaylistViewModel(
         }
     }
 
-     fun renameCover (oldName: String, newName: String) {
+    fun renameCover (oldName: String, newName: String) {
         viewModelScope.launch {
             newPlaylistInteractor.renameFile(oldName,newName)
         }
