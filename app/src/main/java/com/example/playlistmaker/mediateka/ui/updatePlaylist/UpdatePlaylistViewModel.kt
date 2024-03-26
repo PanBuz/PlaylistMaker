@@ -17,8 +17,8 @@ class UpdatePlaylistViewModel(interactor: PlaylistInteractor,
                               newPlaylistInteractor: NewPlaylistInteractor
 ) : NewPlaylistViewModel(interactor, newPlaylistInteractor) {
 
-    private var _updateLiveData = MutableLiveData<Playlist>()
-    val updateLiveData: LiveData<Playlist> = _updateLiveData
+    private var _updateLiveData = MutableLiveData<Playlist?>()
+    val updateLiveData: LiveData<Playlist?> = _updateLiveData
     private val _update = MutableLiveData<Boolean>()
     val update: LiveData<Boolean> = _update
 
@@ -56,6 +56,7 @@ class UpdatePlaylistViewModel(interactor: PlaylistInteractor,
     fun initialization() {
         // Второй вариант передачи данных плэйлиста из DisplayPlaylistFragment
         val actualPlaylist = DisplayPlaylistFragment.actualPlaylist
-        _updateLiveData.postValue(actualPlaylist!!)
+        _updateLiveData.postValue(actualPlaylist)
     }
+
 }

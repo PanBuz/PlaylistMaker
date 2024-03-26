@@ -8,31 +8,26 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mediateka.domain.Playlist
 import com.example.playlistmaker.mediateka.ui.displayPlaylist.DisplayPlaylistFragment.Companion.actualPlaylist
+import com.example.playlistmaker.mediateka.ui.displayPlaylist.DisplayPlaylistViewModel
 import com.example.playlistmaker.mediateka.ui.newPlaylist.NewPlaylistFragment
+import com.example.playlistmaker.search.domain.TrackSearch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class UpdatePlaylistFragment : NewPlaylistFragment() {
 
     override val viewModel by viewModel<UpdatePlaylistViewModel>()
+    private val dispViewModel by viewModel<DisplayPlaylistViewModel>()
 
     var updatePlaylist : Playlist = Playlist(0, "", "", "", arrayListOf(),0,0)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        /*// Третий вариант передачи данных плэйлиста из DisplayPlaylistFragment
-        val idPl = arguments?.getInt("idPl")
-        var imagePl = arguments?.getString("imagePl")
-        var namePl = arguments?.getString("namePl")
-        var descriptPl = arguments?.getString("descriptPl")
-        Log.d("PAN_UpdatePlaylistF", "Получено из bundle: idPl = $idPl \n namePl = ${namePl.toString()}  \n " +
-                "imagePl = $imagePl \n descriptPl = ${descriptPl} selectedUri = ${selectedUri.toString()} ")*/
 
         viewModel.initialization() // Второй вариант передачи данных плэйлиста из DisplayPlaylistFragment
 
@@ -48,10 +43,7 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
         }
 
         viewModel.updateLiveData.observe(viewLifecycleOwner) { playlist ->
-            if (playlist.name.isEmpty()) findNavController().navigateUp()
-           // updatePlaylist = playlist
-            //fillFields (playlist)
-            //updatePlaylist = actualPlaylist!!.copy()
+            if (playlist?.name?.isEmpty() == true) findNavController().navigateUp()
             fillFields (updatePlaylist)
         }
 
@@ -125,9 +117,11 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
         binding.ietDescriptPl.setText(playlist.descript)
         binding.ivPicturePlus.isVisible = false
         val radius = resources.getDimensionPixelSize(R.dimen.corner_radius)
-        val coverPl = viewModel.imagePath() + "/" + playlist.name + ".jpg"
+        val coverPl = dispViewModel.imagePath() + "/" + playlist.name + ".jpg"
         Glide.with(binding.ivCoverPlImage)
             .load(coverPl)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
             .transform(RoundedCorners(radius))
             .placeholder(R.drawable.media_placeholder)
             .into(binding.ivCoverPlImage)
@@ -140,6 +134,15 @@ class UpdatePlaylistFragment : NewPlaylistFragment() {
         if  (!binding.ietDescriptPl.text !!.equals(updatePlaylist.descript))   { return true }
         if  (selectedUri != null) { return true }
         return false
+    }
+
+    private fun replaceCoverTrackToArtwork160(tracks : ArrayList<TrackSearch>) : ArrayList<TrackSearch> {
+        for (track in tracks) {
+            val coverUrl100 = track.artworkUrl100
+            val coverUrl60 = coverUrl100.replaceAfterLast('/', "60x60bb.jpg")
+            track.artworkUrl100 = coverUrl60
+        }
+        return tracks
     }
 
     companion object {
