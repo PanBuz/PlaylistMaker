@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class Converters (private val context:Context){
-
+    /**
+     * Используется для конвертации текста
+     */
     fun convertCountToTextTracks(countTracks: Int): String {
         var text = ""
         if (countTracks in 5..20) return "$countTracks ${context.getText(R.string.tracks)}"
