@@ -34,6 +34,6 @@
     <color name="button_play">#1A1B22</color>
     <color name="button_pause">#1A1B22</color>
     <color name="gray_player"> #AEAFB4</color>
-
+    <color name="grey_pl">#E6E8EB</color>
 
 </resources>

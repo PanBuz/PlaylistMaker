@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -27,9 +26,10 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_main)
         bottomNavigationView.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener {_, nd, _ ->
+        navController.addOnDestinationChangedListener {_, destination, _ ->
             bottomNavigationView.isVisible =
-                ! (nd.id == R.id.newPlaylistFragment || nd.id == R.id.playerFragment)
+                ! (destination.id == R.id.newPlaylistFragment || destination.id == R.id.playerFragment ||
+                        destination.id==R.id.displayPlaylist || destination.id==R.id.updatePlaylistFragment)
         }
 
     }

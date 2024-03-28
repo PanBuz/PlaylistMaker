@@ -11,6 +11,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
+import com.example.playlistmaker.mediateka.ui.displayPlaylist.DisplayPlaylistViewModel
+import com.example.playlistmaker.mediateka.ui.newPlaylist.NewPlaylistViewModel
 import com.example.playlistmaker.mediateka.ui.playlist.PlaylistState
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.TrackSearch
@@ -21,9 +23,12 @@ import java.util.Locale
 class PlayerFragment : Fragment() {
 
     private val viewModel by viewModel<PlayerViewModel>()
+    private val newViewModel by viewModel<NewPlaylistViewModel>()
+    private val viewModelDisp by viewModel<DisplayPlaylistViewModel>()
     private  var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
     private val adapter = PlayerAdapter()
+
 
 
     override fun onCreateView(
@@ -37,6 +42,8 @@ class PlayerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter.imagePath = viewModelDisp.imagePath()
 
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -67,6 +74,7 @@ class PlayerFragment : Fragment() {
             if (reply is ReplyOnAddTrack.Added) bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
+
         binding.btPlay.setOnClickListener { viewModel.playbackControl() }
 
         binding.ivBack.setOnClickListener { findNavController().navigateUp() }
@@ -87,6 +95,7 @@ class PlayerFragment : Fragment() {
         adapter.clickListener = { playlist ->
             viewModel.run { addTrackInPlaylist(track = getTrack(), playlist = playlist) }
         }
+
     }
 
     private fun fillPlaylistsOnBottom (){

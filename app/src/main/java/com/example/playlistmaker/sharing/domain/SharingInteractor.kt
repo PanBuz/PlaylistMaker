@@ -1,9 +1,8 @@
 package com.example.playlistmaker.sharing.domain
 
 interface SharingInteractor {
-
     fun shareApp()
     fun openSupport()
     fun openTerms()
-
+    fun shareText(sharedText : String, sharedTitle : String)
 }

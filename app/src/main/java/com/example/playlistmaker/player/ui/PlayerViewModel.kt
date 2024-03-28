@@ -143,6 +143,7 @@ class PlayerViewModel  (private val mediaPlayerInteractor: MediaPlayerInteractor
         }
     }
 
+
     private fun processResult(playlists: List<Playlist>) {
         if (playlists.isEmpty()) {
             _liveData.postValue(PlaylistState.Empty)

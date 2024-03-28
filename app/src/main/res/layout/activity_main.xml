@@ -41,6 +41,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation_menu"
-        app:navGraph="@navigation/main_navigation_graph" />
+        app:navGraph="@navigation/main_navigation_graph"
+
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

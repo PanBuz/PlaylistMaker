@@ -23,13 +23,15 @@ import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class NewPlaylistFragment : Fragment() {
+open class NewPlaylistFragment : Fragment() {
 
-    private val viewModel by viewModel<NewPlaylistViewModel>()
+    open val viewModel by viewModel<NewPlaylistViewModel>()
     private val playlistViewModel by viewModel<PlaylistViewModel>()
-    private lateinit var binding: FragmentNewPlaylistBinding
-    private lateinit var completeDialog: MaterialAlertDialogBuilder
-    private var selectedUri: Uri? = null
+    var _binding: FragmentNewPlaylistBinding? = null
+    val binding get() = _binding!!
+    private var completeDialog: MaterialAlertDialogBuilder? = null
+    open var selectedUri: Uri? = null
+
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
@@ -48,7 +50,7 @@ class NewPlaylistFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentNewPlaylistBinding.inflate(layoutInflater)
+        _binding = FragmentNewPlaylistBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -67,6 +69,7 @@ class NewPlaylistFragment : Fragment() {
 
         viewModel.loadPickMedia(this)
 
+
         checkPermission()
 
         //1. Нажатие на область выбора обложки
@@ -81,13 +84,19 @@ class NewPlaylistFragment : Fragment() {
 
         // 3. Нажатие на кнопку Создать
         binding.tvButtonNew.setOnClickListener {
-            val imageFileNamePl = viewModel.imagePath() + "/" + binding.etNamePl.editText!!.text.toString() + ".jpg"
-            Log.d ("PAN", "imageFileNamePl = ${imageFileNamePl}")
+
+            val imageFileNamePl = viewModel.imagePath() + "/" +
+                    binding.etNamePl.editText!!.text.toString() + ".jpg"
+
+            Log.d ("PAN_NewPlaylistF", "imageFileNamePl = ${imageFileNamePl} imagePath = ${viewModel.imagePath()}")
+            Log.d ("PAN_NewPlaylistF", "ietNamePl = ${binding.ietNamePl.text} etNamePl=  ${binding.etNamePl.editText !!.text.toString()}" )
+            Log.d ("PAN_NewPlaylistF", "ietDescriptPl = ${binding.ietDescriptPl.text} etDescriptPl=  ${binding.etDescriptPl.editText !!.text.toString()}" )
+            Log.d("PAN_NewPlaylistF", "СОХРАНИТЬ:  \n selectedUri = ${selectedUri.toString()}")
             viewModel.insertPlaylist(
                 Playlist(
                     id = 0,
-                    name = binding.etNamePl.editText!!.text.toString() ,
-                    descript = binding.etDescriptPl.editText!!.text.toString(),
+                    name = binding.ietNamePl.text.toString() ,
+                    descript = binding.ietDescriptPl.text.toString(),
                     image = if (selectedUri != null) {
                         imageFileNamePl
                     } else {
@@ -142,7 +151,7 @@ class NewPlaylistFragment : Fragment() {
             || binding.etNamePl.editText!!.text!!.isNotEmpty()
             || binding.etDescriptPl.editText!!.text!!.isNotEmpty()
         ) {
-            completeDialog.show()
+            completeDialog?.show()
         } else {
             findNavController().navigateUp()
         }

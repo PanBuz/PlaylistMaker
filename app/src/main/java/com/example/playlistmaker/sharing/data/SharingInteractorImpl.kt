@@ -4,7 +4,6 @@ import com.example.playlistmaker.sharing.domain.ExternalNavigator
 import com.example.playlistmaker.sharing.domain.SharingInteractor
 
 class SharingInteractorImpl (private val externalNavigator: ExternalNavigator) : SharingInteractor {
-
     override fun shareApp() {
         externalNavigator.sendShare()
     }
@@ -14,5 +13,7 @@ class SharingInteractorImpl (private val externalNavigator: ExternalNavigator) :
     override fun openTerms() {
         externalNavigator.sendOfer()
     }
-
+    override fun shareText(sharedText: String, sharedTitle: String) {
+        externalNavigator.shareText(sharedText, sharedTitle)
+    }
 }

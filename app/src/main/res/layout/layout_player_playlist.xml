@@ -11,22 +11,15 @@
     android:orientation="horizontal">
 
 
-    <androidx.cardview.widget.CardView
+    <ImageView
+        android:id="@+id/image_playlist"
         android:layout_width="@dimen/card_layout_height"
         android:layout_height="@dimen/card_layout_height"
         android:layout_gravity="center"
-        android:layout_marginStart="5dp"
-        app:cardCornerRadius="2dp"
-        app:cardElevation="0dp">
-
-        <ImageView
-            android:id="@+id/image_playlist"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:clipToOutline="true" />
-
-    </androidx.cardview.widget.CardView>
+        android:clipToOutline="true"
+        android:scaleType="centerCrop"
+        android:cropToPadding="true"
+        app:srcCompat="@drawable/media_placeholder" />
 
     <FrameLayout
         android:layout_width="match_parent"
